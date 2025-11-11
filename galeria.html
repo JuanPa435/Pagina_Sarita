@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería - Para Sarita ❤️</title>
+    <link rel="stylesheet" href="styles-amoroso.css">
+    <link rel="stylesheet" href="styles-adicional.css">
+    <link rel="stylesheet" href="styles-galeria-optimizado.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">💕 Sarita</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Inicio</a></li>
+                <li><a href="poemas.html" class="nav-link">Poemas</a></li>
+                <li><a href="canciones.html" class="nav-link">Canciones</a></li>
+                <li><a href="galeria.html" class="nav-link">Galería</a></li>
+                <li><a href="mensajes.html" class="nav-link">Mensajes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido -->
+    <section class="galeria">
+        <div class="container">
+            <h2 class="seccion-titulo">🖼️ Nuestros Momentos</h2>
+        
+            
+            <div class="galeria-grid" id="galeria-container">
+                <!-- Las fotos se cargarán aquí -->
+            </div>
+
+            <!-- Paginación -->
+            <div class="paginacion" id="paginacion">
+                <!-- Los botones de paginación se generarán aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="galeria-data.js"></script>
+    <script>
+        const FOTOS_POR_PAGINA = 6;
+        let paginaActual = 1;
+
+        function mostrarFotos() {
+            const container = document.getElementById('galeria-container');
+            container.innerHTML = '';
+
+            const inicio = (paginaActual - 1) * FOTOS_POR_PAGINA;
+            const fin = inicio + FOTOS_POR_PAGINA;
+            const fotosEnPagina = GALERIA.slice(inicio, fin);
+
+            fotosEnPagina.forEach((foto, index) => {
+                const indiceFoto = inicio + index;
+                const div = document.createElement('div');
+                div.className = 'galeria-item';
+                div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+                
+                // Intentar cargar foto editada desde localStorage
+                const fotoGuardada = localStorage.getItem(`foto_${indiceFoto}_data`);
+                const descripcionGuardada = localStorage.getItem(`foto_${indiceFoto}_descripcion`);
+                const descripcionFinal = descripcionGuardada || foto.descripcion;
+                
+                let contenidoImagen = '';
+                
+                if (fotoGuardada) {
+                    // Cargar foto editada con sus transformaciones
+                    const zoom = localStorage.getItem(`foto_${indiceFoto}_zoom`) || '100';
+                    const rotation = localStorage.getItem(`foto_${indiceFoto}_rotation`) || '0';
+                    const brightness = localStorage.getItem(`foto_${indiceFoto}_brightness`) || '100';
+                    const contrast = localStorage.getItem(`foto_${indiceFoto}_contrast`) || '100';
+                    const saturacion = localStorage.getItem(`foto_${indiceFoto}_saturacion`) || '100';
+                    
+                    contenidoImagen = `
+                        <img src="${fotoGuardada}" alt="${descripcionFinal}" class="galeria-imagen" 
+                             style="transform: scale(${zoom / 100}) rotate(${rotation}deg); 
+                                     filter: brightness(${brightness}%) contrast(${contrast}%) saturate(${saturacion}%);">
+                    `;
+                } else {
+                    // Cargar foto original
+                    contenidoImagen = `
+                        <img src="${foto.ruta}" alt="${descripcionFinal}" class="galeria-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="galeria-placeholder" style="display:none;">
+                            <span>Foto no encontrada</span>
+                        </div>
+                    `;
+                }
+                
+                div.innerHTML = contenidoImagen + `<p class="galeria-caption">${descripcionFinal}</p>`;
+                container.appendChild(div);
+            });
+
+            actualizarPaginacion();
+        }
+
+        function actualizarPaginacion() {
+            const totalPaginas = Math.ceil(GALERIA.length / FOTOS_POR_PAGINA);
+            const paginacionDiv = document.getElementById('paginacion');
+            paginacionDiv.innerHTML = '';
+
+            // Botón anterior
+            const btnAnterior = document.createElement('button');
+            btnAnterior.className = 'pagina-btn ' + (paginaActual === 1 ? 'deshabilitada' : '');
+            btnAnterior.textContent = '← Anterior';
+            btnAnterior.disabled = paginaActual === 1;
+            btnAnterior.onclick = () => {
+                if (paginaActual > 1) {
+                    paginaActual--;
+                    mostrarFotos();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+            paginacionDiv.appendChild(btnAnterior);
+
+            // Números de página
+            for (let i = 1; i <= totalPaginas; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'pagina-btn ' + (i === paginaActual ? 'activa' : '');
+                btn.textContent = i;
+                btn.onclick = () => {
+                    paginaActual = i;
+                    mostrarFotos();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                paginacionDiv.appendChild(btn);
+            }
+
+            // Botón siguiente
+            const btnSiguiente = document.createElement('button');
+            btnSiguiente.className = 'pagina-btn ' + (paginaActual === totalPaginas ? 'deshabilitada' : '');
+            btnSiguiente.textContent = 'Siguiente →';
+            btnSiguiente.disabled = paginaActual === totalPaginas;
+            btnSiguiente.onclick = () => {
+                if (paginaActual < totalPaginas) {
+                    paginaActual++;
+                    mostrarFotos();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+            paginacionDiv.appendChild(btnSiguiente);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', mostrarFotos);
+    </script>
+</body>
+</html>

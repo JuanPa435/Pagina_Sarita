@@ -1,0 +1,27 @@
+// Array con canciones dedicadas personalizadas para Sarita
+const CANCIONES = [
+    { titulo: "Quisiera", artista: "Pasabordo", razon: "Una canción que expresa el deseo profundo de estar cerca de ti", link: "https://www.spotify.com/search/Quisiera%20Pasabordo" },
+    { titulo: "Rewrite The Stars", artista: "The Greatest Showman", razon: "Perfecta para expresar que deseo reescribir nuestro destino juntos", link: "https://www.spotify.com/search/Rewrite%20The%20Stars%20Greatest%20Showman" },
+    { titulo: "Desear", artista: "Planes", razon: "Habla de los deseos y la esperanza en el amor", link: "https://www.spotify.com/search/Desear%20Planes" },
+    { titulo: "Confieso", artista: "Humbe", razon: "Te confieso todos mis sentimientos en esta canción", link: "https://www.spotify.com/search/Confieso%20Humbe" },
+    { titulo: "Weltita", artista: "Bad Bunny", razon: "Romántica y llena de sentimiento dedicada a ti", link: "https://www.spotify.com/search/Weltita%20Bad%20Bunny" },
+    { titulo: "Mil Vidas", artista: "Mora", razon: "En mil vidas diferentes, seguiría eligiéndote a ti", link: "https://www.spotify.com/search/Mil%20Vidas%20Mora" },
+    { titulo: "I Love You", artista: "Billie Eilish", razon: "Simple pero poderosa, te amo sin necesidad de más palabras", link: "https://www.spotify.com/search/I%20Love%20You%20Billie%20Eilish" },
+    { titulo: "La Propuesta", artista: "Rels B", razon: "La propuesta de amar y estar contigo para siempre", link: "https://www.spotify.com/search/La%20Propuesta%20Rels%20B" },
+    { titulo: "Photograph", artista: "Ed Sheeran", razon: "Como una fotografía, quiero recordarte siempre en mi corazón", link: "https://www.spotify.com/search/Photograph%20Ed%20Sheeran" },
+    { titulo: "Pretty Girl", artista: "Rels B", razon: "Eres la chica más hermosa que he visto", link: "https://www.spotify.com/search/Pretty%20Girl%20Rels%20B" },
+    { titulo: "Ma Belle Evangeline", artista: "Disney", razon: "Una canción mágica y romántica para la persona especial", link: "https://www.spotify.com/search/Ma%20Belle%20Evangeline%20Disney" },
+    { titulo: "Solcito", artista: "Miguel Bueno", razon: "Eres mi solcito que ilumina mis días", link: "https://www.spotify.com/search/Solcito%20Miguel%20Bueno" },
+    { titulo: "Toda La Semana", artista: "Angie", razon: "Pienso en ti toda la semana, cada momento", link: "https://www.spotify.com/search/Toda%20La%20Semana%20Angie" },
+    { titulo: "Mi Mundo", artista: "Manuel Lizarazo", razon: "Eres mi mundo, mi razón de existir", link: "https://www.spotify.com/search/Mi%20Mundo%20Manuel%20Lizarazo" },
+    { titulo: "Princesa", artista: "Paulo Londra", razon: "Eres mi princesa, la reina de mi corazón", link: "https://www.spotify.com/search/Princesa%20Paulo%20Londra" },
+    { titulo: "Me Encanta Todo Lo Tuyo", artista: "Lucauy", razon: "Me encanta absolutamente todo lo que eres y tienes", link: "https://www.spotify.com/search/Me%20Encanta%20Todo%20Lo%20Tuyo%20Lucauy" },
+    { titulo: "Si Te Interesa", artista: "Beele", razon: "Si te interesa, aquí estoy para ti completamente", link: "https://www.spotify.com/search/Si%20Te%20Interesa%20Beele" },
+    { titulo: "I Wanna Be Yours", artista: "Arctic Monkeys", razon: "Quiero ser completamente tuyo, cuerpo y alma", link: "https://www.spotify.com/search/I%20Wanna%20Be%20Yours%20Arctic%20Monkeys" },
+    { titulo: "Mujer Maravilla", artista: "Paulo Londra", razon: "Eres mi mujer maravilla, mi superheroína", link: "https://www.spotify.com/search/Mujer%20Maravilla%20Paulo%20Londra" },
+    { titulo: "Love It", artista: "Rels B", razon: "Me encanta todo de ti, lo amo de verdad", link: "https://www.spotify.com/search/Love%20It%20Rels%20B" },
+    { titulo: "Nenita", artista: "Manuel Medrano", razon: "Mi nenita, la chica de mis sueños y mi corazón", link: "https://www.spotify.com/search/Nenita%20Manuel%20Medrano" },
+    { titulo: "Besito en la Frente", artista: "Rauw Alejandro", razon: "Un besito en la frente para decirte que te amo", link: "https://www.spotify.com/search/Besito%20en%20la%20Frente%20Rauw%20Alejandro" },
+    { titulo: "Nanaena", artista: "Paulo Londra", razon: "Una canción que suena a ti, a amor verdadero", link: "https://www.spotify.com/search/Nanaena%20Paulo%20Londra" },
+    { titulo: "Reina Sin Corona", artista: "Lilo Music", razon: "Eres mi reina sin corona, reina de mi vida", link: "https://www.spotify.com/search/Reina%20Sin%20Corona%20Lilo%20Music" }
+];

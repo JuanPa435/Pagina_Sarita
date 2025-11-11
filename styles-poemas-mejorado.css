@@ -1,0 +1,327 @@
+/* Estilos mejorados para la sección de poemas */
+
+.poemas {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--light) 0%, #ffd7e8 100%);
+    min-height: 100vh;
+}
+
+.poemas .seccion-titulo {
+    text-align: center;
+    font-size: 2.8rem;
+    color: var(--primary);
+    margin-bottom: 3rem;
+    text-shadow: 0 2px 4px rgba(255, 20, 147, 0.1);
+    animation: fadeInDown 0.8s ease-out;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.poemas .seccion-titulo::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    border-radius: 2px;
+}
+
+#poemas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+}
+
+.poema-card {
+    background: var(--white);
+    padding: 2.2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(255, 20, 147, 0.12);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-left: 5px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+}
+
+/* Efecto de fondo decorativo */
+.poema-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 105, 180, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    transition: all 0.6s ease;
+}
+
+.poema-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.6s;
+    opacity: 0;
+    z-index: 10;
+}
+
+.poema-card:hover::before {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 105, 180, 0.15) 0%, transparent 70%);
+}
+
+.poema-card:hover::after {
+    opacity: 1;
+    animation: brillo 0.6s ease-out;
+}
+
+@keyframes brillo {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.poema-card:hover {
+    transform: translateY(-16px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(255, 20, 147, 0.22);
+    border-left-color: #ff69b4;
+    border-left-width: 6px;
+}
+
+.poema-card h3 {
+    color: var(--primary);
+    margin-bottom: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+}
+
+.poema-card h3::before {
+    content: '📖 ';
+    margin-right: 0.5rem;
+}
+
+.poema-contenido {
+    flex: 1;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.poema-contenido p {
+    color: #444;
+    line-height: 1.9;
+    font-size: 1.05rem;
+    font-style: italic;
+    text-align: justify;
+    letter-spacing: 0.3px;
+    word-spacing: 1px;
+}
+
+.poema-contenido br + br {
+    margin-bottom: 0.8rem;
+}
+
+.fecha {
+    display: inline-block;
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-style: italic;
+    font-weight: 600;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(255, 20, 147, 0.2);
+    position: relative;
+    z-index: 2;
+    opacity: 0.85;
+}
+
+/* Paginación mejorada */
+.paginacion {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 4rem;
+    padding: 2rem 0 0 0;
+    border-top: 2px solid rgba(255, 20, 147, 0.15);
+}
+
+.pagina-btn {
+    background: linear-gradient(135deg, var(--primary), #ff69b4);
+    color: white;
+    border: none;
+    padding: 0.9rem 1.4rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 20px rgba(255, 20, 147, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.pagina-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
+}
+
+.pagina-btn:hover::before {
+    left: 100%;
+}
+
+.pagina-btn span {
+    position: relative;
+    z-index: 2;
+}
+
+.pagina-btn:hover:not(.deshabilitada) {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 12px 35px rgba(255, 20, 147, 0.5);
+}
+
+.pagina-btn.activa {
+    background: linear-gradient(135deg, #ff1493, #ff20aa);
+    transform: scale(1.15) translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255, 20, 147, 0.6);
+}
+
+.pagina-btn.deshabilitada {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pagina-btn.deshabilitada:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive optimizado */
+@media (max-width: 1024px) {
+    #poemas-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.8rem;
+    }
+
+    .poema-card {
+        min-height: 300px;
+        padding: 2rem;
+    }
+
+    .poema-card h3 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .poemas {
+        padding: 2.5rem 1rem;
+    }
+
+    .poemas .seccion-titulo {
+        font-size: 2.2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    #poemas-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .poema-card {
+        min-height: 280px;
+        padding: 1.8rem;
+    }
+
+    .poema-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .poema-contenido p {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    .paginacion {
+        gap: 0.7rem;
+    }
+
+    .pagina-btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .poemas .seccion-titulo {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .poema-card {
+        min-height: 260px;
+        padding: 1.5rem;
+        border-left-width: 4px;
+    }
+
+    .poema-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .poema-contenido p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    .fecha {
+        font-size: 0.85rem;
+    }
+
+    .pagina-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        min-width: 45px;
+    }
+}

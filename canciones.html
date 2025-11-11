@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Canciones Para Sarita ❤️</title>
+    <link rel="stylesheet" href="styles-amoroso.css">
+    <link rel="stylesheet" href="styles-canciones-mejorado.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">💕 Sarita</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Inicio</a></li>
+                <li><a href="poemas.html" class="nav-link">Poemas</a></li>
+                <li><a href="canciones.html" class="nav-link">Canciones</a></li>
+                <li><a href="galeria.html" class="nav-link">Galería</a></li>
+                <li><a href="mensajes.html" class="nav-link">Mensajes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido -->
+    <section class="canciones">
+        <div class="container">
+            <h2 class="seccion-titulo">🎵 100 Canciones Dedicadas</h2>
+            
+            <div id="canciones-container">
+                <!-- Las canciones se cargarán aquí -->
+            </div>
+
+            <!-- Paginación -->
+            <div class="paginacion" id="paginacion">
+                <!-- Los botones de paginación se generarán aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="canciones-data.js"></script>
+    <script>
+        const CANCIONES_POR_PAGINA = 6;
+        let paginaActual = 1;
+
+        // Función para mostrar/ocultar opciones de reproducción
+        function toggleOpciones(id) {
+            const opciones = document.getElementById(id);
+            if (opciones.style.display === 'none' || opciones.style.display === '') {
+                opciones.style.display = 'grid';
+                opciones.style.animation = 'slideDown 0.3s ease-out';
+            } else {
+                opciones.style.display = 'none';
+            }
+        }
+
+        function mostrarCanciones() {
+            const container = document.getElementById('canciones-container');
+            container.innerHTML = '';
+
+            const inicio = (paginaActual - 1) * CANCIONES_POR_PAGINA;
+            const fin = inicio + CANCIONES_POR_PAGINA;
+            const cancionesEnPagina = CANCIONES.slice(inicio, fin);
+
+            cancionesEnPagina.forEach((cancion, index) => {
+                const div = document.createElement('div');
+                div.className = 'cancion-card';
+                div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+                
+                const uniqueId = `opciones-${paginaActual}-${index}`;
+                
+                div.innerHTML = `
+                    <div class="cancion-header">
+                        <h3>🎵 ${cancion.titulo}</h3>
+                        <p class="artista">Artista: ${cancion.artista}</p>
+                    </div>
+                    <div class="cancion-razon">
+                        <p><strong>Por qué te la dedico:</strong> ${cancion.razon}</p>
+                    </div>
+                    <div class="reproductor-youtube">
+                        <button class="btn-escuchar" onclick="toggleOpciones('${uniqueId}')">
+                            ▶️ Escuchar
+                        </button>
+                        <div class="opciones-reproducir" id="${uniqueId}" style="display: none;">
+                            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-reproducir btn-youtube">
+                                🎬 YouTube
+                            </a>
+                            <a href="https://open.spotify.com/search/${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-reproducir btn-spotify">
+                                🎵 Spotify
+                            </a>
+                            <a href="https://music.apple.com/search?term=${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-reproducir btn-apple">
+                                🍎 Apple
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            actualizarPaginacion();
+        }
+
+        function actualizarPaginacion() {
+            const totalPaginas = Math.ceil(CANCIONES.length / CANCIONES_POR_PAGINA);
+            const paginacionDiv = document.getElementById('paginacion');
+            paginacionDiv.innerHTML = '';
+
+            // Botón anterior
+            const btnAnterior = document.createElement('button');
+            btnAnterior.className = 'pagina-btn ' + (paginaActual === 1 ? 'deshabilitada' : '');
+            btnAnterior.textContent = '← Anterior';
+            btnAnterior.disabled = paginaActual === 1;
+            btnAnterior.onclick = () => {
+                if (paginaActual > 1) {
+                    paginaActual--;
+                    mostrarCanciones();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+            paginacionDiv.appendChild(btnAnterior);
+
+            // Números de página
+            for (let i = 1; i <= totalPaginas; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'pagina-btn ' + (i === paginaActual ? 'activa' : '');
+                btn.textContent = i;
+                btn.onclick = () => {
+                    paginaActual = i;
+                    mostrarCanciones();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                paginacionDiv.appendChild(btn);
+            }
+
+            // Botón siguiente
+            const btnSiguiente = document.createElement('button');
+            btnSiguiente.className = 'pagina-btn ' + (paginaActual === totalPaginas ? 'deshabilitada' : '');
+            btnSiguiente.textContent = 'Siguiente →';
+            btnSiguiente.disabled = paginaActual === totalPaginas;
+            btnSiguiente.onclick = () => {
+                if (paginaActual < totalPaginas) {
+                    paginaActual++;
+                    mostrarCanciones();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+            paginacionDiv.appendChild(btnSiguiente);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', mostrarCanciones);
+    </script>
+</body>
+</html>

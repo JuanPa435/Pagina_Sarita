@@ -1,0 +1,7 @@
+/* Estilos adicionales para imágenes en galería */
+.galeria-imagen {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
