@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles-amoroso.css">
     <link rel="stylesheet" href="styles-adicional.css">
     <link rel="stylesheet" href="styles-galeria-optimizado.css">
+    <link rel="stylesheet" href="styles-modal-upload.css">
 </head>
 <body>
     <!-- Navegación -->
@@ -27,8 +28,48 @@
     <section class="galeria">
         <div class="container">
             <h2 class="seccion-titulo">🖼️ Nuestros Momentos</h2>
-        
-            
+
+            <!-- Botón para abrir modal de subida -->
+            <div class="galeria-actions">
+                <button id="btn-subir-fotos" class="btn btn-subir-fotos">➕ Subir Fotos</button>
+                <button id="descargar-json" class="btn btn-descargar">📥 Descargar JSON</button>
+            </div>
+
+            <!-- Modal para subir fotos -->
+            <div id="modal-upload" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Subir Nuevas Fotos</h3>
+                        <button class="modal-close" id="modal-close">&times;</button>
+                    </div>
+                    <form id="upload-form">
+                        <div class="form-group">
+                            <label for="codigo">🔐 Código de Seguridad:</label>
+                            <input type="password" id="codigo" name="codigo" placeholder="Ingresa el código" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descripcion">📝 Descripción (opcional):</label>
+                            <input type="text" id="descripcion" name="descripcion" placeholder="Ej: En la playa un atardecer hermoso...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fotos">📸 Selecciona Fotos (JPG, PNG):</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="fotos" name="fotos" accept="image/*" multiple required>
+                                <span class="file-label">Haz clic o arrastra archivos aquí</span>
+                            </div>
+                            <p class="form-help">Máx 3MB por foto • Múltiples selecciones permitidas</p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">✅ Subir Fotos</button>
+                            <button type="button" class="btn btn-secondary" id="modal-cancel">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="galeria-grid" id="galeria-container">
                 <!-- Las fotos se cargarán aquí -->
             </div>
@@ -60,98 +101,19 @@
             const fin = inicio + FOTOS_POR_PAGINA;
             const fotosEnPagina = GALERIA.slice(inicio, fin);
 
-            fotosEnPagina.forEach((foto, index) => {
-                const indiceFoto = inicio + index;
-                const div = document.createElement('div');
-                div.className = 'galeria-item';
-                div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
-                
-                // Intentar cargar foto editada desde localStorage
-                const fotoGuardada = localStorage.getItem(`foto_${indiceFoto}_data`);
-                const descripcionGuardada = localStorage.getItem(`foto_${indiceFoto}_descripcion`);
-                const descripcionFinal = descripcionGuardada || foto.descripcion;
-                
-                let contenidoImagen = '';
-                
-                if (fotoGuardada) {
-                    // Cargar foto editada con sus transformaciones
+            <script src="script.js"></script>
+            <script src="galeria-data.js"></script>
+            <script>
+                const FOTOS_POR_PAGINA = 6;
+                let paginaActual = 1;
+
+                // Inicializa la galería delegando la lógica a script.js
+                document.addEventListener('DOMContentLoaded', () => {
+                    if (typeof initGallery === 'function') {
+                        initGallery({ fotosPorPagina: FOTOS_POR_PAGINA, paginaInicial: 1 });
+                    } else {
+                        console.error('initGallery no está definido. Asegúrate de que script.js cargó correctamente.');
+                    }
+                });
+            </script>
                     const zoom = localStorage.getItem(`foto_${indiceFoto}_zoom`) || '100';
-                    const rotation = localStorage.getItem(`foto_${indiceFoto}_rotation`) || '0';
-                    const brightness = localStorage.getItem(`foto_${indiceFoto}_brightness`) || '100';
-                    const contrast = localStorage.getItem(`foto_${indiceFoto}_contrast`) || '100';
-                    const saturacion = localStorage.getItem(`foto_${indiceFoto}_saturacion`) || '100';
-                    
-                    contenidoImagen = `
-                        <img src="${fotoGuardada}" alt="${descripcionFinal}" class="galeria-imagen" 
-                             style="transform: scale(${zoom / 100}) rotate(${rotation}deg); 
-                                     filter: brightness(${brightness}%) contrast(${contrast}%) saturate(${saturacion}%);">
-                    `;
-                } else {
-                    // Cargar foto original
-                    contenidoImagen = `
-                        <img src="${foto.ruta}" alt="${descripcionFinal}" class="galeria-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="galeria-placeholder" style="display:none;">
-                            <span>Foto no encontrada</span>
-                        </div>
-                    `;
-                }
-                
-                div.innerHTML = contenidoImagen + `<p class="galeria-caption">${descripcionFinal}</p>`;
-                container.appendChild(div);
-            });
-
-            actualizarPaginacion();
-        }
-
-        function actualizarPaginacion() {
-            const totalPaginas = Math.ceil(GALERIA.length / FOTOS_POR_PAGINA);
-            const paginacionDiv = document.getElementById('paginacion');
-            paginacionDiv.innerHTML = '';
-
-            // Botón anterior
-            const btnAnterior = document.createElement('button');
-            btnAnterior.className = 'pagina-btn ' + (paginaActual === 1 ? 'deshabilitada' : '');
-            btnAnterior.textContent = '← Anterior';
-            btnAnterior.disabled = paginaActual === 1;
-            btnAnterior.onclick = () => {
-                if (paginaActual > 1) {
-                    paginaActual--;
-                    mostrarFotos();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            };
-            paginacionDiv.appendChild(btnAnterior);
-
-            // Números de página
-            for (let i = 1; i <= totalPaginas; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'pagina-btn ' + (i === paginaActual ? 'activa' : '');
-                btn.textContent = i;
-                btn.onclick = () => {
-                    paginaActual = i;
-                    mostrarFotos();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                };
-                paginacionDiv.appendChild(btn);
-            }
-
-            // Botón siguiente
-            const btnSiguiente = document.createElement('button');
-            btnSiguiente.className = 'pagina-btn ' + (paginaActual === totalPaginas ? 'deshabilitada' : '');
-            btnSiguiente.textContent = 'Siguiente →';
-            btnSiguiente.disabled = paginaActual === totalPaginas;
-            btnSiguiente.onclick = () => {
-                if (paginaActual < totalPaginas) {
-                    paginaActual++;
-                    mostrarFotos();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            };
-            paginacionDiv.appendChild(btnSiguiente);
-        }
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', mostrarFotos);
-    </script>
-</body>
-</html>

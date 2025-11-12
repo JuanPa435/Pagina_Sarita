@@ -145,3 +145,279 @@ document.addEventListener('click', function(e) {
         lanzarConfeti();
     }
 });
+
+/* --------------------------------------------------
+   Funcionalidad de subida de fotos para la galería
+   - Valida código (0605)
+   - Guarda imágenes en localStorage como base64
+   - Permite descargar JSON con las imágenes guardadas
+   - Integra las fotos guardadas con `GALERIA` (lectura en tiempo de ejecución)
+-------------------------------------------------- */
+
+const USER_GALERIA_KEY = 'galeria_user_images';
+
+function getUserFotos() {
+    try {
+        const raw = localStorage.getItem(USER_GALERIA_KEY);
+        return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+        console.error('Error leyendo user fotos desde localStorage', err);
+        return [];
+    }
+}
+
+function saveUserFotos(arr) {
+    try {
+        localStorage.setItem(USER_GALERIA_KEY, JSON.stringify(arr));
+    } catch (err) {
+        console.error('Error guardando user fotos en localStorage', err);
+        alert('No se pudieron guardar las fotos en localStorage (espacio insuficiente).');
+    }
+}
+
+function fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+async function handleUploadForm(event) {
+    event.preventDefault();
+
+    const codigo = document.getElementById('codigo').value.trim();
+    const descripcion = document.getElementById('descripcion').value.trim();
+    const inputFiles = document.getElementById('fotos');
+
+    if (codigo !== '0605') {
+        alert('Código incorrecto. No tienes permiso para subir fotos.');
+        return;
+    }
+
+    if (!inputFiles || !inputFiles.files || inputFiles.files.length === 0) {
+        alert('Selecciona al menos una foto.');
+        return;
+    }
+
+    const archivos = Array.from(inputFiles.files);
+    const existentes = getUserFotos();
+
+    for (const archivo of archivos) {
+        // Tamaño máximo por archivo: 3MB para evitar problemas con localStorage
+        if (archivo.size > 3 * 1024 * 1024) {
+            alert(`La imagen "${archivo.name}" es demasiado grande (máx 3MB). Se omitirá.`);
+            continue;
+        }
+
+        try {
+            const dataUrl = await fileToDataURL(archivo);
+            existentes.push({ data: dataUrl, descripcion: descripcion || archivo.name, uploadedAt: new Date().toISOString() });
+        } catch (err) {
+            console.error('Error leyendo archivo', archivo.name, err);
+            alert(`No se pudo leer la imagen: ${archivo.name}`);
+        }
+    }
+
+    saveUserFotos(existentes);
+
+    // Limpiar formulario
+    document.getElementById('upload-form').reset();
+
+    alert('Fotos subidas correctamente. Se guardaron en tu navegador.');
+    
+    // Cerrar modal
+    const modal = document.getElementById('modal-upload');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+    }
+    
+    // Volver a renderizar la galería
+    if (typeof renderGallery === 'function') renderGallery();
+}
+
+function descargarJSON() {
+    const fotos = getUserFotos();
+    const blob = new Blob([JSON.stringify(fotos, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'galeria_user_images.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+// Inicializador público que la página puede llamar
+function initGallery(options = {}) {
+    const fotosPorPagina = options.fotosPorPagina || 6;
+    const paginaInicial = options.paginaInicial || 1;
+
+    // Estado compartido en window para facilitar accesos desde el HTML
+    window._GALERIA_STATE = {
+        fotosPorPagina,
+        paginaActual: paginaInicial
+    };
+
+    const form = document.getElementById('upload-form');
+    if (form) form.addEventListener('submit', handleUploadForm);
+
+    const btnDescarga = document.getElementById('descargar-json');
+    if (btnDescarga) btnDescarga.addEventListener('click', descargarJSON);
+
+    // Inicializar modal
+    initModalHandlers();
+
+    // Render inicial
+    renderGallery();
+}
+
+function initModalHandlers() {
+    const modal = document.getElementById('modal-upload');
+    const btnAbrir = document.getElementById('btn-subir-fotos');
+    const btnCerrar = document.getElementById('modal-close');
+    const btnCancelar = document.getElementById('modal-cancel');
+    const fileInput = document.getElementById('fotos');
+
+    if (!modal || !btnAbrir) return;
+
+    // Abrir modal
+    btnAbrir.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
+    });
+
+    // Cerrar modal
+    const cerrarModal = () => {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+        document.getElementById('upload-form').reset();
+    };
+
+    btnCerrar.addEventListener('click', cerrarModal);
+    btnCancelar.addEventListener('click', cerrarModal);
+
+    // Cerrar al hacer clic fuera del modal
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) cerrarModal();
+    });
+
+    // Drag and drop
+    if (fileInput) {
+        const wrapper = fileInput.parentElement;
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            wrapper.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            wrapper.addEventListener(eventName, () => {
+                wrapper.style.background = 'rgba(255, 105, 180, 0.2)';
+                wrapper.style.borderColor = '#ff1493';
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            wrapper.addEventListener(eventName, () => {
+                wrapper.style.background = 'rgba(255, 105, 180, 0.05)';
+                wrapper.style.borderColor = '#ff69b4';
+            });
+        });
+
+        wrapper.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+        });
+    }
+}
+
+function renderGallery() {
+    const state = window._GALERIA_STATE || { fotosPorPagina: 6, paginaActual: 1 };
+    const container = document.getElementById('galeria-container');
+    const paginacionDiv = document.getElementById('paginacion');
+    if (!container || !paginacionDiv) return;
+
+    container.innerHTML = '';
+
+    const userFotos = getUserFotos();
+    // Combinar fotos originales con las subidas por el usuario
+    const combined = GALERIA.map(f => ({ src: f.ruta, descripcion: f.descripcion, isUser: false }))
+        .concat(userFotos.map(u => ({ src: u.data, descripcion: u.descripcion || '', isUser: true })));
+
+    const totalPaginas = Math.max(1, Math.ceil(combined.length / state.fotosPorPagina));
+    if (state.paginaActual > totalPaginas) state.paginaActual = totalPaginas;
+
+    const inicio = (state.paginaActual - 1) * state.fotosPorPagina;
+    const fin = inicio + state.fotosPorPagina;
+    const fotosEnPagina = combined.slice(inicio, fin);
+
+    fotosEnPagina.forEach((foto, index) => {
+        const div = document.createElement('div');
+        div.className = 'galeria-item';
+        div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.08}s both`;
+
+        // If it's a user image (base64) we render directly; else we use original ruta
+        const src = foto.isUser ? foto.src : foto.src;
+        const contenido = `
+            <img src="${src}" alt="${foto.descripcion}" class="galeria-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="galeria-placeholder" style="display:none;"><span>Foto no encontrada</span></div>
+            <p class="galeria-caption">${foto.descripcion}</p>
+        `;
+
+        div.innerHTML = contenido;
+        container.appendChild(div);
+    });
+
+    // Render paginación
+    paginacionDiv.innerHTML = '';
+
+    const btnAnterior = document.createElement('button');
+    btnAnterior.className = 'pagina-btn ' + (state.paginaActual === 1 ? 'deshabilitada' : '');
+    btnAnterior.textContent = '← Anterior';
+    btnAnterior.disabled = state.paginaActual === 1;
+    btnAnterior.onclick = () => {
+        if (state.paginaActual > 1) {
+            state.paginaActual--;
+            renderGallery();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+    paginacionDiv.appendChild(btnAnterior);
+
+    for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'pagina-btn ' + (i === state.paginaActual ? 'activa' : '');
+        btn.textContent = i;
+        btn.onclick = () => {
+            state.paginaActual = i;
+            renderGallery();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        paginacionDiv.appendChild(btn);
+    }
+
+    const btnSiguiente = document.createElement('button');
+    btnSiguiente.className = 'pagina-btn ' + (state.paginaActual === totalPaginas ? 'deshabilitada' : '');
+    btnSiguiente.textContent = 'Siguiente →';
+    btnSiguiente.disabled = state.paginaActual === totalPaginas;
+    btnSiguiente.onclick = () => {
+        if (state.paginaActual < totalPaginas) {
+            state.paginaActual++;
+            renderGallery();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+    paginacionDiv.appendChild(btnSiguiente);
+
+    // Re-observar elementos para animaciones si la función está disponible
+    if (typeof observarElementos === 'function') observarElementos();
+}
