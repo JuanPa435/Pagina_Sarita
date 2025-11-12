@@ -239,22 +239,26 @@
 }
 
 .btn-subir-fotos {
-    background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
-    color: white;
-    padding: 14px 32px;
-    font-size: 1.05em;
-    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.3);
-    border: none;
-    border-radius: 50px;
+    background: transparent;
+    color: #ffb6d9;
+    padding: 8px 12px;
+    font-size: 0.85em;
+    border: 1px solid #ffb6d9;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
 }
 
 .btn-subir-fotos:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(255, 20, 147, 0.4);
+    opacity: 1;
+    border-color: #ff69b4;
+    color: #ff69b4;
+    background: rgba(255, 105, 180, 0.05);
 }
 
 .btn-subir-fotos:active {
-    transform: translateY(-1px);
+    transform: scale(0.98);
 }
 
 .btn-descargar {
