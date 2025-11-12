@@ -284,13 +284,13 @@ function initModalHandlers() {
 
     // Abrir modal
     btnAbrir.addEventListener('click', () => {
-        modal.style.display = 'flex';
+        modal.classList.add('visible');
         modal.classList.remove('hidden');
     });
 
     // Cerrar modal
     const cerrarModal = () => {
-        modal.style.display = 'none';
+        modal.classList.remove('visible');
         modal.classList.add('hidden');
         document.getElementById('upload-form').reset();
     };
