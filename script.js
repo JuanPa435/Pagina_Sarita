@@ -202,35 +202,71 @@ async function handleUploadForm(event) {
     }
 
     const archivos = Array.from(inputFiles.files);
-    const existentes = getUserFotos();
+    let fotosSubidas = 0;
+    let errores = 0;
 
     for (const archivo of archivos) {
-        // Tamaño máximo por archivo: 3MB para evitar problemas con localStorage
-        if (archivo.size > 3 * 1024 * 1024) {
-            alert(`La imagen "${archivo.name}" es demasiado grande (máx 3MB). Se omitirá.`);
+        // Tamaño máximo: 10MB
+        if (archivo.size > 10 * 1024 * 1024) {
+            alert(`La imagen "${archivo.name}" es demasiado grande (máx 10MB). Se omitirá.`);
+            errores++;
             continue;
         }
 
         try {
             const dataUrl = await fileToDataURL(archivo);
-            existentes.push({ data: dataUrl, descripcion: descripcion || archivo.name, uploadedAt: new Date().toISOString() });
+            
+            // Enviar al servidor
+            const response = await fetch('/api/upload-foto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    codigo: codigo,
+                    descripcion: descripcion || archivo.name,
+                    imageData: dataUrl,
+                    filename: archivo.name
+                })
+            });
+
+            const result = await response.json();
+            
+            if (response.ok) {
+                fotosSubidas++;
+                // También guardar en localStorage como respaldo
+                const userFotos = getUserFotos();
+                userFotos.push({
+                    data: dataUrl,
+                    descripcion: descripcion || archivo.name,
+                    uploadedAt: new Date().toISOString(),
+                    servidor: true
+                });
+                saveUserFotos(userFotos);
+            } else {
+                console.error('Error del servidor:', result.error);
+                errores++;
+            }
         } catch (err) {
-            console.error('Error leyendo archivo', archivo.name, err);
-            alert(`No se pudo leer la imagen: ${archivo.name}`);
+            console.error('Error leyendo/subiendo archivo', archivo.name, err);
+            errores++;
         }
     }
-
-    saveUserFotos(existentes);
 
     // Limpiar formulario
     document.getElementById('upload-form').reset();
 
-    alert('Fotos subidas correctamente. Se guardaron en tu navegador.');
+    if (fotosSubidas > 0) {
+        alert(`✅ ${fotosSubidas} foto(s) subida(s) correctamente a la carpeta /fotos/subidas/`);
+    }
+    if (errores > 0) {
+        alert(`⚠️ ${errores} foto(s) no se pudieron subir. Revisa la consola para más detalles.`);
+    }
     
     // Cerrar modal
     const modal = document.getElementById('modal-upload');
     if (modal) {
-        modal.style.display = 'none';
+        modal.classList.remove('visible');
         modal.classList.add('hidden');
     }
     

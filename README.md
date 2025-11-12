@@ -154,23 +154,58 @@ Tu sitio estará en: **`https://juanpa435.github.io/Pagina_Sarita/`**
 
 ---
 
-## � **Seguridad y Almacenamiento de Fotos**
+## 🔐 **Seguridad y Almacenamiento de Fotos**
 
 ### ¿Cómo funciona la subida de fotos?
 
-Las fotos se guardan **directamente en tu navegador** usando `localStorage`:
-- ✅ **No sube a internet** (privado y seguro)
+Las fotos se guardan **directamente en la carpeta `/fotos/subidas/`** del proyecto usando un servidor Node.js:
+- ✅ **Guarda automáticamente en el proyecto** (visible en la carpeta)
 - ✅ **Código de seguridad** (0605) protege la galería
-- ✅ **Máximo 3MB por foto** (para no saturar el navegador)
+- ✅ **Máximo 10MB por foto** (se comprimen automáticamente)
 - ✅ **Múltiples fotos a la vez** (drag and drop o selección)
+- ✅ **Metadata** guardada (descripción, fecha, tamaño original)
 
-### Persistencia en la nube
+### ¿Cómo usar?
 
-Si quieres que las fotos se guarden **permanentemente**:
-1. Haz clic en **"📥 Descargar JSON"** en la galería
-2. Esto descarga un archivo `galeria_user_images.json`
-3. Súbelo a tu repositorio de GitHub
-4. ¡Listo! Las fotos se sincronizarán en todos los navegadores
+**Opción 1: Con el servidor (Recomendado) ⭐**
+1. Instala Node.js si no lo tienes: [nodejs.org](https://nodejs.org/)
+2. En la carpeta del proyecto, ejecuta:
+```bash
+npm install
+npm start
+```
+3. Abre `http://localhost:3000`
+4. Ve a **Galería** → **+ Agregar**
+5. Código: `0605`
+6. ¡Selecciona y sube tus fotos!
+
+**Opción 2: Sin servidor (Manual)**
+1. Ve a la sección **Galería**
+2. Haz clic en **"+ Agregar"**
+3. Ingresa el código: **`0605`**
+4. Las fotos se guardan en `localStorage` (tu navegador)
+5. Descarga el JSON con el botón ⬇️
+
+### Estructura de carpetas
+
+```
+fotos/
+├── foto 1.jpg (originales)
+├── foto 2.jpg
+└── subidas/          ← Nuevas fotos aquí
+    ├── miafoto_1699234567890.jpg
+    ├── otrafoto_1699234890123.jpg
+    └── ...
+```
+
+### Commits automáticos
+
+Una vez hayas subido las fotos con el servidor:
+```bash
+git add fotos/subidas/
+git commit -m "Nuevas fotos en la galería ❤️"
+git push
+```
 
 ---
 
