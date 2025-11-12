@@ -276,6 +276,30 @@
     transform: translateY(-1px);
 }
 
+/* Botón oculto para descargar JSON */
+.modal-footer {
+    padding: 15px 30px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 105, 180, 0.1);
+}
+
+.btn-hidden-download {
+    background: none;
+    border: none;
+    color: #ffb6d9;
+    font-size: 0.9em;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+.btn-hidden-download:hover {
+    opacity: 1;
+    color: #ff69b4;
+    transform: scale(1.2);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .modal-content {

@@ -32,7 +32,6 @@
             <!-- Botón para abrir modal de subida -->
             <div class="galeria-actions">
                 <button id="btn-subir-fotos" class="btn btn-subir-fotos">➕ Subir Fotos</button>
-                <button id="descargar-json" class="btn btn-descargar">📥 Descargar JSON</button>
             </div>
 
             <!-- Modal para subir fotos -->
@@ -67,6 +66,13 @@
                             <button type="button" class="btn btn-secondary" id="modal-cancel">Cancelar</button>
                         </div>
                     </form>
+                    
+                    <!-- Opción discreta para descargar JSON -->
+                    <div class="modal-footer">
+                        <small>
+                            <button type="button" id="descargar-json" class="btn-hidden-download" title="Descargar datos">⬇️</button>
+                        </small>
+                    </div>
                 </div>
             </div>
 

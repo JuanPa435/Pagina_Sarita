@@ -265,9 +265,6 @@ function initGallery(options = {}) {
     const form = document.getElementById('upload-form');
     if (form) form.addEventListener('submit', handleUploadForm);
 
-    const btnDescarga = document.getElementById('descargar-json');
-    if (btnDescarga) btnDescarga.addEventListener('click', descargarJSON);
-
     // Inicializar modal
     initModalHandlers();
 
@@ -280,6 +277,7 @@ function initModalHandlers() {
     const btnAbrir = document.getElementById('btn-subir-fotos');
     const btnCerrar = document.getElementById('modal-close');
     const btnCancelar = document.getElementById('modal-cancel');
+    const btnDescarga = document.getElementById('descargar-json');
     const fileInput = document.getElementById('fotos');
 
     if (!modal || !btnAbrir) return;
@@ -299,6 +297,11 @@ function initModalHandlers() {
 
     btnCerrar.addEventListener('click', cerrarModal);
     btnCancelar.addEventListener('click', cerrarModal);
+
+    // Descarga JSON (desde dentro del modal)
+    if (btnDescarga) {
+        btnDescarga.addEventListener('click', descargarJSON);
+    }
 
     // Cerrar al hacer clic fuera del modal
     modal.addEventListener('click', (e) => {
