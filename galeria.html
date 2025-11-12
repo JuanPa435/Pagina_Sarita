@@ -99,27 +99,14 @@
         const FOTOS_POR_PAGINA = 6;
         let paginaActual = 1;
 
-        function mostrarFotos() {
-            const container = document.getElementById('galeria-container');
-            container.innerHTML = '';
-
-            const inicio = (paginaActual - 1) * FOTOS_POR_PAGINA;
-            const fin = inicio + FOTOS_POR_PAGINA;
-            const fotosEnPagina = GALERIA.slice(inicio, fin);
-
-            <script src="script.js"></script>
-            <script src="galeria-data.js"></script>
-            <script>
-                const FOTOS_POR_PAGINA = 6;
-                let paginaActual = 1;
-
-                // Inicializa la galería delegando la lógica a script.js
-                document.addEventListener('DOMContentLoaded', () => {
-                    if (typeof initGallery === 'function') {
-                        initGallery({ fotosPorPagina: FOTOS_POR_PAGINA, paginaInicial: 1 });
-                    } else {
-                        console.error('initGallery no está definido. Asegúrate de que script.js cargó correctamente.');
-                    }
-                });
-            </script>
-                    const zoom = localStorage.getItem(`foto_${indiceFoto}_zoom`) || '100';
+        // Inicializa la galería delegando la lógica a script.js
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initGallery === 'function') {
+                initGallery({ fotosPorPagina: FOTOS_POR_PAGINA, paginaInicial: 1 });
+            } else {
+                console.error('initGallery no está definido. Asegúrate de que script.js cargó correctamente.');
+            }
+        });
+    </script>
+</body>
+</html>
