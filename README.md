@@ -26,6 +26,7 @@ Tus canciones favoritas en un solo lugar:
 ### 🖼️ **Galería de Momentos**
 Un espacio para guardar recuerdos:
 - Diseñado para **18 fotos** de ustedes
+- **Subir nuevas fotos directamente desde la página** con código de seguridad
 - Grid responsivo y elegante
 - Sombras y efectos modernos
 - Funciona perfectamente en celular, tablet y computadora
@@ -153,7 +154,25 @@ Tu sitio estará en: **`https://juanpa435.github.io/Pagina_Sarita/`**
 
 ---
 
-## 📝 **Cómo Personalizar**
+## � **Seguridad y Almacenamiento de Fotos**
+
+### ¿Cómo funciona la subida de fotos?
+
+Las fotos se guardan **directamente en tu navegador** usando `localStorage`:
+- ✅ **No sube a internet** (privado y seguro)
+- ✅ **Código de seguridad** (0605) protege la galería
+- ✅ **Máximo 3MB por foto** (para no saturar el navegador)
+- ✅ **Múltiples fotos a la vez** (drag and drop o selección)
+
+### Persistencia en la nube
+
+Si quieres que las fotos se guarden **permanentemente**:
+1. Haz clic en **"📥 Descargar JSON"** en la galería
+2. Esto descarga un archivo `galeria_user_images.json`
+3. Súbelo a tu repositorio de GitHub
+4. ¡Listo! Las fotos se sincronizarán en todos los navegadores
+
+---
 
 ### Agregar más poemas
 Abre `poemas-data.js` y agrega:
@@ -189,6 +208,17 @@ Abre `styles-amoroso.css` y modifica:
 ```
 
 ### Agregar fotos a la galería
+Tienes **dos opciones**:
+
+**Opción 1: Desde la página (Recomendado) ⭐**
+1. Ve a la sección **Galería**
+2. Haz clic en el botón **"➕ Subir Fotos"**
+3. Ingresa el código: **`0605`**
+4. Selecciona las fotos (puedes arrastrarlas o hacer clic)
+5. Agrega una descripción (opcional)
+6. ¡Listo! Las fotos aparecen inmediatamente
+
+**Opción 2: Editando archivos directamente**
 1. Guarda las fotos en la carpeta `/fotos/`
 2. Abre `galeria-data.js`
 3. Agrega las rutas de tus fotos
@@ -219,7 +249,7 @@ Presiona `F12` → Pestaña "Elements" o "Inspector"
 | Poemas | 100 | ✅ Completo |
 | Canciones | 24 | ✅ Completo |
 | Mensajes | 80+ | ✅ Completo |
-| Fotos | 18 | 🔄 Puedes agregar las tuyas |
+| Fotos | 18 | ✅ Puedes agregar desde la página con código 0605 |
 | Diseño | - | ✅ Profesional y moderno |
 | Animaciones | - | ✅ Suaves y hermosas |
 
