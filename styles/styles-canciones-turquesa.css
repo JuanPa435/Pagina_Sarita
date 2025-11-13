@@ -1,0 +1,110 @@
+/* ==========================================
+   CANCIONES TURQUESA
+   ========================================== */
+
+:root {
+    --turquesa-oscuro: #0a4d68;
+    --turquesa-claro: #05bfdb;
+    --blanco: #ffffff;
+}
+
+.canciones {
+    padding: 3rem 2rem;
+    min-height: 80vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.seccion-titulo {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--turquesa-oscuro);
+    margin-bottom: 3rem;
+    font-weight: 700;
+}
+
+#canciones-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.cancion-card {
+    background: linear-gradient(135deg, rgba(5, 191, 219, 0.1), rgba(8, 131, 149, 0.1));
+    border: 2px solid var(--turquesa-claro);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.cancion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(5, 191, 219, 0.2);
+    background: linear-gradient(135deg, rgba(5, 191, 219, 0.15), rgba(8, 131, 149, 0.15));
+}
+
+.cancion-card h3 {
+    color: var(--turquesa-oscuro);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.cancion-artista {
+    color: var(--turquesa-claro);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.cancion-contenido {
+    color: var(--turquesa-oscuro);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 3rem 0;
+    flex-wrap: wrap;
+}
+
+.pagina-btn {
+    padding: 0.7rem 1.2rem;
+    border: 2px solid var(--turquesa-claro);
+    background: rgba(5, 191, 219, 0.1);
+    color: var(--turquesa-oscuro);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagina-btn:hover:not(.deshabilitada) {
+    background: var(--turquesa-claro);
+    color: var(--blanco);
+}
+
+.pagina-btn.activa {
+    background: var(--turquesa-oscuro);
+    color: var(--blanco);
+}
+
+.pagina-btn.deshabilitada {
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    #canciones-container {
+        grid-template-columns: 1fr;
+    }
+
+    .seccion-titulo {
+        font-size: 1.8rem;
+    }
+}

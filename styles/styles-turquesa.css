@@ -1,0 +1,316 @@
+/* ==========================================
+   TEMA TURQUESA - NUESTRA HISTORIA
+   ========================================== */
+
+:root {
+    --turquesa-oscuro: #0a4d68;
+    --turquesa-medio: #088395;
+    --turquesa-claro: #05bfdb;
+    --turquesa-muy-claro: #00d4ff;
+    --blanco: #ffffff;
+    --gris-claro: #f0f9ff;
+    --gris-medio: #e0f2fe;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--turquesa-oscuro) 0%, var(--turquesa-medio) 50%, var(--turquesa-claro) 100%);
+    color: var(--turquesa-oscuro);
+    min-height: 100vh;
+}
+
+/* ==========================================
+   NAVEGACIÓN
+   ========================================== */
+
+.navbar {
+    background: rgba(10, 77, 104, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(5, 191, 219, 0.2);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--turquesa-muy-claro);
+    text-shadow: 0 4px 8px rgba(5, 191, 219, 0.3);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--blanco);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.nav-link:hover {
+    color: var(--turquesa-muy-claro);
+    background: rgba(5, 191, 219, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   HERO SECTION
+   ========================================== */
+
+.hero {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 800px;
+    z-index: 2;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.titulo-principal {
+    font-size: 3.5rem;
+    color: var(--blanco);
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 12px rgba(5, 191, 219, 0.4);
+    font-weight: 700;
+}
+
+.subtitulo {
+    font-size: 1.5rem;
+    color: var(--turquesa-muy-claro);
+    margin-bottom: 1rem;
+    font-weight: 300;
+}
+
+.descripcion {
+    font-size: 1.1rem;
+    color: var(--gris-claro);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.animacion-corazones {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.corazon {
+    font-size: 3rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.corazon:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.corazon:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-20px);
+        opacity: 0.8;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   SECCIONES PRINCIPALES
+   ========================================== */
+
+.secciones-principales {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 4rem 2rem;
+    margin: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.seccion-titulo {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--turquesa-oscuro);
+    margin-bottom: 3rem;
+    font-weight: 700;
+}
+
+.grid-secciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.seccion-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.seccion-box {
+    background: linear-gradient(135deg, rgba(5, 191, 219, 0.1) 0%, rgba(8, 131, 149, 0.1) 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid var(--turquesa-claro);
+    cursor: pointer;
+}
+
+.seccion-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 32px rgba(5, 191, 219, 0.3);
+    background: linear-gradient(135deg, rgba(5, 191, 219, 0.2) 0%, rgba(8, 131, 149, 0.2) 100%);
+    border-color: var(--turquesa-muy-claro);
+}
+
+.seccion-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.seccion-box h3 {
+    font-size: 1.5rem;
+    color: var(--turquesa-oscuro);
+    margin-bottom: 0.5rem;
+}
+
+.seccion-box p {
+    color: var(--turquesa-medio);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.cantidad {
+    display: inline-block;
+    background: var(--turquesa-claro);
+    color: var(--blanco);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.footer {
+    background: var(--turquesa-oscuro);
+    color: var(--blanco);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+}
+
+.footer-date {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ==========================================
+   RESPONSIVO
+   ========================================== */
+
+@media (max-width: 768px) {
+    .titulo-principal {
+        font-size: 2rem;
+    }
+
+    .subtitulo {
+        font-size: 1.1rem;
+    }
+
+    .nav-menu {
+        gap: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .grid-secciones {
+        grid-template-columns: 1fr;
+    }
+
+    .seccion-titulo {
+        font-size: 1.8rem;
+    }
+
+    .animacion-corazones {
+        gap: 1rem;
+    }
+
+    .corazon {
+        font-size: 2rem;
+    }
+}
+
+/* ==========================================
+   UTILIDADES
+   ========================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
