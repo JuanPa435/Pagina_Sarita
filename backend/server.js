@@ -135,6 +135,60 @@ app.delete('/api/foto/:filename', (req, res) => {
     }
 });
 
+// Endpoints para persistencia de datos
+const poemasPath = path.join(__dirname, '..', 'poemas', 'poemas-data.js');
+const cancionesPath = path.join(__dirname, '..', 'canciones', 'canciones-data.js');
+const mensajesPath = path.join(__dirname, '..', 'mensajes', 'mensajes-data.js');
+const galeriaPath = path.join(__dirname, '..', 'galeria', 'galeria-data.js');
+
+app.post('/api/poemas/save', (req, res) => {
+    try {
+        const { poemas } = req.body;
+        const content = `const POEMAS = ${JSON.stringify(poemas, null, 2)};`;
+        fs.writeFileSync(poemasPath, content, 'utf8');
+        res.json({ success: true, mensaje: 'Poemas guardados' });
+    } catch (error) {
+        console.error('Error guardando poemas:', error);
+        res.status(500).json({ error: 'Error al guardar poemas' });
+    }
+});
+
+app.post('/api/canciones/save', (req, res) => {
+    try {
+        const { canciones } = req.body;
+        const content = `const CANCIONES = ${JSON.stringify(canciones, null, 2)};`;
+        fs.writeFileSync(cancionesPath, content, 'utf8');
+        res.json({ success: true, mensaje: 'Canciones guardadas' });
+    } catch (error) {
+        console.error('Error guardando canciones:', error);
+        res.status(500).json({ error: 'Error al guardar canciones' });
+    }
+});
+
+app.post('/api/mensajes/save', (req, res) => {
+    try {
+        const { mensajes } = req.body;
+        const content = `const MENSAJES = ${JSON.stringify(mensajes, null, 2)};`;
+        fs.writeFileSync(mensajesPath, content, 'utf8');
+        res.json({ success: true, mensaje: 'Mensajes guardados' });
+    } catch (error) {
+        console.error('Error guardando mensajes:', error);
+        res.status(500).json({ error: 'Error al guardar mensajes' });
+    }
+});
+
+app.post('/api/galeria/save', (req, res) => {
+    try {
+        const { galeria } = req.body;
+        const content = `const GALERIA = ${JSON.stringify(galeria, null, 2)};`;
+        fs.writeFileSync(galeriaPath, content, 'utf8');
+        res.json({ success: true, mensaje: 'Galería guardada' });
+    } catch (error) {
+        console.error('Error guardando galería:', error);
+        res.status(500).json({ error: 'Error al guardar galería' });
+    }
+});
+
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
