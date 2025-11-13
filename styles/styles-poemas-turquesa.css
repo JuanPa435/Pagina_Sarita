@@ -1,17 +1,19 @@
 /* ==========================================
-   POEMAS TURQUESA
+   POEMAS TURQUESA - ULTRA VISIBLE
    ========================================== */
 
 :root {
     --turquesa-oscuro: #0a4d68;
     --turquesa-claro: #05bfdb;
+    --turquesa-neon: #00ffff;
+    --texto-claro: #e0f7ff;
     --blanco: #ffffff;
-    --gris-claro: #f0f9ff;
 }
 
 .poemas {
     padding: 3rem 2rem;
     min-height: 80vh;
+    background: linear-gradient(135deg, #0a3a4f 0%, #084567 50%, #066678 100%);
 }
 
 .container {
@@ -21,55 +23,80 @@
 
 .seccion-titulo {
     text-align: center;
-    font-size: 2.5rem;
-    color: var(--turquesa-oscuro);
+    font-size: 2.8rem;
+    color: var(--turquesa-neon);
     margin-bottom: 3rem;
-    font-weight: 700;
+    font-weight: 800;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
 #poemas-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
 }
 
 .poema-card {
-    background: linear-gradient(135deg, rgba(5, 191, 219, 0.1), rgba(8, 131, 149, 0.1));
-    border: 2px solid var(--turquesa-claro);
-    border-radius: 12px;
-    padding: 2rem;
-    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(5, 191, 219, 0.35) 0%, rgba(0, 212, 255, 0.2) 100%);
+    border: 3px solid var(--turquesa-neon);
+    border-radius: 16px;
+    padding: 2.2rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.poema-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
 }
 
 .poema-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 32px rgba(5, 191, 219, 0.2);
-    background: linear-gradient(135deg, rgba(5, 191, 219, 0.15), rgba(8, 131, 149, 0.15));
+    transform: translateY(-12px);
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, rgba(5, 191, 219, 0.45) 0%, rgba(0, 212, 255, 0.3) 100%);
+    border-color: #00ffff;
+}
+
+.poema-card:hover::before {
+    left: 100%;
 }
 
 .poema-card h3 {
-    color: var(--turquesa-oscuro);
+    color: var(--turquesa-neon);
     margin-bottom: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
 }
 
 .poema-contenido {
-    color: var(--turquesa-oscuro);
-    line-height: 1.8;
+    color: var(--texto-claro);
+    line-height: 1.9;
     margin-bottom: 1rem;
+    font-size: 1.08rem;
 }
 
 .poema-contenido p {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
 }
 
 .fecha {
     display: block;
-    color: var(--turquesa-claro);
+    color: var(--turquesa-neon);
     font-style: italic;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-top: 1rem;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
 }
 
 .paginacion {
@@ -81,28 +108,33 @@
 }
 
 .pagina-btn {
-    padding: 0.7rem 1.2rem;
-    border: 2px solid var(--turquesa-claro);
-    background: rgba(5, 191, 219, 0.1);
-    color: var(--turquesa-oscuro);
-    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    border: 2px solid var(--turquesa-neon);
+    background: rgba(0, 255, 255, 0.1);
+    color: var(--turquesa-neon);
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
+    font-size: 1rem;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
 .pagina-btn:hover:not(.deshabilitada) {
-    background: var(--turquesa-claro);
-    color: var(--blanco);
+    background: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    transform: translateY(-2px);
 }
 
 .pagina-btn.activa {
-    background: var(--turquesa-oscuro);
-    color: var(--blanco);
+    background: var(--turquesa-neon);
+    color: var(--turquesa-oscuro);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
 }
 
 .pagina-btn.deshabilitada {
-    opacity: 0.5;
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
