@@ -8,12 +8,12 @@ const app = express();
 // Configurar middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb' }));
-app.use(express.static('.'));
+app.use(express.static(path.join(__dirname, '..')));
 
 // Crear carpetas si no existen
-const fotosDir = path.join(__dirname, 'fotos');
+const fotosDir = path.join(__dirname, '..', 'fotos');
 const subiradasDir = path.join(fotosDir, 'subidas');
-const metadataDir = path.join(__dirname, 'fotos-metadata');
+const metadataDir = path.join(__dirname, '..', 'fotos-metadata');
 
 [fotosDir, subiradasDir, metadataDir].forEach(dir => {
     if (!fs.existsSync(dir)) {
