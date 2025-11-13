@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia 💙</title>
+    <link rel="stylesheet" href="styles/styles-turquesa.css">
+    <link rel="stylesheet" href="styles/buttons-premium.css">
+    <link rel="stylesheet" href="styles/styles-index.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">💙 Nuestra Historia</a>
+            <ul class="nav-menu">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#poemas" class="nav-link">Poemas</a></li>
+                <li><a href="#canciones" class="nav-link">Canciones</a></li>
+                <li><a href="#galeria" class="nav-link">Galería</a></li>
+                <li><a href="#mensajes" class="nav-link">Mensajes</a></li>
+                <li><a href="#meses" class="nav-link">Meses</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <div class="corazones-flotantes">
+                <span class="corazon">❤️</span>
+                <span class="corazon">💙</span>
+                <span class="corazon">💜</span>
+                <span class="corazon">❤️</span>
+                <span class="corazon">💙</span>
+            </div>
+            <h1 class="titulo-principal">Nuestra Historia</h1>
+            <p class="subtitulo">Un espacio para nuestros momentos, sentimientos y recuerdos</p>
+            <div class="contador-dias">
+                <div class="contador-item">
+                    <span id="contador-dias" class="numero-grande">191</span>
+                    <span class="label-contador">Días Juntos</span>
+                </div>
+            </div>
+            <a href="#poemas" class="btn-ver-mas">Explorar Nuestros Momentos →</a>
+        </div>
+    </section>
+
+    <!-- Sección Poemas -->
+    <section class="seccion-contenido" id="poemas">
+        <div class="container">
+            <div class="seccion-header">
+                <h2 class="seccion-titulo">📝 Poemas</h2>
+                <p class="seccion-descripcion">Versos escritos desde el corazón</p>
+            </div>
+            <div class="contenido-preview">
+                <div id="poemas-preview" class="items-grid">
+                    <!-- Los últimos poemas se mostrarán aquí -->
+                </div>
+                <div class="seccion-actions">
+                    <a href="poemas/poemas.html" class="btn-ver">Ver y Agregar Poemas →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Canciones -->
+    <section class="seccion-contenido" id="canciones">
+        <div class="container">
+            <div class="seccion-header">
+                <h2 class="seccion-titulo">🎵 Canciones</h2>
+                <p class="seccion-descripcion">Canciones que te dedico</p>
+            </div>
+            <div class="contenido-preview">
+                <div id="canciones-preview" class="items-grid">
+                    <!-- Las últimas canciones se mostrarán aquí -->
+                </div>
+                <div class="seccion-actions">
+                    <a href="canciones/canciones.html" class="btn-ver">Ver y Agregar Canciones →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Galería -->
+    <section class="seccion-contenido" id="galeria">
+        <div class="container">
+            <div class="seccion-header">
+                <h2 class="seccion-titulo">🖼️ Galería</h2>
+                <p class="seccion-descripcion">Nuestros mejores momentos capturados</p>
+            </div>
+            <div class="contenido-preview">
+                <div id="galeria-preview" class="galeria-grid-preview">
+                    <!-- Las últimas fotos se mostrarán aquí -->
+                </div>
+                <div class="seccion-actions">
+                    <a href="galeria/galeria.html" class="btn-ver">Ver y Subir Fotos →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Mensajes -->
+    <section class="seccion-contenido" id="mensajes">
+        <div class="container">
+            <div class="seccion-header">
+                <h2 class="seccion-titulo">💬 Mensajes</h2>
+                <p class="seccion-descripcion">Palabras especiales para ti</p>
+            </div>
+            <div class="contenido-preview">
+                <div id="mensajes-preview" class="items-grid">
+                    <!-- Los últimos mensajes se mostrarán aquí -->
+                </div>
+                <div class="seccion-actions">
+                    <a href="mensajes/mensajes.html" class="btn-ver">Ver y Agregar Mensajes →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Meses -->
+    <section class="seccion-contenido" id="meses">
+        <div class="container">
+            <div class="seccion-header">
+                <h2 class="seccion-titulo">📅 Celebraciones Mensuales</h2>
+                <p class="seccion-descripcion">Cada mes es una bendición contigo</p>
+            </div>
+            <div class="contenido-preview">
+                <div id="meses-preview" class="meses-grid">
+                    <!-- Los meses se mostrarán aquí -->
+                </div>
+                <div class="seccion-actions">
+                    <a href="#meses" class="btn-ver">Ver y Agregar Meses →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para agregar mes -->
+    <div id="modal-mes" class="modal-mes" style="display: none;">
+        <div class="modal-mes-content">
+            <div class="modal-header">
+                <h3>Registrar Mes Especial</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-mes">&times;</button>
+            </div>
+            <form id="form-mes">
+                <div class="form-group">
+                    <label for="mes-numero">Número de mes:</label>
+                    <input type="number" id="mes-numero" placeholder="Ej: 1, 2, 3..." required>
+                </div>
+                <div class="form-group">
+                    <label for="mes-fecha">Fecha de celebración:</label>
+                    <input type="date" id="mes-fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="mes-mensaje">Mensaje para este mes:</label>
+                    <textarea id="mes-mensaje" placeholder="¿Qué significa este mes para ti?" rows="4" required></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar-mes">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar Mes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="poemas/poemas-data.js"></script>
+    <script src="canciones/canciones-data.js"></script>
+    <script src="mensajes/mensajes-data.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

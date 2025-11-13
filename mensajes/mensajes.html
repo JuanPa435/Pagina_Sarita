@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensajes - Nuestra Historia 💙</title>
-    <link rel="stylesheet" href="../styles/styles-turquesa.css">
-    <link rel="stylesheet" href="../styles/styles-mensajes-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-variables.css">
+    <link rel="stylesheet" href="../styles/styles-global-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-modal-mensajes.css">
 </head>
 <body>
     <!-- Navegación -->
     <nav class="navbar">
-        <div class="nav-container">
+        <div class="nav-content">
             <a href="../index.html" class="logo">💙 Nuestra Historia</a>
             <ul class="nav-menu">
-                <li><a href="../index.html" class="nav-link">Inicio</a></li>
-                <li><a href="../poemas/poemas.html" class="nav-link">Poemas</a></li>
-                <li><a href="../canciones/canciones.html" class="nav-link">Canciones</a></li>
-                <li><a href="../galeria/galeria.html" class="nav-link">Galería</a></li>
-                <li><a href="mensajes.html" class="nav-link">Mensajes</a></li>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../poemas/poemas.html">Poemas</a></li>
+                <li><a href="../canciones/canciones.html">Canciones</a></li>
+                <li><a href="../galeria/galeria.html">Galería</a></li>
+                <li><a href="mensajes.html">Mensajes</a></li>
             </ul>
         </div>
     </nav>
@@ -35,20 +36,74 @@
             <div class="paginacion" id="paginacion">
                 <!-- Los botones de paginación se generarán aquí -->
             </div>
+
+            <!-- Botón Agregar -->
+            <div style="text-align: center; margin-top: 3rem; margin-bottom: 3rem;">
+                <button class="btn-agregar" id="btn-agregar-mensaje">+ Agregar Mensaje</button>
+            </div>
         </div>
     </section>
 
+    <!-- Modal para agregar/editar mensaje -->
+    <div id="modal-mensaje" class="modal-mensaje" style="display: none;">
+        <div class="modal-mensaje-content">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Agregar Mensaje</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
+            </div>
+            <form id="form-mensaje">
+                <div class="form-group">
+                    <label for="mensaje-asunto">Asunto:</label>
+                    <input type="text" id="mensaje-asunto" placeholder="Ej: Mi amor por ti" required>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje-contenido">Mensaje:</label>
+                    <textarea id="mensaje-contenido" placeholder="Escribe tu mensaje especial..." rows="6" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="mensaje-fecha">Fecha (opcional):</label>
+                    <input type="date" id="mensaje-fecha">
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar Mensaje</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
-        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p>Hecho con 💙 para la persona que amo</p>
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
     <script src="../script.js"></script>
     <script src="mensajes-data.js"></script>
     <script>
-        const MENSAJES_POR_PAGINA = 6;
+        const MENSAJES_POR_PAGINA = 12;
         let paginaActual = 1;
+        let mensajeDatosEditando = null;
+
+        function cargarMensajesDelStorage() {
+            const mensajesGuardados = localStorage.getItem('mensajes_app');
+            if (mensajesGuardados) {
+                try {
+                    window.MENSAJES = JSON.parse(mensajesGuardados);
+                } catch (e) {
+                    console.log('Usando mensajes por defecto');
+                }
+            }
+        }
+
+        function guardarMensajesEnStorage() {
+            localStorage.setItem('mensajes_app', JSON.stringify(window.MENSAJES));
+            fetch('http://localhost:3000/api/mensajes/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mensajes: window.MENSAJES })
+            }).catch(err => console.log('Backend no disponible:', err));
+        }
 
         function mostrarMensajes() {
             const container = document.getElementById('mensajes-container');
@@ -59,12 +114,21 @@
             const mensajesEnPagina = MENSAJES.slice(inicio, fin);
 
             mensajesEnPagina.forEach((mensaje, index) => {
+                const indicePrincipal = inicio + index;
                 const div = document.createElement('div');
                 div.className = 'mensaje-box';
                 div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
                 div.innerHTML = `
-                    <div class="mensaje-emoji">${mensaje.emoji}</div>
-                    <p class="mensaje-texto">"${mensaje.texto}"</p>
+                    <h3>${mensaje.asunto || 'Mensaje Especial'}</h3>
+                    <p class="mensaje-texto">"${mensaje.contenido || mensaje.texto}"</p>
+                    <span class="fecha-mensaje">${mensaje.fecha || 'Sin fecha'}</span>
+                    <div class="botones-mensaje-menu">
+                        <button class="btn-menu-toggle" onclick="toggleMenuMensaje(this)">+</button>
+                        <div class="botones-mensaje-desplegable">
+                            <button class="btn-editar" onclick="editarMensaje(${indicePrincipal})">✎ Editar</button>
+                            <button class="btn-eliminar" onclick="eliminarMensaje(${indicePrincipal})">🗑️ Eliminar</button>
+                        </div>
+                    </div>
                 `;
                 container.appendChild(div);
             });
@@ -119,8 +183,109 @@
             paginacionDiv.appendChild(btnSiguiente);
         }
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', mostrarMensajes);
+        function toggleMenuMensaje(btn) {
+            const menu = btn.parentElement.querySelector('.botones-mensaje-desplegable');
+            menu.classList.toggle('visible');
+            btn.classList.toggle('activo');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.botones-mensaje-menu')) {
+                document.querySelectorAll('.botones-mensaje-desplegable.visible').forEach(menu => {
+                    menu.classList.remove('visible');
+                    menu.previousElementSibling.classList.remove('activo');
+                });
+            }
+        });
+
+        function mostrarModal(titulo = 'Agregar Mensaje') {
+            document.getElementById('modal-titulo').textContent = titulo;
+            document.getElementById('modal-mensaje').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-mensaje').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('form-mensaje').reset();
+            mensajeDatosEditando = null;
+        }
+
+        function abrirFormularioAgregar() {
+            mensajeDatosEditando = null;
+            document.getElementById('form-mensaje').reset();
+            mostrarModal('Agregar Mensaje');
+        }
+
+        function editarMensaje(indice) {
+            mensajeDatosEditando = indice;
+            const mensaje = MENSAJES[indice];
+            document.getElementById('mensaje-asunto').value = mensaje.asunto || '';
+            document.getElementById('mensaje-contenido').value = mensaje.contenido || mensaje.texto || '';
+            document.getElementById('mensaje-fecha').value = mensaje.fecha || '';
+            mostrarModal('Editar Mensaje');
+        }
+
+        function eliminarMensaje(indice) {
+            if (confirm(`¿Estás seguro de que quieres eliminar este mensaje?`)) {
+                MENSAJES.splice(indice, 1);
+                guardarMensajesEnStorage();
+                
+                const totalPaginas = Math.ceil(MENSAJES.length / MENSAJES_POR_PAGINA);
+                if (paginaActual > totalPaginas && totalPaginas > 0) {
+                    paginaActual = totalPaginas;
+                } else if (totalPaginas === 0) {
+                    paginaActual = 1;
+                }
+                
+                mostrarMensajes();
+            }
+        }
+
+        function guardarMensaje(evento) {
+            evento.preventDefault();
+            
+            const asunto = document.getElementById('mensaje-asunto').value.trim();
+            const contenido = document.getElementById('mensaje-contenido').value.trim();
+            const fecha = document.getElementById('mensaje-fecha').value;
+
+            if (!asunto || !contenido) {
+                alert('Por favor completa el asunto y el contenido');
+                return;
+            }
+
+            if (mensajeDatosEditando !== null) {
+                MENSAJES[mensajeDatosEditando] = { asunto, contenido, fecha, texto: contenido };
+            } else {
+                MENSAJES.push({ asunto, contenido, fecha, texto: contenido });
+            }
+
+            guardarMensajesEnStorage();
+            mostrarMensajes();
+            cerrarModal();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarMensajesDelStorage();
+            mostrarMensajes();
+
+            document.getElementById('btn-agregar-mensaje').addEventListener('click', abrirFormularioAgregar);
+            document.getElementById('btn-cerrar-modal').addEventListener('click', cerrarModal);
+            document.getElementById('btn-cancelar').addEventListener('click', cerrarModal);
+            document.getElementById('form-mensaje').addEventListener('submit', guardarMensaje);
+
+            document.getElementById('modal-mensaje').addEventListener('click', (e) => {
+                if (e.target.id === 'modal-mensaje') {
+                    cerrarModal();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.getElementById('modal-mensaje').style.display === 'flex') {
+                    cerrarModal();
+                }
+            });
+        });
     </script>
 </body>
 </html>

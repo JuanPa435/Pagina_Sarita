@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería - Nuestra Historia 💙</title>
-    <link rel="stylesheet" href="../styles/styles-turquesa.css">
-    <link rel="stylesheet" href="../styles/styles-galeria-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-variables.css">
+    <link rel="stylesheet" href="../styles/styles-global-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-modal-galeria.css">
 </head>
 <body>
     <!-- Navegación -->
     <nav class="navbar">
-        <div class="nav-container">
+        <div class="nav-content">
             <a href="../index.html" class="logo">💙 Nuestra Historia</a>
             <ul class="nav-menu">
-                <li><a href="../index.html" class="nav-link">Inicio</a></li>
-                <li><a href="../poemas/poemas.html" class="nav-link">Poemas</a></li>
-                <li><a href="../canciones/canciones.html" class="nav-link">Canciones</a></li>
-                <li><a href="galeria.html" class="nav-link">Galería</a></li>
-                <li><a href="../mensajes/mensajes.html" class="nav-link">Mensajes</a></li>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../poemas/poemas.html">Poemas</a></li>
+                <li><a href="../canciones/canciones.html">Canciones</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="../mensajes/mensajes.html">Mensajes</a></li>
             </ul>
         </div>
     </nav>
@@ -45,7 +46,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p>Hecho con 💙 para la persona que amo</p>
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
@@ -94,7 +95,7 @@
     <script src="../script.js"></script>
     <script src="galeria-data.js"></script>
     <script>
-        const FOTOS_POR_PAGINA = 6;
+        const FOTOS_POR_PAGINA = 12;
         let paginaActual = 1;
 
         // Inicializa la galería delegando la lógica a script.js

@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canciones - Nuestra Historia 💙</title>
-    <link rel="stylesheet" href="../styles/styles-turquesa.css">
-    <link rel="stylesheet" href="../styles/styles-canciones-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-variables.css">
+    <link rel="stylesheet" href="../styles/styles-global-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-modal-canciones.css">
 </head>
 <body>
     <!-- Navegación -->
     <nav class="navbar">
-        <div class="nav-container">
+        <div class="nav-content">
             <a href="../index.html" class="logo">💙 Nuestra Historia</a>
             <ul class="nav-menu">
-                <li><a href="../index.html" class="nav-link">Inicio</a></li>
-                <li><a href="../poemas/poemas.html" class="nav-link">Poemas</a></li>
-                <li><a href="canciones.html" class="nav-link">Canciones</a></li>
-                <li><a href="../galeria/galeria.html" class="nav-link">Galería</a></li>
-                <li><a href="../mensajes/mensajes.html" class="nav-link">Mensajes</a></li>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../poemas/poemas.html">Poemas</a></li>
+                <li><a href="canciones.html">Canciones</a></li>
+                <li><a href="../galeria/galeria.html">Galería</a></li>
+                <li><a href="../mensajes/mensajes.html">Mensajes</a></li>
             </ul>
         </div>
     </nav>
@@ -25,7 +26,7 @@
     <!-- Contenido -->
     <section class="canciones">
         <div class="container">
-            <h2 class="seccion-titulo">🎵 100 Canciones Dedicadas</h2>
+            <h2 class="seccion-titulo">🎵 Canciones</h2>
             
             <div id="canciones-container">
                 <!-- Las canciones se cargarán aquí -->
@@ -35,30 +36,81 @@
             <div class="paginacion" id="paginacion">
                 <!-- Los botones de paginación se generarán aquí -->
             </div>
+
+            <!-- Botón Agregar -->
+            <div style="text-align: center; margin-top: 3rem; margin-bottom: 3rem;">
+                <button class="btn-agregar" id="btn-agregar-cancion">+ Agregar Canción</button>
+                <button class="btn-descargar" id="btn-descargar-canciones" style="margin-left: 1rem; opacity: 0.7; font-size: 0.85rem;">⬇️ Descargar Datos</button>
+            </div>
         </div>
     </section>
 
+    <!-- Modal para agregar/editar canción -->
+    <div id="modal-cancion" class="modal-cancion" style="display: none;">
+        <div class="modal-cancion-content">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Agregar Canción</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
+            </div>
+            <form id="form-cancion">
+                <div class="form-group">
+                    <label for="cancion-titulo">Título de la Canción:</label>
+                    <input type="text" id="cancion-titulo" placeholder="Ingresa el título" required>
+                </div>
+                <div class="form-group">
+                    <label for="cancion-artista">Artista:</label>
+                    <input type="text" id="cancion-artista" placeholder="Ej: Taylor Swift">
+                </div>
+                <div class="form-group">
+                    <label for="cancion-url">Enlace (YouTube, Spotify, etc):</label>
+                    <input type="text" id="cancion-url" placeholder="Pega el enlace de la canción">
+                </div>
+                <div class="form-group">
+                    <label for="cancion-dedicatoria">Dedicatoria:</label>
+                    <textarea id="cancion-dedicatoria" placeholder="¿Por qué te dedico esta canción?" rows="4"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar Canción</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
-        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p>Hecho con 💙 para la persona que amo</p>
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
     <script src="../script.js"></script>
     <script src="canciones-data.js"></script>
     <script>
-        const CANCIONES_POR_PAGINA = 6;
+        const CANCIONES_POR_PAGINA = 12;
         let paginaActual = 1;
+        let cancionDatosEditando = null;
 
-        // Función para mostrar/ocultar opciones de reproducción
-        function toggleOpciones(id) {
-            const opciones = document.getElementById(id);
-            if (opciones.style.display === 'none' || opciones.style.display === '') {
-                opciones.style.display = 'grid';
-                opciones.style.animation = 'slideDown 0.3s ease-out';
-            } else {
-                opciones.style.display = 'none';
+        // Cargar canciones desde localStorage
+        function cargarCancionesDelStorage() {
+            const cancionesGuardadas = localStorage.getItem('canciones_app');
+            if (cancionesGuardadas) {
+                try {
+                    window.CANCIONES = JSON.parse(cancionesGuardadas);
+                } catch (e) {
+                    console.log('Usando canciones por defecto');
+                }
             }
+        }
+
+        // Guardar canciones en localStorage y en el servidor
+        function guardarCancionesEnStorage() {
+            localStorage.setItem('canciones_app', JSON.stringify(window.CANCIONES));
+            // Guardar en el servidor
+            fetch('http://localhost:3000/api/canciones/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ canciones: window.CANCIONES })
+            }).catch(err => console.log('Backend no disponible:', err));
         }
 
         function mostrarCanciones() {
@@ -70,34 +122,25 @@
             const cancionesEnPagina = CANCIONES.slice(inicio, fin);
 
             cancionesEnPagina.forEach((cancion, index) => {
+                const indicePrincipal = inicio + index;
                 const div = document.createElement('div');
                 div.className = 'cancion-card';
                 div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
                 
-                const uniqueId = `opciones-${paginaActual}-${index}`;
-                
                 div.innerHTML = `
-                    <div class="cancion-header">
-                        <h3>🎵 ${cancion.titulo}</h3>
-                        <p class="artista">Artista: ${cancion.artista}</p>
-                    </div>
-                    <div class="cancion-razon">
-                        <p><strong>Por qué te la dedico:</strong> ${cancion.razon}</p>
-                    </div>
-                    <div class="reproductor-youtube">
-                        <button class="btn-escuchar" onclick="toggleOpciones('${uniqueId}')">
-                            ▶️ Escuchar
+                    <h3>🎵 ${cancion.titulo}</h3>
+                    <p class="cancion-artista">🎤 ${cancion.artista}</p>
+                    <p class="cancion-contenido">${cancion.razon}</p>
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.2rem;">
+                        <button class="btn-reproducir" onclick="window.open('https://open.spotify.com/search/${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}', '_blank')">
+                            ▶ Spotify
                         </button>
-                        <div class="opciones-reproducir" id="${uniqueId}" style="display: none;">
-                            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-reproducir btn-youtube">
-                                🎬 YouTube
-                            </a>
-                            <a href="https://open.spotify.com/search/${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-reproducir btn-spotify">
-                                🎵 Spotify
-                            </a>
-                            <a href="https://music.apple.com/search?term=${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-reproducir btn-apple">
-                                🍎 Apple
-                            </a>
+                    </div>
+                    <div class="botones-cancion-menu">
+                        <button class="btn-menu-toggle" onclick="toggleMenuCancion(this)">+</button>
+                        <div class="botones-cancion-desplegable">
+                            <button class="btn-editar" onclick="editarCancion(${indicePrincipal})">✎ Editar</button>
+                            <button class="btn-eliminar" onclick="eliminarCancion(${indicePrincipal})">🗑️ Eliminar</button>
                         </div>
                     </div>
                 `;
@@ -154,8 +197,127 @@
             paginacionDiv.appendChild(btnSiguiente);
         }
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', mostrarCanciones);
+        // Toggle menu
+        function toggleMenuCancion(btn) {
+            const menu = btn.parentElement.querySelector('.botones-cancion-desplegable');
+            menu.classList.toggle('visible');
+            btn.classList.toggle('activo');
+        }
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.botones-cancion-menu')) {
+                document.querySelectorAll('.botones-cancion-desplegable.visible').forEach(menu => {
+                    menu.classList.remove('visible');
+                    menu.previousElementSibling.classList.remove('activo');
+                });
+            }
+        });
+
+        // Modal functions
+        function mostrarModal(titulo = 'Agregar Canción') {
+            document.getElementById('modal-titulo').textContent = titulo;
+            document.getElementById('modal-cancion').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-cancion').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('form-cancion').reset();
+            cancionDatosEditando = null;
+        }
+
+        function abrirFormularioAgregar() {
+            cancionDatosEditando = null;
+            document.getElementById('form-cancion').reset();
+            mostrarModal('Agregar Canción');
+        }
+
+        function editarCancion(indice) {
+            cancionDatosEditando = indice;
+            const cancion = CANCIONES[indice];
+            document.getElementById('cancion-titulo').value = cancion.titulo;
+            document.getElementById('cancion-artista').value = cancion.artista || '';
+            document.getElementById('cancion-url').value = cancion.url || '';
+            document.getElementById('cancion-dedicatoria').value = cancion.razon || '';
+            mostrarModal('Editar Canción');
+        }
+
+        function eliminarCancion(indice) {
+            if (confirm(`¿Estás seguro de que quieres eliminar "${CANCIONES[indice].titulo}"?`)) {
+                CANCIONES.splice(indice, 1);
+                guardarCancionesEnStorage();
+                
+                const totalPaginas = Math.ceil(CANCIONES.length / CANCIONES_POR_PAGINA);
+                if (paginaActual > totalPaginas && totalPaginas > 0) {
+                    paginaActual = totalPaginas;
+                } else if (totalPaginas === 0) {
+                    paginaActual = 1;
+                }
+                
+                mostrarCanciones();
+            }
+        }
+
+        function guardarCancion(evento) {
+            evento.preventDefault();
+            
+            const titulo = document.getElementById('cancion-titulo').value.trim();
+            const artista = document.getElementById('cancion-artista').value.trim();
+            const url = document.getElementById('cancion-url').value.trim();
+            const razon = document.getElementById('cancion-dedicatoria').value.trim();
+
+            if (!titulo) {
+                alert('Por favor completa el título de la canción');
+                return;
+            }
+
+            if (cancionDatosEditando !== null) {
+                CANCIONES[cancionDatosEditando] = { titulo, artista: artista || 'Desconocido', url, razon };
+            } else {
+                CANCIONES.push({ titulo, artista: artista || 'Desconocido', url, razon });
+            }
+
+            guardarCancionesEnStorage();
+            mostrarCanciones();
+            cerrarModal();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarCancionesDelStorage();
+            mostrarCanciones();
+
+            document.getElementById('btn-agregar-cancion').addEventListener('click', abrirFormularioAgregar);
+            document.getElementById('btn-cerrar-modal').addEventListener('click', cerrarModal);
+            document.getElementById('btn-cancelar').addEventListener('click', cerrarModal);
+            document.getElementById('form-cancion').addEventListener('submit', guardarCancion);
+
+            document.getElementById('modal-cancion').addEventListener('click', (e) => {
+                if (e.target.id === 'modal-cancion') {
+                    cerrarModal();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.getElementById('modal-cancion').style.display === 'flex') {
+                    cerrarModal();
+                }
+            });
+
+            // Descargar datos en JSON
+            document.getElementById('btn-descargar-canciones').addEventListener('click', function() {
+                const dataStr = JSON.stringify(window.CANCIONES, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'canciones-data.json';
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+        });
     </script>
 </body>
 </html>

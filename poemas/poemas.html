@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poemas - Nuestra Historia 💙</title>
-    <link rel="stylesheet" href="../styles/styles-turquesa.css">
-    <link rel="stylesheet" href="../styles/styles-poemas-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-variables.css">
+    <link rel="stylesheet" href="../styles/styles-global-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-modal-poemas.css">
 </head>
 <body>
     <!-- Navegación -->
     <nav class="navbar">
-        <div class="nav-container">
+        <div class="nav-content">
             <a href="../index.html" class="logo">💙 Nuestra Historia</a>
             <ul class="nav-menu">
-                <li><a href="../index.html" class="nav-link">Inicio</a></li>
-                <li><a href="poemas.html" class="nav-link">Poemas</a></li>
-                <li><a href="../canciones/canciones.html" class="nav-link">Canciones</a></li>
-                <li><a href="../galeria/galeria.html" class="nav-link">Galería</a></li>
-                <li><a href="../mensajes/mensajes.html" class="nav-link">Mensajes</a></li>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="poemas.html">Poemas</a></li>
+                <li><a href="../canciones/canciones.html">Canciones</a></li>
+                <li><a href="../galeria/galeria.html">Galería</a></li>
+                <li><a href="../mensajes/mensajes.html">Mensajes</a></li>
             </ul>
         </div>
     </nav>
@@ -25,7 +26,7 @@
     <!-- Contenido -->
     <section class="poemas">
         <div class="container">
-            <h2 class="seccion-titulo">📝 100 Poemas Para Ti</h2>
+            <h2 class="seccion-titulo">📝 Poemas</h2>
             
             <div id="poemas-container">
                 <!-- Los poemas se cargarán aquí -->
@@ -35,20 +36,76 @@
             <div class="paginacion" id="paginacion">
                 <!-- Los botones de paginación se generarán aquí -->
             </div>
+
+            <!-- Botón Agregar -->
+            <div style="text-align: center; margin-top: 3rem; margin-bottom: 3rem;">
+                <button class="btn-agregar" id="btn-agregar-poema">+ Agregar Poema</button>
+            </div>
         </div>
     </section>
 
+    <!-- Modal para agregar/editar poema -->
+    <div id="modal-poema" class="modal-poema" style="display: none;">
+        <div class="modal-poema-content">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Agregar Poema</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
+            </div>
+            <form id="form-poema">
+                <div class="form-group">
+                    <label for="poema-titulo">Título del Poema:</label>
+                    <input type="text" id="poema-titulo" placeholder="Ingresa el título" required>
+                </div>
+                <div class="form-group">
+                    <label for="poema-contenido">Contenido:</label>
+                    <textarea id="poema-contenido" placeholder="Escribe el poema..." rows="8" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="poema-autor">Autor/Dedicatoria:</label>
+                    <input type="text" id="poema-autor" placeholder="Ej: Con amor ❤️">
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar Poema</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
-        <p>Hecho con ❤️ para ti, Sarita</p>
+        <p>Hecho con 💙 para la persona que amo</p>
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
     <script src="../script.js"></script>
     <script src="poemas-data.js"></script>
     <script>
-        const POEMAS_POR_PAGINA = 6;
+        const POEMAS_POR_PAGINA = 12;
         let paginaActual = 1;
+        let poemaDatosEditando = null; // Para tracking del poema en edición
+
+        // Cargar poemas desde localStorage si existen
+        function cargarPoemosDelStorage() {
+            const poemasGuardados = localStorage.getItem('poemas_app');
+            if (poemasGuardados) {
+                try {
+                    window.POEMAS = JSON.parse(poemasGuardados);
+                } catch (e) {
+                    console.log('Usando poemas por defecto');
+                }
+            }
+        }
+
+        // Guardar poemas en localStorage
+        function guardarPoemasEnStorage() {
+            localStorage.setItem('poemas_app', JSON.stringify(window.POEMAS));
+            fetch('http://localhost:3000/api/poemas/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ poemas: window.POEMAS })
+            }).catch(err => console.log('Backend no disponible:', err));
+        }
 
         function mostrarPoemas() {
             const container = document.getElementById('poemas-container');
@@ -59,15 +116,23 @@
             const poemasEnPagina = POEMAS.slice(inicio, fin);
 
             poemasEnPagina.forEach((poema, index) => {
+                const indicePrincipal = inicio + index;
                 const div = document.createElement('div');
                 div.className = 'poema-card';
                 div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
                 div.innerHTML = `
-                    <h3>Poema #${inicio + index + 1}: ${poema.titulo}</h3>
+                    <h3>Poema #${indicePrincipal + 1}: ${poema.titulo}</h3>
                     <div class="poema-contenido">
                         <p>${poema.contenido}</p>
                     </div>
                     <span class="fecha">— ${poema.autor || 'Escrito con amor ❤️'}</span>
+                    <div class="botones-poema-menu">
+                        <button class="btn-menu-toggle" onclick="toggleMenuPoema(this)">+</button>
+                        <div class="botones-poema-desplegable">
+                            <button class="btn-editar" onclick="editarPoema(${indicePrincipal})">✎ Editar</button>
+                            <button class="btn-eliminar" onclick="eliminarPoema(${indicePrincipal})">🗑️ Eliminar</button>
+                        </div>
+                    </div>
                 `;
                 container.appendChild(div);
             });
@@ -122,8 +187,125 @@
             paginacionDiv.appendChild(btnSiguiente);
         }
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', mostrarPoemas);
+        // Modal Functions
+        function mostrarModal(titulo = 'Agregar Poema') {
+            document.getElementById('modal-titulo').textContent = titulo;
+            document.getElementById('modal-poema').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-poema').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('form-poema').reset();
+            poemaDatosEditando = null;
+        }
+
+        // Agregar poema
+        function abrirFormularioAgregar() {
+            poemaDatosEditando = null;
+            document.getElementById('form-poema').reset();
+            mostrarModal('Agregar Poema');
+        }
+
+        // Editar poema
+        function editarPoema(indice) {
+            poemaDatosEditando = indice;
+            const poema = POEMAS[indice];
+            document.getElementById('poema-titulo').value = poema.titulo;
+            document.getElementById('poema-contenido').value = poema.contenido;
+            document.getElementById('poema-autor').value = poema.autor || '';
+            mostrarModal('Editar Poema');
+        }
+
+        // Eliminar poema con confirmación
+        function eliminarPoema(indice) {
+            if (confirm(`¿Estás seguro de que quieres eliminar el poema "${POEMAS[indice].titulo}"?`)) {
+                POEMAS.splice(indice, 1);
+                guardarPoemasEnStorage();
+                
+                // Ajustar página si es necesario
+                const totalPaginas = Math.ceil(POEMAS.length / POEMAS_POR_PAGINA);
+                if (paginaActual > totalPaginas && totalPaginas > 0) {
+                    paginaActual = totalPaginas;
+                } else if (totalPaginas === 0) {
+                    paginaActual = 1;
+                }
+                
+                mostrarPoemas();
+            }
+        }
+
+        // Toggle menu de acciones en poema
+        function toggleMenuPoema(btn) {
+            const menu = btn.parentElement.querySelector('.botones-poema-desplegable');
+            menu.classList.toggle('visible');
+            btn.classList.toggle('activo');
+        }
+
+        // Cerrar menú al hacer clic en otra parte
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.botones-poema-menu')) {
+                document.querySelectorAll('.botones-poema-desplegable.visible').forEach(menu => {
+                    menu.classList.remove('visible');
+                    menu.previousElementSibling.classList.remove('activo');
+                });
+            }
+        });
+
+        // Guardar poema (agregar o editar)
+        function guardarPoema(evento) {
+            evento.preventDefault();
+            
+            const titulo = document.getElementById('poema-titulo').value.trim();
+            const contenido = document.getElementById('poema-contenido').value.trim();
+            const autor = document.getElementById('poema-autor').value.trim();
+
+            if (!titulo || !contenido) {
+                alert('Por favor completa el título y contenido del poema');
+                return;
+            }
+
+            if (poemaDatosEditando !== null) {
+                // Editar poema existente
+                POEMAS[poemaDatosEditando] = { titulo, contenido, autor: autor || 'Escrito con amor ❤️' };
+            } else {
+                // Agregar nuevo poema
+                POEMAS.push({ titulo, contenido, autor: autor || 'Escrito con amor ❤️' });
+            }
+
+            guardarPoemasEnStorage();
+            mostrarPoemas();
+            cerrarModal();
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarPoemosDelStorage();
+            mostrarPoemas();
+
+            // Botón agregar
+            document.getElementById('btn-agregar-poema').addEventListener('click', abrirFormularioAgregar);
+
+            // Modal
+            document.getElementById('btn-cerrar-modal').addEventListener('click', cerrarModal);
+            document.getElementById('btn-cancelar').addEventListener('click', cerrarModal);
+            document.getElementById('form-poema').addEventListener('submit', guardarPoema);
+
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('modal-poema').addEventListener('click', (e) => {
+                if (e.target.id === 'modal-poema') {
+                    cerrarModal();
+                }
+            });
+
+            // Cerrar modal con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.getElementById('modal-poema').style.display === 'flex') {
+                    cerrarModal();
+                }
+            });
+        });
     </script>
 </body>
 </html>

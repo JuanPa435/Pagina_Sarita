@@ -40,26 +40,30 @@
 
 .btn-upload,
 .btn-eliminar-seleccionadas {
-    padding: 1rem 2rem;
-    border: 2px solid var(--turquesa-neon);
-    background: rgba(0, 255, 255, 0.2);
+    padding: 1.2rem 2.2rem;
+    border: 4px solid var(--turquesa-neon);
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.4) 0%, rgba(0, 212, 255, 0.3) 100%);
     color: var(--turquesa-neon);
-    border-radius: 10px;
+    border-radius: 14px;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 900;
     transition: all 0.3s ease;
-    font-size: 1rem;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    font-size: 1.1rem;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.2);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .btn-upload:hover,
 .btn-eliminar-seleccionadas:hover {
-    background: var(--turquesa-neon);
-    color: var(--turquesa-oscuro);
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    background: linear-gradient(135deg, var(--turquesa-neon) 0%, rgba(0, 212, 255, 0.8) 100%);
+    color: #000a15;
+    transform: translateY(-6px) scale(1.12);
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.95), 0 0 100px rgba(0, 255, 255, 0.6), inset 0 0 25px rgba(255, 255, 255, 0.4);
+    letter-spacing: 3px;
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
 }
 
 #file-input {
@@ -138,20 +142,24 @@
 }
 
 .btn-ver {
-    padding: 0.7rem 1.5rem;
-    background: var(--turquesa-neon);
-    color: var(--turquesa-oscuro);
-    border: none;
-    border-radius: 8px;
+    padding: 0.9rem 1.8rem;
+    background: linear-gradient(135deg, var(--turquesa-neon) 0%, rgba(0, 212, 255, 0.8) 100%);
+    color: #000a15;
+    border: 3px solid var(--turquesa-neon);
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 900;
     transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .btn-ver:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+    transform: scale(1.15);
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
 }
 
 .checkbox-wrapper {
@@ -217,41 +225,44 @@
 .btn-descargar,
 .btn-eliminar,
 .btn-cerrar-modal {
-    padding: 0.8rem 1.5rem;
-    border: 2px solid var(--turquesa-neon);
-    background: rgba(0, 255, 255, 0.2);
+    padding: 1rem 1.8rem;
+    border: 3px solid var(--turquesa-neon);
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.3) 0%, rgba(0, 212, 255, 0.2) 100%);
     color: var(--turquesa-neon);
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 900;
     transition: all 0.3s ease;
-    font-size: 0.95rem;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    font-size: 1rem;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.15);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .btn-descargar:hover,
 .btn-eliminar:hover,
 .btn-cerrar-modal:hover {
-    background: var(--turquesa-neon);
-    color: var(--turquesa-oscuro);
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    background: linear-gradient(135deg, var(--turquesa-neon) 0%, rgba(0, 212, 255, 0.8) 100%);
+    color: #000a15;
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+    font-weight: 900;
 }
 
 .btn-eliminar {
     border-color: #ff6b6b;
-    background: rgba(255, 107, 107, 0.2);
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(255, 100, 100, 0.2) 100%);
     color: #ff6b6b;
-    box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+    box-shadow: 0 0 25px rgba(255, 107, 107, 0.5), inset 0 0 10px rgba(255, 107, 107, 0.1);
 }
 
 .btn-eliminar:hover {
     background: #ff6b6b;
     color: #ffffff;
-    box-shadow: 0 0 25px rgba(255, 107, 107, 0.6);
+    box-shadow: 0 0 50px rgba(255, 107, 107, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.2);
     border-color: #ff6b6b;
+    transform: translateY(-5px) scale(1.1);
 }
 
 .close {

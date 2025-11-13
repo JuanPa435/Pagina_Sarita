@@ -169,6 +169,11 @@ function getUserFotos() {
 function saveUserFotos(arr) {
     try {
         localStorage.setItem(USER_GALERIA_KEY, JSON.stringify(arr));
+        fetch('http://localhost:3000/api/galeria/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ galeria: arr })
+        }).catch(err => console.log('Backend no disponible:', err));
     } catch (err) {
         console.error('Error guardando user fotos en localStorage', err);
         alert('No se pudieron guardar las fotos en localStorage (espacio insuficiente).');

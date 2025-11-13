@@ -133,10 +133,7 @@
             const hoy = new Date();
             const diferencia = hoy - fechaInicio;
             const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-            const contador = document.getElementById('diasCounter');
-            if (contador) {
-                contador.textContent = dias;
-            }
+            document.getElementById('diasCounter').textContent = dias;
         }
 
         // Cargar previews de todas las secciones
@@ -261,10 +258,7 @@
         calcularDiasJuntos();
         cargarPreviews();
 
-        // Actualizar días cada segundo
-        setInterval(calcularDiasJuntos, 1000);
-
-        // Recargar previews cada 2 segundos (por si hay cambios desde otra pestaña)
+        // Recargar previews cada segundo (por si hay cambios desde otra pestaña)
         setInterval(cargarPreviews, 2000);
     </script>
 </body>
