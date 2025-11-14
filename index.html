@@ -179,7 +179,7 @@
             const container = document.getElementById('poemasPreview');
             
             try {
-                const response = await fetch('http://localhost:3000/api/poemas/get');
+                const response = await fetch('/api/poemas/get');
                 const data = await response.json();
                 
                 if (!data.success || !data.poemas || data.poemas.length === 0) {
@@ -205,7 +205,7 @@
             const container = document.getElementById('cancionesPreview');
             
             try {
-                const response = await fetch('http://localhost:3000/api/canciones/get');
+                const response = await fetch('/api/canciones/get');
                 const data = await response.json();
                 
                 if (!data.success || !data.canciones || data.canciones.length === 0) {
