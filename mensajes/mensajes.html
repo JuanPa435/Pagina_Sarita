@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensajes - Nuestra Historia 💙</title>
-    <link rel="stylesheet" href="../styles/styles-variables.css">
-    <link rel="stylesheet" href="../styles/styles-global-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-mensajes-turquesa.css">
     <link rel="stylesheet" href="../styles/styles-modal-mensajes.css">
+    <!-- Navbar del index -->
+    <link rel="stylesheet" href="../styles/styles-index.css">
 </head>
 <body>
     <!-- Navegación -->
-    <nav class="navbar">
+    <nav class="navbar-simple">
         <div class="nav-content">
-            <a href="../index.html" class="logo">💙 Nuestra Historia</a>
-            <ul class="nav-menu">
+            <a href="../index.html" class="logo-simple">💙 Nuestra Historia</a>
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-simple">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu-simple" id="menu-simple">
                 <li><a href="../index.html">Inicio</a></li>
                 <li><a href="../poemas/poemas.html">Poemas</a></li>
                 <li><a href="../canciones/canciones.html">Canciones</a></li>
@@ -285,6 +291,16 @@
                     cerrarModal();
                 }
             });
+
+            // Toggle menú móvil
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.getElementById('menu-simple');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    const abierto = navMenu.classList.toggle('open');
+                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+            }
         });
     </script>
 </body>

@@ -1,98 +1,202 @@
-// Array con 100 poemas amorosos: 50 de JP y 50 de diferentes autores (mezclados)
 const POEMAS = [
-    { titulo: "Amor Constante", contenido: "En cada amanecer pienso en ti,<br>en tu sonrisa que ilumina mi día,<br>eres la melodía de mi vida,<br>el poema que vive en mi corazón.", autor: "JP" },
-    { titulo: "Susurros del viento", contenido: "El viento me trae tu nombre,<br>como un susurro entre los árboles,<br>me envuelve en recuerdos tuyos,<br>y me invita a soñar despierto.", autor: "Pablo Neruda" },
-    { titulo: "Mi Razón", contenido: "Eres la razón de mis sonrisas,<br>el motivo de mis días brillantes,<br>la persona que hace especial cada momento,<br>el sueño que se hizo realidad.", autor: "JP" },
-    { titulo: "Luz de luna", contenido: "La luna observa en silencio,<br>nuestros pasos bajo su manto,<br>y en su brillo encuentro reflejado<br>el amor que en ti habita.", autor: "Federico García Lorca" },
-    { titulo: "En tus ojos", contenido: "En tus ojos veo el futuro que quiero vivir,<br>cada mirada tuya es un 'te amo' sin palabras,<br>en ellos encuentro la paz que buscaba,<br>y la razón de cada día sonreír.", autor: "JP" },
-    { titulo: "Latido", contenido: "Tu nombre late en mi pecho,<br>como un secreto guardado,<br>como un fuego que no cesa,<br>ni el tiempo puede apagar.", autor: "Jaime Sabines" },
-    { titulo: "Tu presencia", contenido: "No necesitas hacer nada especial,<br>solo estar aquí es suficiente para mí,<br>tu presencia ilumina mis días,<br>y tu sonrisa es mi medicina favorita.", autor: "JP" },
-    { titulo: "Primavera", contenido: "Llegaste como la primavera,<br>trayendo vida a lo marchito,<br>pintando colores en mis días,<br>y esperanza en mis noches.", autor: "Octavio Paz" },
-    { titulo: "Eternidad", contenido: "Si pudiese elegir vivir mil vidas,<br>en cada una de ellas estaría contigo,<br>porque eres el mejor regalo que pudo darme la vida,<br>el amor verdadero que siempre busqué.", autor: "JP" },
-    { titulo: "Ecos del alma", contenido: "Hay voces que no se apagan,<br>ni con el silencio del tiempo,<br>ecos que vienen del alma,<br>y me hablan de ti.", autor: "Buika" },
-    { titulo: "Imperfectamente perfecta", contenido: "No eres perfecta, y eso es lo que te hace perfecta para mí,<br>tus defectos son hermosos porque son tuyos,<br>cada cicatriz cuenta una historia de fuerza,<br>y yo quiero estar en todas tus historias.", autor: "JP" },
-    { titulo: "Encuentro de ríos", contenido: "Nos cruzamos sin buscarlo,<br>como ríos que se encuentran,<br>y supe en tu mirada,<br>que eras mi destino.", autor: "Mario Benedetti" },
-    { titulo: "Pequeños detalles", contenido: "Es en los pequeños detalles donde veo cuánto te amo,<br>en tu risa cuando te cuento algo tonto,<br>en tus manos sosteniendo las mías,<br>en los momentos que nunca planeamos pero siempre recordamos.", autor: "JP" },
-    { titulo: "Silencio sagrado", contenido: "Tu silencio me habla,<br>más que mil palabras,<br>y en él descubro<br>la verdad del amor.", autor: "Jaime Sabines" },
-    { titulo: "Eres mi hogar", contenido: "Dondequiera que esté, si tú estás allí, es mi hogar,<br>no importa el lugar, no importa la distancia,<br>porque contigo encuentro el camino de regreso,<br>al lugar donde quiero estar.", autor: "JP" },
-    { titulo: "Noche de amor", contenido: "En la noche, tu cuerpo es música,<br>tus manos escriben poesía en mi piel,<br>y en tus labios encuentro<br>la razón de vivir.", autor: "Pablo Neruda" },
-    { titulo: "Tu sonrisa", contenido: "Tu sonrisa es el amanecer de mis días oscuros,<br>es la luz que guía mis pasos,<br>es la razón por la que creo en la magia,<br>y por la que sigo adelante cada día.", autor: "JP" },
-    { titulo: "Ausencia", contenido: "Tu ausencia es como la lluvia,<br>cae lentamente en mi alma,<br>empapando cada rincón,<br>de melancolía y dolor.", autor: "Jaime Sabines" },
-    { titulo: "Te amo como", contenido: "Te amo como la luna ama a las estrellas,<br>te amo como el mar ama las olas,<br>te amo como el bosque ama los árboles,<br>te amo como mi corazón ama su próximo latido.", autor: "JP" },
-    { titulo: "Espejo de agua", contenido: "En tus ojos brilla el espejo,<br>donde veo reflejado mi corazón,<br>transparente como el agua,<br>profundo como el mar.", autor: "Mario Benedetti" },
-    { titulo: "En tu ausencia", contenido: "En tu ausencia, las horas son más largas,<br>el silencio más ruidoso,<br>pero en mi corazón vives cada segundo,<br>cada respiración te lleva mi amor.", autor: "JP" },
-    { titulo: "Vueltas de la vida", contenido: "La vida da vueltas y te trae,<br>como una brújula al norte,<br>tú eres el destino final,<br>de todos mis caminos.", autor: "Octavio Paz" },
-    { titulo: "Nuestro camino", contenido: "Juntos escribimos nuestra propia historia,<br>una de amor, risa y aventura,<br>cada página es un recuerdo hermoso,<br>y cada línea es un 'te amo' eterno.", autor: "JP" },
-    { titulo: "Nombre escrito", contenido: "Tu nombre está escrito<br>en cada estrella del cielo,<br>en cada gota de rocío,<br>en cada latido de mi corazón.", autor: "Federico García Lorca" },
-    { titulo: "La magia contigo", contenido: "Contigo descubrí que la magia existe,<br>en cada roce de tus manos,<br>en cada palabra que susurras,<br>en cada momento que compartimos.", autor: "JP" },
-    { titulo: "Fuego sagrado", contenido: "Eres fuego sagrado que quema,<br>pero no destruye,<br>que calienta el alma,<br>y purifica el espíritu.", autor: "Buika" },
-    { titulo: "Mi razón de ser", contenido: "Eres mi razón de ser feliz,<br>mi motivo para soñar en grande,<br>mi inspiración para ser mejor cada día,<br>mi corazón latiendo fuera de mi pecho.", autor: "JP" },
-    { titulo: "Infinitos caminos", contenido: "He caminado mil caminos,<br>y todos me llevan a ti,<br>como si el universo supiera,<br>que eres mi destino final.", autor: "Pablo Neruda" },
-    { titulo: "Besos de eternidad", contenido: "Tus besos saben a eternidad,<br>a promesas de un futuro juntos,<br>a amor que no tiene fin,<br>a la música más bella del universo.", autor: "JP" },
-    { titulo: "Versos de amor", contenido: "Cada verso que escribo,<br>lleva tu nombre grabado,<br>cada palabra es tu recuerdo,<br>cada silencio es tu amor.", autor: "Mario Benedetti" },
-    { titulo: "Sin ti", contenido: "Sin ti, el mundo perdería su color,<br>las canciones perderían su melodía,<br>la vida perdería su significado,<br>y yo perdería la razón de vivir.", autor: "JP" },
-    { titulo: "Manos entrelazadas", contenido: "Tus manos en las mías,<br>son la prueba de que existes,<br>son la certeza de que el amor,<br>es real y verdadero.", autor: "Octavio Paz" },
-    { titulo: "Cada momento contigo", contenido: "Cada momento contigo es especial,<br>cada conversación es un tesoro,<br>cada silencio es cómodo y perfecto,<br>cada día contigo es el mejor de mi vida.", autor: "JP" },
-    { titulo: "Corazón transparente", contenido: "Mi corazón es transparente,<br>y en él solo hay lugar para ti,<br>cada latido es tu nombre,<br>cada respiración es tu amor.", autor: "Jaime Sabines" },
-    { titulo: "Tu amor", contenido: "Tu amor es como el aire que respiro,<br>necesario, vital, esencial,<br>sin ti no puedo existir,<br>sin ti no sería yo.", autor: "JP" },
-    { titulo: "Besos de fuego", contenido: "Tus besos son fuego,<br>que enciende mi alma,<br>y me consume lentamente,<br>en las llamas de la pasión.", autor: "Federico García Lorca" },
-    { titulo: "Juntos para siempre", contenido: "Quiero estar contigo cada día,<br>quiero despertar viendo tu cara,<br>quiero dormir en tus brazos,<br>quiero pasar la eternidad contigo.", autor: "JP" },
-    { titulo: "Eternos", contenido: "Somos eternos, tú y yo,<br>más allá del tiempo,<br>más allá del espacio,<br>unidos en el amor infinito.", autor: "Pablo Neruda" },
-    { titulo: "Mi brújula", contenido: "Eres mi brújula en la oscuridad,<br>la que me guía hacia la luz,<br>la que me muestra el camino correcto,<br>la que siempre me lleva a casa.", autor: "JP" },
-    { titulo: "Espejo del cielo", contenido: "Eres el espejo del cielo,<br>donde veo la belleza infinita,<br>eres la promesa de Dios,<br>hecha mujer ante mí.", autor: "Buika" },
-    { titulo: "Confesión", contenido: "Te confieso que eres mi adicción,<br>de la buena, de la que no quiero dejarme curar,<br>eres mi droga favorita,<br>el veneno que quiero tomar por siempre.", autor: "JP" },
-    { titulo: "Corazón errante", contenido: "Mi corazón errante,<br>encontró su hogar en ti,<br>ya no busca caminos,<br>solo quiere quedarse contigo.", autor: "Mario Benedetti" },
-    { titulo: "Tus ojos me hablan", contenido: "En tus ojos puedo leer mi futuro,<br>en ellos veo amor infinito,<br>en ellos encuentro paz y tranquilidad,<br>en ellos me pierdo eternamente.", autor: "JP" },
-    { titulo: "Música del universo", contenido: "Tu voz es la música del universo,<br>que toca las fibras de mi alma,<br>y hace danzar mis pensamientos,<br>al ritmo de tu amor.", autor: "Octavio Paz" },
-    { titulo: "La belleza del amor", contenido: "La belleza del amor no está en palabras,<br>está en cómo miras mis defectos como virtudes,<br>está en cómo abrazas mis miedos,<br>está en ti, siendo exactamente quien eres.", autor: "JP" },
-    { titulo: "Promesa de mañana", contenido: "Te prometo un mañana,<br>lleno de momentos mágicos,<br>de abrazos sin fin,<br>y besos que saben a eternidad.", autor: "Jaime Sabines" },
-    { titulo: "Razones por las que te amo", contenido: "Te amo por tu sonrisa sincera,<br>te amo por tu corazón puro,<br>te amo por tu risa contagiosa,<br>te amo por cada pequeña cosa que te hace tú.", autor: "JP" },
-    { titulo: "Ángel en la tierra", contenido: "Eres un ángel en la tierra,<br>que bajó solo para mí,<br>para mostrarme lo que es amar,<br>sin miedo y sin limitaciones.", autor: "Federico García Lorca" },
-    { titulo: "Promesa eterna", contenido: "Te prometo amararte cada día,<br>te prometo cuidarte en las tormentas,<br>te prometo estar siempre a tu lado,<br>te prometo un amor que dura para siempre.", autor: "JP" },
-    { titulo: "Alma gemela", contenido: "En mil vidas pasadas,<br>nuestras almas se buscaban,<br>en mil vidas futuras,<br>seguirán amándose eternamente.", autor: "Pablo Neruda" },
-    { titulo: "Mi sueño hecho realidad", contenido: "Mi sueño era encontrarte,<br>y aquí estás, hecho realidad,<br>mi sueño era amarte,<br>y aquí estoy, del corazón enamorado.", autor: "JP" },
-    { titulo: "Verdad absoluta", contenido: "La verdad absoluta es que existes,<br>que eres real, que eres mía,<br>que cada día a tu lado,<br>es una bendición del cielo.", autor: "Buika" },
-    { titulo: "El arte de amarte", contenido: "Amarte es un arte que aprendo cada día,<br>cada línea de tu cara es una obra maestra,<br>cada gesto que haces es una sinfonía,<br>cada momento contigo es un cuadro hermoso.", autor: "JP" },
-    { titulo: "Camino de esperanza", contenido: "Tu amor es mi camino de esperanza,<br>en la oscuridad de la vida,<br>eres la luz que me guía,<br>hacia un futuro hermoso.", autor: "Mario Benedetti" },
-    { titulo: "Cárcel de amor", contenido: "Estaría en cárcel por amarte,<br>estaría en cárcel sin pedir libertad,<br>porque estar en cárcel contigo,<br>es mejor que la libertad sin ti.", autor: "JP" },
-    { titulo: "Danza del corazón", contenido: "Mi corazón danza,<br>al ritmo de tu respiración,<br>dos almas entrelazadas,<br>en una danza eterna de amor.", autor: "Octavio Paz" },
-    { titulo: "Infinito", contenido: "Nuestro amor no tiene límite,<br>es infinito como el universo,<br>es eterno como el tiempo,<br>es profundo como el océano.", autor: "JP" },
-    { titulo: "Secreto guardado", contenido: "Guardé tu amor como un secreto,<br>en lo profundo de mi pecho,<br>donde nadie puede encontrarlo,<br>solo mi alma lo conoce.", autor: "Jaime Sabines" },
-    { titulo: "Tu mano en la mía", contenido: "Tu mano en la mía es lo perfecto,<br>tu mano me guía en la oscuridad,<br>tu mano me da seguridad,<br>tu mano es donde quiero estar.", autor: "JP" },
-    { titulo: "Lienzo en blanco", contenido: "Eres el lienzo en blanco,<br>donde pinto mis sentimientos,<br>cada color es una emoción,<br>cada trazo es un 'te amo'.", autor: "Federico García Lorca" },
-    { titulo: "La razón del universo", contenido: "Creo que el universo fue creado,<br>solo para que nos encontráramos,<br>que las estrellas brillan para iluminar tu camino,<br>que todo existe solo para que te ame.", autor: "JP" },
-    { titulo: "Voz del destino", contenido: "Tu voz es el destino,<br>que susurra en mi oído,<br>llamándome hacia ti,<br>hacia el amor sin fin.", autor: "Pablo Neruda" },
-    { titulo: "Realidad vs Sueño", contenido: "A veces creo que eres un sueño hermoso,<br>del que nunca quiero despertar,<br>pero luego te toco y es real,<br>y es aún más hermoso que cualquier sueño.", autor: "JP" },
-    { titulo: "Brújula del alma", contenido: "Eres la brújula de mi alma,<br>que me orienta hacia la paz,<br>hacia la tranquilidad,<br>hacia ti, siempre hacia ti.", autor: "Buika" },
-    { titulo: "Mi canción favorita", contenido: "Tu nombre es mi canción favorita,<br>tu risa es la melodía más bella,<br>tu amor es la armonía perfecta,<br>y juntos formamos la música del universo.", autor: "JP" },
-    { titulo: "Horizonte de amor", contenido: "Tu amor es mi horizonte,<br>donde se encuentran cielo y tierra,<br>donde nacen las esperanzas,<br>y mueren los miedos.", autor: "Mario Benedetti" },
-    { titulo: "Después de ti", contenido: "Después de conocerte, cambié,<br>el mundo brilla diferente,<br>los colores son más vibrantes,<br>la vida tiene más sentido.", autor: "JP" },
-    { titulo: "Ojos que hablan", contenido: "Tus ojos hablan sin palabras,<br>dicen 'te amo' silenciosamente,<br>llenan mi corazón de paz,<br>y me hacen sentir vivo.", autor: "Octavio Paz" },
-    { titulo: "Quererte", contenido: "Quererte es tan natural como respirar,<br>es tan necesario como el agua,<br>es tan real como el suelo bajo mis pies,<br>es lo más auténtico que siento.", autor: "JP" },
-    { titulo: "Verso perfecto", contenido: "Tú eres el verso perfecto,<br>la rima que completa mi poema,<br>la estrofa que faltaba,<br>para que mi vida tenga sentido.", autor: "Jaime Sabines" },
-    { titulo: "Destino escrito", contenido: "Creo en el destino que nos unió,<br>creo que estaba escrito en las estrellas,<br>creo que el universo sabía que estaríamos juntos,<br>creo que tú y yo somos inevitables.", autor: "JP" },
-    { titulo: "Magia de tu presencia", contenido: "La magia de tu presencia,<br>transforma todo a mi alrededor,<br>los grises se vuelven colores,<br>y la tristeza se convierte en alegría.", autor: "Federico García Lorca" },
-    { titulo: "Mi alma gemela", contenido: "Eres mi alma gemela, mi media naranja,<br>la persona para la que fue creada mi alma,<br>el propósito de mi existencia,<br>la respuesta a todas mis plegarias.", autor: "JP" },
-    { titulo: "Corazón que vuela", contenido: "Mi corazón vuela hacia ti,<br>como pájaro sin nido,<br>buscando en tus brazos,<br>el lugar donde pertenece.", autor: "Pablo Neruda" },
-    { titulo: "Cada respiración", contenido: "En cada respiración pienso en ti,<br>en cada latido de mi corazón estás tú,<br>en cada momento de mi vida te necesito,<br>eres el aire que respiro.", autor: "JP" },
-    { titulo: "Respuesta a mis preguntas", contenido: "Fuiste la respuesta,<br>a todas mis preguntas,<br>la solución a mis dudas,<br>la paz en mi confusión.", autor: "Buika" },
-    { titulo: "La prueba del amor", contenido: "La prueba de que te amo,<br>es que sin ti me siento incompleto,<br>es que cada día quiero más,<br>es que contigo quiero envejecer.", autor: "JP" },
-    { titulo: "Puente de almas", contenido: "Nuestro amor es un puente,<br>que une dos almas distantes,<br>permitiéndoles encontrarse,<br>en la eternidad del amor.", autor: "Mario Benedetti" },
-    { titulo: "Tu luz", contenido: "Eres mi luz en la oscuridad,<br>eres mi faro en la tormenta,<br>eres mi brújula cuando me pierdo,<br>eres todo lo que necesito.", autor: "JP" },
-    { titulo: "Ritmo del corazón", contenido: "El ritmo de tu corazón,<br>es la música que escucho,<br>cuando dormimos juntos,<br>y el mundo desaparece.", autor: "Octavio Paz" },
-    { titulo: "Pensamientos nocturnos", contenido: "Por las noches pienso en ti,<br>en cómo duermes tranquila,<br>en tus sueños que espero sean hermosos,<br>y en el mañana que construiremos juntos.", autor: "JP" },
-    { titulo: "Escribiendo el destino", contenido: "El destino escribió tu nombre,<br>en cada página de mi vida,<br>trazó tu figura,<br>en cada capítulo de mi historia.", autor: "Jaime Sabines" },
-    { titulo: "Certeza absoluta", contenido: "Hay algo que tengo muy claro,<br>que eres la mujer de mi vida,<br>que contigo quiero construir un hogar,<br>que tú eres mi certeza absoluta.", autor: "JP" },
-    { titulo: "Belleza infinita", contenido: "Tu belleza es infinita,<br>no solo en el rostro,<br>sino en cada gesto,<br>en cada palabra que pronuncias.", autor: "Federico García Lorca" },
-    { titulo: "Atrapado en ti", contenido: "Estoy completamente atrapado en ti,<br>en tu magia, en tu esencia,<br>en cada gesto que haces,<br>y no quiero salir de esta trampa.", autor: "JP" },
-    { titulo: "Unidad perfecta", contenido: "Somos la unidad perfecta,<br>como el día y la noche,<br>como el mar y la playa,<br>incompletos sin el otro.", autor: "Pablo Neruda" },
-    { titulo: "Lo mejor de la vida", contenido: "Lo mejor de la vida eres tú,<br>lo mejor de mis días es verte,<br>lo mejor de mis noches es soñarte,<br>lo mejor de mí es el amor que te tengo.", autor: "JP" },
-    { titulo: "Fuente de vida", contenido: "Eres la fuente de vida,<br>que me nutre cada día,<br>que me refresca el alma,<br>y me hace sentir eterno.", autor: "Buika" },
-    { titulo: "El libro de nuestra historia", contenido: "Contigo estoy escribiendo un libro,<br>un libro llamado 'Nuestro Amor',<br>cada página es un recuerdo,<br>cada capítulo es una promesa.", autor: "JP" },
-    { titulo: "Lenguaje del amor", contenido: "El lenguaje del amor,<br>es el que hablan nuestros corazones,<br>sin palabras, sin ruido,<br>solo la verdad pura del sentimiento.", autor: "Mario Benedetti" },
-    { titulo: "Bajo las estrellas", contenido: "Bajo las estrellas quiero estar contigo,<br>bajo la luna quiero besarte,<br>bajo el sol quiero amarte,<br>bajo cualquier cielo quiero vivir contigo.", autor: "JP" },
-    { titulo: "Espíritu gemelo", contenido: "Eres mi espíritu gemelo,<br>la otra mitad de mi alma,<br>el reflejo de mis sueños,<br>la razón de mi existencia.", autor: "Octavio Paz" },
-    { titulo: "Mi refugio", contenido: "Eres mi refugio en las tormentas,<br>mi paz en la confusión,<br>mi calma en la ansiedad,<br>mi hogar donde sea que estés.", autor: "JP" },
-    { titulo: "Creciendo contigo", contenido: "Cada día que paso contigo crezco,<br>como persona, como amante, como ser,<br>tú me haces mejor,<br>tú me haces más humano.", autor: "JP" },
-    { titulo: "Verdad universal", contenido: "Es una verdad universal,<br>que te amo más que nada,<br>que seguiré amándote,<br>que nuestro amor es eterno.", autor: "JP" }
+  {
+    "titulo": "Amo, amas",
+    "contenido": "Amar, amar, amar, amar siempre, con todo\nel ser y con la tierra y con el cielo,\ncon lo claro del sol y lo oscuro del lodo:\namar por toda ciencia y amar por todo anhelo.\n\nY cuando la montaña de la vida\nnos sea dura y larga y alta y llena de abismos,\namar la inmensidad que es de amor encendida\n¡y arder en la fusión de nuestros pechos mismos!",
+    "autor": "Rubén Darío"
+  },
+  {
+    "titulo": "Mar de Emociones",
+    "contenido": "Soy un mar de emociones cuando miro tus ojos,\nolas grandes que chocan contra mis deseos,\nla marea sube y baja al ritmo de tu voz,\ny me ahogo feliz en tu profundidad y tu voz.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Sueños Compartidos",
+    "contenido": "Nuestros sueños se entrelazan como vides en la parra,\nformamos una red de amor que nunca se desgarra,\nen el mundo de los sueños, somos reyes y reinas,\nde un reino hecho de ternura y caricias ajenas.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Tiempo Congelado",
+    "contenido": "En tu mirada, el tiempo se congela y se detiene,\nsolamente tú y yo en un momento que nos sostiene,\nlas horas desaparecen, los años no existen,\nsolamente existe tu amor que mi alma resiste.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Eres Mi Cielo",
+    "contenido": "Eres mi cielo cuando nubes grises me rodean,\neres mi sol cuando la noche larga desespera,\neres mi estrella que brilla cuando se oscurezca,\ny eres la razón por la que vivo sin tristeza.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Ven",
+    "contenido": "Ven, te daré mis ojos para que veas,\ny el corazón también, para que sientas.\nVen, porque la vida se nos va,\ny es triste estar solo en la tierra.",
+    "autor": "Vicente Aleixandre"
+  },
+  {
+    "titulo": "Perfume Eterno",
+    "contenido": "Tu perfume llena todos mis sentidos,\ndeja rastros en todos mis caminos,\nflota en el aire de mi habitación,\ny me persigue hasta la más profunda emoción.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Corazón Dividido",
+    "contenido": "Mi corazón se divide entre tu amor y mi cordura,\nentonces decides que al verte, pierdo toda ternura,\ntus labios son de fuego, tu mirada es profunda,\ny en tus brazos encuentro una paz que es fecunda.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Noche de Plata",
+    "contenido": "En la noche de plata, bajo las estrellas brillar,\ntu silhueta dibuja en la sombra, un cuadro sin par,\ntoma mi mano con suavidad, dame tu corazón,\ny en este momento perfecto, seremos uno en adoración.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Si me miras",
+    "contenido": "Si me miras, yo me vuelvo\nhermoso como la hierba,\ntierno como si la lluvia\nacabaje de besarme.\n\n¡Si me hablas, yo me pongo\nsemejante a la montaña\nque le ha nacido, de pronto,\nuna flor en la garganta!",
+    "autor": "Juan Ramón Jiménez"
+  },
+  {
+    "titulo": "Abrazo Infinito",
+    "contenido": "En tu abrazo encuentro el infinito,\ntus brazos son mi refugio y me siento bendecido,\nme proteges del mundo con tu calidez,\ny siento la paz, gracias a tu poder.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "La cita",
+    "contenido": "Yo te espero en el jardín de las estrellas,\ndonde la fuente canta su canción de cristal,\ndonde la luna vierte su luz sobre la tierra\ny el silencio es la voz de la inmensidad.",
+    "autor": "Rubén Darío"
+  },
+  {
+    "titulo": "Soneto de la noche",
+    "contenido": "No cesa este rayo que cubre de alegría\nlas profundas cavernas de la carne mía:\nasí te amo, absorbido por tu presencia fuerte.\n\nLatiendo en la dulzura de la noche segura,\ndonde los corazones se desangran, perdura\nesta fiebre que me mantiene en la muerte.",
+    "autor": "Miguel Hernández"
+  },
+  {
+    "titulo": "Si el hombre pudiera...",
+    "contenido": "Si el hombre pudiera decir lo que ama,\nsi el hombre pudiera levantar su amor por el cielo\ncomo una nube en la luz\nsi como muros que se derrumban,\npara saludar la verdad erguida en medio,\npudiera derrumbar su cuerpo, dejando sólo la verdad de su amor,\nla verdad de sí mismo,\nque no se llama gloria, fortuna o ambición,\nsino amor o deseo.\n\nYo sería aquel que imaginaba\naquel que con su lengua, sus ojos y sus manos\nprocama ante los hombres la verdad ignorada,\nla verdad de su amor verdadero.",
+    "autor": "Gustavo Adolfo Bécquer"
+  },
+  {
+    "titulo": "Tu Mirada",
+    "contenido": "Tu mirada es un pozo de infinita profundidad,\ndonde caigo sin remedio en su calidez y claridad,\nme atrapas con tus ojos de color de miel y fuego,\ny pierdo todo cordura en tu dulce juego.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Para mi corazón...",
+    "contenido": "Para mi corazón basta tu pecho,\npara tu libertad bastan mis alas.\nDesde mi boca llegará hasta el cielo\nlo que estaba dormido sobre tu alma.",
+    "autor": "Antonio Machado"
+  },
+  {
+    "titulo": "Poema 15",
+    "contenido": "Me gustas cuando callas porque estás como ausente,\ny me oyes desde lejos, y mi voz no te toca.\nParece que los ojos se te hubieran volado\ny parece que un beso te cerrara la boca.",
+    "autor": "Pablo Neruda"
+  },
+  {
+    "titulo": "Mariposas del Alma",
+    "contenido": "Mariposas de colores vuelan en mi alma,\ncuando tú caminas hacia mí con tu calma,\nlas alas tocan mi corazón con dulzura,\ny en ese instante, siento la eternidad pura.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Poema de la amistad",
+    "contenido": "Tu corazón, una vez me abriste,\nen el jardín de tu quinta, un día...\nHalló, mis ojos, por vez primera,\nlos ojos tú, de la alegría mía.",
+    "autor": "Antonio Machado"
+  },
+  {
+    "titulo": "Alma Gemela",
+    "contenido": "Eres mi alma gemela, encontrada en el destino,\nni el tiempo, ni la distancia puede cerrar nuestro camino,\nla vida nos juntó en este plano existencial,\ny ahora somos uno en un amor universal.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Beso Eterno",
+    "contenido": "Un beso tuyo es como beber el néctar de los dioses,\nque despierta mi alma en formas que nunca supuse,\ntus labios rozan los míos en la oscuridad,\ny siento que muero y renazco en tu eternidad.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Rima XXI",
+    "contenido": "¿Qué es poesía?, dices mientras clavas\nen mi pupila tu pupila azul.\n¿Qué es poesía? ¿Y tú me lo preguntas?\nPoesía... eres tú.",
+    "autor": "Gustavo Adolfo Bécquer"
+  },
+  {
+    "titulo": "Soneto XVII",
+    "contenido": "No te amo como si fueras rosa de sal, topacio\no flecha de claveles que propagan el fuego:\nte amo como se aman ciertas cosas oscuras,\nsecretamente, entre la sombra y el alma.\n\nTe amo como la planta que no florece y lleva\ndentro de sí, escondida, la luz de aquellas flores,\ny gracias a tu amor vive oscuro en mi cuerpo\nel apretado aroma que ascendió de la tierra.\n\nTe amo sin saber cómo, ni cuándo, ni de dónde,\nte amo directamente sin problemas ni orgullo:\nasí te amo porque no sé amar de otra manera,\n\nsino así de este modo en que no soy ni eres,\ntan cerca que tu mano sobre mi pecho es mía,\ntan cerca que se cierran tus ojos con mi sueño.",
+    "autor": "Pablo Neruda"
+  },
+  {
+    "titulo": "Luz de Mi Vida",
+    "contenido": "Eres la luz que ilumina mi camino oscuro,\neres el faro que me guía seguro,\nsin ti, mi mundo sería noche completa,\ny en tu presencia, mi vida se completa.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Promesa de Amor",
+    "contenido": "Te prometo amor eterno bajo las estrellas,\nte prometo ser tu fuerza cuando caigas y no veas,\nte prometo guardar tu nombre en mi corazón,\nhasta que el tiempo se detenga en la eternidad del amor.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Canción del Alma",
+    "contenido": "Mi alma canta una canción de amor eterno,\ncuando miro tu rostro, lleno de fuego tierno,\nlas notas suben al cielo en melodía,\ny el universo baila al son de tu armonía.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Soneto de la dulce queja",
+    "contenido": "No quiero que te vayas, dolor, último amor.\nNo quiero que te vayas, flor de la tempestad.\nDéjame en el recuerdo de tu boca de miel,\ny en la locura azul de tu total verdad.",
+    "autor": "Federico García Lorca"
+  },
+  {
+    "titulo": "Lluvia de Amor",
+    "contenido": "Como lluvia en primavera que cae sobre el verde prado,\ntu amor cae sobre mi pecho dejando rastros marcado,\nme empapo de tu ternura, de tu voz dulce y sincera,\ny florezco en tu presencia cada mañana y cada noche entera.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Verso de Pasión",
+    "contenido": "En cada verso que escribo, \nestá tu nombre escrito,\ntu amor es la musa \nque me tiene circunscritos,\nen cada rima encuentro tu dulce voz,\ny en cada estrofa, \nla razón de mi existencia y mi voz.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Fuego Invisible",
+    "contenido": "Un fuego invisible quema en mis venas cuando estás cerca,\ny aunque nadie lo ve, el alma mía se despierta,\ntus besos encienden llamas que consumen mi razón,\ny muero feliz en el fuego de tu pasión.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Espejo del Cielo",
+    "contenido": "Tus ojos son espejo del cielo azul y claro,\nreflejan la belleza de todo lo que es raro,\nen ellos veo mi futuro, mi destino y mi verdad,\ny siento que he encontrado la eterna felicidad.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Rosa Lejana",
+    "contenido": "Eres rosa lejana en el jardín del tiempo,\nque perfuma mis días con su aroma dulce y lento,\ntus pétalos de seda son mis sueños de belleza,\ny en ti encuentro la paz que mi alma anhelaba con presteza.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Rima LIII",
+    "contenido": "Volverán las oscuras golondrinas\nen tu balcón sus nidos a colgar,\ny otra vez con el ala a sus cristales\njugando llamarán\n\npero aquéllas que el vuelo refrenaban\ntu hermosura y mi dicha al contemplar,\naquéllas que aprendieron nuestros nombres...\nésas... ¡no volverán!",
+    "autor": "Gustavo Adolfo Bécquer"
+  },
+  {
+    "titulo": "Danza Eterna",
+    "contenido": "Danzamos bajo la luna en la noche infinita,\ntu cuerpo junto al mío en una danza maldita,\nlos pies tocan la tierra pero nuestras almas vuelan,\ny en el ritmo del amor, nuestras vidas se revelan.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Susurro Dulce",
+    "contenido": "Un susurro dulce en mi oído despaciosamente,\nme cuenta historias de amor tan bellas,\nque hago mío cada sonido de tu voz,\nque me llena de dicha y de voz.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Poema de la tarde",
+    "contenido": "Hoy te he visto pasar y me ha dado\nun vuelco el corazón. Ibas tan cerca,\nque pude tocarte con la mirada.\nY sin embargo, ibas tan lejos,\nque no pude decirte ni una palabra.",
+    "autor": "Jaime Sabines"
+  },
+  {
+    "titulo": "Tempestad de Amor",
+    "contenido": "Como tempestad feroz que golpea la montaña,\ntu amor me arrastra sin que nada me amaña,\nrayo y trueno en mi pecho, granizo en mi respiración,\ny en la calma que sigue, encuentro tu consolación.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Himno del Amor",
+    "contenido": "Cantaré un himno de amor que resuene en las montañas,\nque llegue a todos los corazones, y que nunca halla fallas.\nLes hablaré de tu belleza, de tu gracia sin igual,\nde cómo transformaste mi vida para bien y mucho más.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Amanecer Contigo",
+    "contenido": "Cada amanecer contigo es un regalo divino,\nlos colores del cielo palidecen ante tu tino,\nla luz dorada te envuelve como un manto,\ny en tu sonrisa celestial, encuentro todo mi encanto.",
+    "autor": "JP"
+  },
+  {
+    "titulo": "Corazón Errante",
+    "contenido": "Mi corazón errante encontró en ti su morada,\nya no busca en otros lados ni en otra madrugada,\nse quedó en tu pecho, latiendo con tu ritmo,\nformando la canción de nuestro nuevo corazón.",
+    "autor": "JP"
+  }
 ];
