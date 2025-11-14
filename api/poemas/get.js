@@ -1,20 +1,29 @@
-try {
-    const poemasModule = require('../../poemas/poemas-data.js');
-    module.exports = (req, res) => {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.json({
+module.exports = (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'application/json');
+    
+    try {
+        // Intentar cargar desde el archivo
+        let poemas = [];
+        try {
+            const data = require('../../poemas/poemas-data.js');
+            poemas = data.poemas || data.POEMAS || [];
+        } catch (e) {
+            console.log('Error cargando datos:', e.message);
+        }
+        
+        res.status(200).json({
             success: true,
-            poemas: poemasModule.poemas || [],
-            count: (poemasModule.poemas || []).length
+            poemas: poemas,
+            count: poemas.length
         });
-    };
-} catch (error) {
-    module.exports = (req, res) => {
+    } catch (error) {
+        console.error('Error:', error);
         res.status(500).json({
             success: false,
             error: error.message,
             poemas: [],
             count: 0
         });
-    };
-}
+    }
+};

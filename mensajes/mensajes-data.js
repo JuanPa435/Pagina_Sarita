@@ -91,3 +91,8 @@ const MENSAJES = [
     { emoji: "🖊️", texto: "Eres el bolígrafo que escribe mi destino" },
     { emoji: "📝", texto: "Eres el poema de mi vida" },
 ];
+
+// Export para Vercel
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { mensajes: MENSAJES, MENSAJES };
+}

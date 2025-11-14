@@ -200,3 +200,8 @@ const POEMAS = [
     "autor": "JP"
   }
 ];
+
+// Export para Vercel
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { poemas: POEMAS, POEMAS };
+}

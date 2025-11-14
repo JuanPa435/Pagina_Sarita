@@ -150,3 +150,8 @@ const CANCIONES = [
         "razon": "Expresa las ganas que me dan de besarte, siempre que pienso en ti"
     }
 ];
+
+// Export para Vercel
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { canciones: CANCIONES, CANCIONES };
+}
