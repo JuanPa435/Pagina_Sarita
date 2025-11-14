@@ -5,6 +5,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Para form-data
+app.use(express.raw({ type: 'application/json' })); // Para raw JSON
 app.use(express.static('.'));
 
 // CORS
@@ -30,8 +32,26 @@ app.post('/api/mensajes/save', require('./api/mensajes/save.js'));
 
 // Webhook para Railway/GitHub
 app.post('/webhook', (req, res) => {
-    console.log('📬 Webhook recibido:', req.body);
-    res.sendStatus(200);
+    console.log('📬 Webhook recibido!');
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    console.log('Query:', req.query);
+    
+    // Responder exitosamente
+    res.status(200).json({ 
+        success: true, 
+        message: 'Webhook recibido correctamente',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Endpoint GET para verificar que el webhook existe
+app.get('/webhook', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        message: 'Webhook endpoint está activo',
+        method: 'Usa POST para enviar datos'
+    });
 });
 
 // Servir archivos HTML
