@@ -120,11 +120,6 @@ const POEMAS = [
     "autor": "JP"
   },
   {
-    "titulo": "Me crece la barba...",
-    "contenido": "Me crece la barba hacia ti,\ncomo el musgo de una losa.\nDeja que te cubra el pecho\nde silencio y pelo rosa.",
-    "autor": "Federico García Lorca"
-  },
-  {
     "titulo": "Promesa de Amor",
     "contenido": "Te prometo amor eterno bajo las estrellas,\nte prometo ser tu fuerza cuando caigas y no veas,\nte prometo guardar tu nombre en mi corazón,\nhasta que el tiempo se detenga en la eternidad del amor.",
     "autor": "JP"
@@ -133,11 +128,6 @@ const POEMAS = [
     "titulo": "Canción del Alma",
     "contenido": "Mi alma canta una canción de amor eterno,\ncuando miro tu rostro, lleno de fuego tierno,\nlas notas suben al cielo en melodía,\ny el universo baila al son de tu armonía.",
     "autor": "JP"
-  },
-  {
-    "titulo": "Soneto X",
-    "contenido": "Hemos perdido aun este crepúsculo.\nNadie nos vio esta tarde con las manos unidas\nmientras la noche azul caía sobre el mundo.\n\nHe visto desde mi ventana\nla fiesta del poniente en los cerros lejanos.\n\nA veces como una moneda\nse encendía un pedazo de sol entre mis manos.\n\nYo te recordaba con el alma apretada\nde esa tristeza que tú me conoces.\n\nEntonces, dónde estabas?\nEntre qué gentes?\nDiciendo qué palabras?\n\nPor qué se me vendrá todo el amor de golpe\ncuando me siento triste, y te siento lejana?\n\nCuerpo de mujer\nBlancas colinas, muslos blancos,\nte pareces al mundo en tu actitud de entrega.",
-    "autor": "Pablo Neruda"
   },
   {
     "titulo": "Soneto de la dulce queja",
@@ -172,16 +162,6 @@ const POEMAS = [
   {
     "titulo": "Rima LIII",
     "contenido": "Volverán las oscuras golondrinas\nen tu balcón sus nidos a colgar,\ny otra vez con el ala a sus cristales\njugando llamarán\n\npero aquéllas que el vuelo refrenaban\ntu hermosura y mi dicha al contemplar,\naquéllas que aprendieron nuestros nombres...\nésas... ¡no volverán!",
-    "autor": "Gustavo Adolfo Bécquer"
-  },
-  {
-    "titulo": "Poema 20",
-    "contenido": "Puedo escribir los versos más tristes esta noche.\nYo la quise, y a veces ella también me quiso.\nEn las noches como ésta la tuve entre mis brazos.\nLa besé tantas veces bajo el cielo infinito.\n\nElla me quiso, a veces yo también la quería.\nCómo no haber amado sus grandes ojos fijos.\nPuedo escribir los versos más tristes esta noche.\nPensar que no la tengo. Sentir que la he perdido.",
-    "autor": "Pablo Neruda"
-  },
-  {
-    "titulo": "Rima XLII",
-    "contenido": "Cuando me lo contaron sentí el frío\nde una hoja de acero en las entrañas,\nme apoyé contra el muro, y un instante\nla conciencia perdí de dónde estaba.\n\nCayó sobre mi espíritu la noche,\nen ira y en piedad se anegó el alma...\n¡Y entonces comprendí por qué se llora,\ny entonces comprendí por qué se mata!",
     "autor": "Gustavo Adolfo Bécquer"
   },
   {
@@ -220,3 +200,8 @@ const POEMAS = [
     "autor": "JP"
   }
 ];
+
+// Export para Vercel
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { poemas: POEMAS, POEMAS };
+}

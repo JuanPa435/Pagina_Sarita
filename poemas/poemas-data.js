@@ -198,10 +198,19 @@ const POEMAS = [
     "titulo": "Corazón Errante",
     "contenido": "Mi corazón errante encontró en ti su morada,\nya no busca en otros lados ni en otra madrugada,\nse quedó en tu pecho, latiendo con tu ritmo,\nformando la canción de nuestro nuevo corazón.",
     "autor": "JP"
+  },
+  {
+    "titulo": "Test",
+    "contenido": "Poema de prueba",
+    "autor": "Test"
+  },
+  {
+    "titulo": "Poema de Prueba Local",
+    "contenido": "Este es un poema de prueba\npara verificar que el sistema funciona\ncon backups automáticos",
+    "autor": "Sistema de Prueba"
   }
 ];
 
-// Export para Vercel
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { poemas: POEMAS, POEMAS };
 }

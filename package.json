@@ -2,11 +2,14 @@
   "name": "pagina-sarita",
   "version": "1.0.0",
   "description": "Romantic poetry and songs collection with persistent backend",
-  "main": "backend/save-data.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend/save-data.js",
+    "start": "node server.js",
     "dev": "node backend/save-data.js & python3 -m http.server 8080 --directory .",
     "stop": "pkill -f 'node backend/save-data.js'"
+  },
+  "engines": {
+    "node": ">=18.x"
   },
   "dependencies": {
     "cors": "^2.8.5",
