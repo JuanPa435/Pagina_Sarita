@@ -298,7 +298,8 @@
                 // Guardar en backend
                 const guardado = await guardarCancionesEnBackend();
                 if (guardado) {
-                    filtrarCanciones(document.getElementById('buscador-canciones').value);
+                    // Recargar página para mostrar cambios
+                    window.location.reload();
                 } else {
                     alert('Error al eliminar. Intenta de nuevo.');
                 }
@@ -327,8 +328,9 @@
             // Guardar en backend
             const guardado = await guardarCancionesEnBackend();
             if (guardado) {
-                mostrarCanciones();
                 cerrarModal();
+                // Recargar página para mostrar cambios
+                window.location.reload();
             } else {
                 alert('Error al guardar. Intenta de nuevo.');
             }

@@ -104,13 +104,19 @@
             }
         }
 
-        function guardarMensajesEnStorage() {
-            localStorage.setItem('mensajes_app', JSON.stringify(window.MENSAJES));
-            fetch('http://localhost:3000/api/mensajes/save', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mensajes: window.MENSAJES })
-            }).catch(err => console.log('Backend no disponible:', err));
+        async function guardarMensajesEnStorage() {
+            try {
+                const response = await fetch(CONFIG.BACKEND_URL + '/mensajes/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mensajes: window.MENSAJES })
+                });
+                const data = await response.json();
+                return data.success;
+            } catch (error) {
+                console.error('Error guardando mensajes:', error);
+                return false;
+            }
         }
 
         function mostrarMensajes() {
@@ -234,23 +240,21 @@
             mostrarModal('Editar Mensaje');
         }
 
-        function eliminarMensaje(indice) {
+        async function eliminarMensaje(indice) {
             if (confirm(`¿Estás seguro de que quieres eliminar este mensaje?`)) {
                 MENSAJES.splice(indice, 1);
-                guardarMensajesEnStorage();
+                const guardado = await guardarMensajesEnStorage();
                 
-                const totalPaginas = Math.ceil(MENSAJES.length / MENSAJES_POR_PAGINA);
-                if (paginaActual > totalPaginas && totalPaginas > 0) {
-                    paginaActual = totalPaginas;
-                } else if (totalPaginas === 0) {
-                    paginaActual = 1;
+                if (guardado) {
+                    // Recargar página para mostrar cambios
+                    window.location.reload();
+                } else {
+                    alert('Error al eliminar. Intenta de nuevo.');
                 }
-                
-                mostrarMensajes();
             }
         }
 
-        function guardarMensaje(evento) {
+        async function guardarMensaje(evento) {
             evento.preventDefault();
             
             const asunto = document.getElementById('mensaje-asunto').value.trim();
@@ -268,9 +272,14 @@
                 MENSAJES.push({ asunto, contenido, fecha, texto: contenido });
             }
 
-            guardarMensajesEnStorage();
-            mostrarMensajes();
-            cerrarModal();
+            const guardado = await guardarMensajesEnStorage();
+            if (guardado) {
+                cerrarModal();
+                // Recargar página para mostrar cambios
+                window.location.reload();
+            } else {
+                alert('Error al guardar. Intenta de nuevo.');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {

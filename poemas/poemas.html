@@ -303,11 +303,9 @@
                 const guardado = await guardarPoemasEnBackend();
                 if (guardado) {
                     console.log(`✅ Poema eliminado y guardado en backend`);
-                    // Ajustar página si es necesario
-                    const totalPaginas = Math.ceil(POEMAS.length / POEMAS_POR_PAGINA);
-                    if (paginaActual > totalPaginas && totalPaginas > 0) {
-                        paginaActual = totalPaginas;
-                    } else if (totalPaginas === 0) {
+                    // Recargar página para mostrar cambios
+                    window.location.reload();
+                } else {
                         paginaActual = 1;
                     }
                     mostrarPoemas();
@@ -371,8 +369,9 @@
             if (guardado) {
                 console.log('✨ Poema guardado exitosamente en el backend');
                 poemaDatosEditando = null; // Limpiar estado de edición
-                mostrarPoemas();
                 cerrarModal();
+                // Recargar página para mostrar cambios
+                window.location.reload();
             } else {
                 console.error('❌ Error al guardar en backend');
                 alert('Error al guardar. Intenta de nuevo.');
