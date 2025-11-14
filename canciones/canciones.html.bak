@@ -37,7 +37,7 @@
             
             <!-- Buscador -->
             <div class="buscador-container">
-                <input type="text" id="buscador-canciones" class="buscador-input" placeholder="🔍 Buscar por título, artista o dedicatoria..." />
+                <input type="text" id="buscador-canciones" class="buscador-input" placeholder="🔍 Buscar por título, artista..." />
                 <button id="btn-limpiar-busqueda" class="btn-limpiar">✕ Limpiar</button>
             </div>
             
@@ -68,11 +68,15 @@
                 </div>
                 <div class="form-group">
                     <label for="cancion-artista">Artista:</label>
-                    <input type="text" id="cancion-artista" placeholder="Ej: Bad Bunny">
+                    <input type="text" id="cancion-artista" placeholder="Ej: Taylor Swift">
                 </div>
                 <div class="form-group">
-                    <label for="cancion-razon">Dedicatoria:</label>
-                    <textarea id="cancion-razon" placeholder="¿Por qué te dedico esta canción?" rows="4"></textarea>
+                    <label for="cancion-url">Enlace (YouTube, Spotify, etc):</label>
+                    <input type="text" id="cancion-url" placeholder="Pega el enlace de la canción">
+                </div>
+                <div class="form-group">
+                    <label for="cancion-dedicatoria">Dedicatoria:</label>
+                    <textarea id="cancion-dedicatoria" placeholder="¿Por qué te dedico esta canción?" rows="4"></textarea>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                     <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
@@ -91,25 +95,25 @@
     <script src="../script.js"></script>
     <script>
         const CANCIONES_POR_PAGINA = 12;
+        const BACKEND_URL = 'http://localhost:3000/api/canciones';
         let paginaActual = 1;
         let cancionDatosEditando = null;
-        let cancionesEnPantalla = []; // Array para filtros
-        const BACKEND_URL = 'http://localhost:3000/api/canciones';
+        let cancionesEnPantalla = [];
 
-        // Cargar canciones desde el backend
+        // Cargar canciones del backend
         async function cargarCancionesDelBackend() {
             try {
-                console.log('🔄 Cargando canciones del backend...');
-                const res = await fetch(`${BACKEND_URL}/get`);
-                const data = await res.json();
+                const response = await fetch(BACKEND_URL + '/get');
+                const data = await response.json();
+                
                 if (data.success && data.canciones) {
                     window.CANCIONES = data.canciones;
-                    cancionesEnPantalla = [...window.CANCIONES]; // Inicializar array de pantalla
-                    console.log(`✅ ${data.canciones.length} canciones cargadas del backend`);
+                    cancionesEnPantalla = [...data.canciones];
+                    console.log(`🎵 ${data.canciones.length} canciones cargadas del backend`);
                     return true;
                 }
-            } catch (err) {
-                console.warn('⚠️ Error cargando del backend:', err);
+            } catch (error) {
+                console.error('❌ Error cargando canciones del backend:', error);
             }
             return false;
         }
@@ -117,74 +121,63 @@
         // Guardar canciones en el backend
         async function guardarCancionesEnBackend() {
             try {
-                console.log(`📤 Guardando ${window.CANCIONES.length} canciones en el backend...`);
-                const res = await fetch(`${BACKEND_URL}/save`, {
+                const response = await fetch(BACKEND_URL + '/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ canciones: window.CANCIONES })
                 });
-                const data = await res.json();
-                if (data.success) {
-                    console.log(`✅ Guardado exitoso: ${data.total} canciones en servidor`);
-                    return true;
-                } else {
-                    console.error(`❌ Error al guardar: ${data.error}`);
-                    return false;
-                }
-            } catch (err) {
-                console.error('❌ Error guardando en backend:', err);
+                const data = await response.json();
+                return data.success;
+            } catch (error) {
+                console.error('❌ Error guardando canciones:', error);
                 return false;
             }
         }
-
-        // Función de búsqueda
+        
+        // Filtrar canciones por búsqueda
         function filtrarCanciones(texto) {
-            texto = texto.toLowerCase().trim();
-            console.log(`🔍 Buscando: "${texto}"`);
-            
-            if (texto === '') {
-                cancionesEnPantalla = [...window.CANCIONES];
-            } else {
-                cancionesEnPantalla = window.CANCIONES.filter(cancion => 
-                    cancion.titulo.toLowerCase().includes(texto) ||
-                    cancion.artista.toLowerCase().includes(texto) ||
-                    cancion.razon.toLowerCase().includes(texto)
-                );
-            }
-            
-            paginaActual = 1; // Volver a la primera página
+            const filtro = texto.toLowerCase();
+            cancionesEnPantalla = window.CANCIONES.filter(cancion => 
+                cancion.titulo.toLowerCase().includes(filtro) || 
+                cancion.artista.toLowerCase().includes(filtro) ||
+                cancion.razon.toLowerCase().includes(filtro)
+            );
+            paginaActual = 1;
             mostrarCanciones();
-            console.log(`📊 Resultados encontrados: ${cancionesEnPantalla.length}`);
+            
+            if (cancionesEnPantalla.length === 0 && texto) {
+                console.log(`🔍 No se encontraron canciones con: "${texto}"`);
+            }
         }
 
         function mostrarCanciones() {
             const container = document.getElementById('canciones-container');
             container.innerHTML = '';
+            
+            if (cancionesEnPantalla.length === 0) {
+                container.innerHTML = '<p class="no-resultados">No hay canciones para mostrar</p>';
+                document.getElementById('paginacion').innerHTML = '';
+                return;
+            }
 
             const inicio = (paginaActual - 1) * CANCIONES_POR_PAGINA;
             const fin = inicio + CANCIONES_POR_PAGINA;
             const cancionesEnPagina = cancionesEnPantalla.slice(inicio, fin);
-
-            if (cancionesEnPagina.length === 0) {
-                if (cancionesEnPantalla.length === 0) {
-                    container.innerHTML = '<div class="no-resultados">😔 No se encontraron canciones con tu búsqueda...</div>';
-                } else {
-                    container.innerHTML = '<div class="no-items">Aún no hay canciones... pero aquí guardaré nuestras favoritas 🎵</div>';
-                }
-                actualizarPaginacion();
-                return;
-            }
 
             cancionesEnPagina.forEach((cancion, index) => {
                 const indicePrincipal = inicio + index;
                 const div = document.createElement('div');
                 div.className = 'cancion-card';
                 div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+                
                 div.innerHTML = `
-                    <h3>Canción #${indicePrincipal + 1}: ${cancion.titulo}</h3>
+                    <h3>🎵 ${cancion.titulo}</h3>
                     <p class="cancion-artista">🎤 ${cancion.artista}</p>
-                    <div class="cancion-contenido">
-                        <p>${cancion.razon}</p>
+                    <p class="cancion-contenido">${cancion.razon}</p>
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.2rem;">
+                        <button class="btn-reproducir" onclick="window.open('https://open.spotify.com/search/${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}', '_blank')">
+                            ▶ Spotify
+                        </button>
                     </div>
                     <div class="botones-cancion-menu">
                         <button class="btn-menu-toggle" onclick="toggleMenuCancion(this)">+</button>
@@ -247,7 +240,24 @@
             paginacionDiv.appendChild(btnSiguiente);
         }
 
-        // Modal Functions
+        // Toggle menu
+        function toggleMenuCancion(btn) {
+            const menu = btn.parentElement.querySelector('.botones-cancion-desplegable');
+            menu.classList.toggle('visible');
+            btn.classList.toggle('activo');
+        }
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.botones-cancion-menu')) {
+                document.querySelectorAll('.botones-cancion-desplegable.visible').forEach(menu => {
+                    menu.classList.remove('visible');
+                    menu.previousElementSibling.classList.remove('activo');
+                });
+            }
+        });
+
+        // Modal functions
         function mostrarModal(titulo = 'Agregar Canción') {
             document.getElementById('modal-titulo').textContent = titulo;
             document.getElementById('modal-cancion').style.display = 'flex';
@@ -261,163 +271,80 @@
             cancionDatosEditando = null;
         }
 
-        // Agregar canción
         function abrirFormularioAgregar() {
             cancionDatosEditando = null;
             document.getElementById('form-cancion').reset();
             mostrarModal('Agregar Canción');
         }
 
-        // Editar canción
         function editarCancion(indice) {
-            console.log(`✏️ Editando canción en índice: ${indice}`);
-            if (!CANCIONES[indice]) {
-                console.error(`❌ Canción no encontrada en índice ${indice}`);
-                alert('Error: Canción no encontrada');
-                return;
-            }
             cancionDatosEditando = indice;
-            const cancion = CANCIONES[indice];
-            console.log(`📝 Datos de la canción a editar:`, cancion);
+            const cancion = cancionesEnPantalla[indice];
             document.getElementById('cancion-titulo').value = cancion.titulo;
             document.getElementById('cancion-artista').value = cancion.artista || '';
-            document.getElementById('cancion-razon').value = cancion.razon || '';
+            document.getElementById('cancion-url').value = cancion.url || '';
+            document.getElementById('cancion-dedicatoria').value = cancion.razon || '';
             mostrarModal('Editar Canción');
         }
 
-        // Eliminar canción con confirmación
         async function eliminarCancion(indice) {
-            console.log(`🗑️ Intentando eliminar canción en índice: ${indice}`);
-            if (!CANCIONES[indice]) {
-                console.error(`❌ Canción no encontrada en índice ${indice}`);
-                alert('Error: Canción no encontrada');
-                return;
-            }
-            const titulo = CANCIONES[indice].titulo;
-            if (confirm(`¿Estás seguro de que quieres eliminar la canción "${titulo}"?`)) {
-                console.log(`🎵 Canciones antes de eliminar: ${CANCIONES.length}`);
-                CANCIONES.splice(indice, 1);
-                console.log(`🎵 Canciones después de eliminar: ${CANCIONES.length}`);
+            if (confirm(`¿Estás seguro de que quieres eliminar "${cancionesEnPantalla[indice].titulo}"?`)) {
+                // Encontrar el índice en el array principal
+                const indicePrincipal = window.CANCIONES.findIndex(c => c === cancionesEnPantalla[indice]);
+                window.CANCIONES.splice(indicePrincipal, 1);
                 
+                // Guardar en backend
                 const guardado = await guardarCancionesEnBackend();
                 if (guardado) {
-                    console.log(`✅ Canción eliminada y guardada en backend`);
-                    // Ajustar página si es necesario
-                    const totalPaginas = Math.ceil(CANCIONES.length / CANCIONES_POR_PAGINA);
-                    if (paginaActual > totalPaginas && totalPaginas > 0) {
-                        paginaActual = totalPaginas;
-                    } else if (totalPaginas === 0) {
-                        paginaActual = 1;
-                    }
-                    mostrarCanciones();
+                    filtrarCanciones(document.getElementById('buscador-canciones').value);
                 } else {
-                    console.error(`❌ Error al guardar en backend después de eliminar`);
                     alert('Error al eliminar. Intenta de nuevo.');
                 }
             }
         }
-
-        // Toggle menu de acciones en canción
-        function toggleMenuCancion(btn) {
-            const menu = btn.parentElement.querySelector('.botones-cancion-desplegable');
-            menu.classList.toggle('visible');
-            btn.classList.toggle('activo');
+            }
         }
 
-        // Cerrar menú al hacer clic en otra parte
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.botones-cancion-menu')) {
-                document.querySelectorAll('.botones-cancion-desplegable.visible').forEach(menu => {
-                    menu.classList.remove('visible');
-                    menu.previousElementSibling.classList.remove('activo');
-                });
-            }
-        });
-
-        // Guardar canción (agregar o editar)
         async function guardarCancion(evento) {
             evento.preventDefault();
             
             const titulo = document.getElementById('cancion-titulo').value.trim();
             const artista = document.getElementById('cancion-artista').value.trim();
-            const razon = document.getElementById('cancion-razon').value.trim();
+            const url = document.getElementById('cancion-url').value.trim();
+            const razon = document.getElementById('cancion-dedicatoria').value.trim();
 
             if (!titulo) {
                 alert('Por favor completa el título de la canción');
                 return;
             }
 
-            console.log(`🖊️ ${cancionDatosEditando !== null ? 'Editando' : 'Agregando'} canción: "${titulo}"`);
-            console.log(`🎵 Canciones actuales antes: ${window.CANCIONES.length}`);
-
-            const nuevaCancion = { titulo, artista: artista || 'Desconocido', razon: razon || 'Con amor ❤️' };
-            
             if (cancionDatosEditando !== null) {
-                const indiceEditando = cancionDatosEditando;
-                console.log(`✏️ Reemplazando canción en índice ${indiceEditando}`);
-                console.log(`  Anterior:`, window.CANCIONES[indiceEditando]);
-                window.CANCIONES[indiceEditando] = nuevaCancion;
-                console.log(`  Nueva:`, window.CANCIONES[indiceEditando]);
+                window.CANCIONES[cancionDatosEditando] = { titulo, artista: artista || 'Desconocido', url, razon };
             } else {
-                window.CANCIONES.push(nuevaCancion);
-                console.log(`✅ Canción agregada. Total ahora: ${window.CANCIONES.length}`);
+                window.CANCIONES.push({ titulo, artista: artista || 'Desconocido', url, razon });
             }
 
-            console.log(`📤 Enviando ${window.CANCIONES.length} canciones al backend...`);
-            
             // Guardar en backend
             const guardado = await guardarCancionesEnBackend();
             if (guardado) {
-                console.log('✨ Canción guardada exitosamente en el backend');
-                cancionDatosEditando = null; // Limpiar estado de edición
                 mostrarCanciones();
                 cerrarModal();
             } else {
-                console.error('❌ Error al guardar en backend');
                 alert('Error al guardar. Intenta de nuevo.');
             }
         }
 
-        // Event Listeners
-        // Toggle menú móvil
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.getElementById('menu-simple');
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const abierto = navMenu.classList.toggle('open');
-                navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-            });
-            
-            // Cerrar menú cuando se hace click en un link
-            navMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-            
-            // Cerrar menú cuando se hace click fuera
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.navbar-simple')) {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-
+        // Event listeners
         document.addEventListener('DOMContentLoaded', async () => {
             // Cargar canciones del backend
             const cargado = await cargarCancionesDelBackend();
             if (!cargado) {
                 console.warn('⚠️ No se pudo cargar del backend, usando array vacío');
                 window.CANCIONES = [];
+                cancionesEnPantalla = [];
             }
             
             mostrarCanciones();
-
-            // Botón agregar
-            document.getElementById('btn-agregar-cancion').addEventListener('click', abrirFormularioAgregar);
 
             // Buscador
             const buscadorInput = document.getElementById('buscador-canciones');
@@ -433,24 +360,61 @@
                 buscadorInput.focus();
             });
 
-            // Modal
+            document.getElementById('btn-agregar-cancion').addEventListener('click', abrirFormularioAgregar);
             document.getElementById('btn-cerrar-modal').addEventListener('click', cerrarModal);
             document.getElementById('btn-cancelar').addEventListener('click', cerrarModal);
             document.getElementById('form-cancion').addEventListener('submit', guardarCancion);
 
-            // Cerrar modal al hacer clic fuera
             document.getElementById('modal-cancion').addEventListener('click', (e) => {
                 if (e.target.id === 'modal-cancion') {
                     cerrarModal();
                 }
             });
 
-            // Cerrar modal con tecla Escape
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && document.getElementById('modal-cancion').style.display === 'flex') {
                     cerrarModal();
                 }
             });
+
+            // Descargar datos en JSON
+            document.getElementById('btn-descargar-canciones').addEventListener('click', function() {
+                const dataStr = JSON.stringify(window.CANCIONES, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'canciones-data.json';
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+
+            // Toggle menú móvil mejorado
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.getElementById('menu-simple');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const abierto = navMenu.classList.toggle('open');
+                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+                
+                // Cerrar menú cuando se hace click en un link
+                navMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+                
+                // Cerrar menú cuando se hace click fuera
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.navbar-simple')) {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
         });
     </script>
 </body>
