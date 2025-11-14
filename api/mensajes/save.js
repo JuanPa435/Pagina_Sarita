@@ -1,6 +1,51 @@
-const storage = require('../storage.js');
 const fs = require('fs');
 const path = require('path');
+
+// Función para crear backup
+function crearBackup(filePath) {
+    try {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const backupPath = filePath.replace('.js', `.backup.${timestamp}.js`);
+        if (fs.existsSync(filePath)) {
+            fs.copyFileSync(filePath, backupPath);
+            console.log(`💾 Backup creado: ${backupPath}`);
+            limpiarBackupsAntiguos(filePath);
+        }
+    } catch (error) {
+        console.error('Error creando backup:', error);
+    }
+}
+
+// Función para mantener solo los últimos 5 backups
+function limpiarBackupsAntiguos(filePath) {
+    try {
+        const dir = path.dirname(filePath);
+        const fileName = path.basename(filePath, '.js');
+        
+        const archivos = fs.readdirSync(dir)
+            .filter(f => f.startsWith(fileName) && f.includes('.backup.'))
+            .map(f => ({
+                nombre: f,
+                ruta: path.join(dir, f),
+                tiempo: fs.statSync(path.join(dir, f)).mtimeMs
+            }))
+            .sort((a, b) => b.tiempo - a.tiempo);
+        
+        if (archivos.length > 5) {
+            const aEliminar = archivos.slice(5);
+            aEliminar.forEach(backup => {
+                try {
+                    fs.unlinkSync(backup.ruta);
+                    console.log(`🗑️ Backup antiguo eliminado: ${backup.nombre}`);
+                } catch (e) {
+                    console.error(`Error al eliminar backup: ${e}`);
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error limpiando backups:', error);
+    }
+}
 
 module.exports = (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,31 +67,28 @@ module.exports = (req, res) => {
             });
         }
         
-        // Guardar en memoria
-        storage.setMensajesGuardados(mensajes);
+        const filePath = path.join(__dirname, '../../mensajes/mensajes-data.js');
         
-        // Intentar guardar también al archivo
-        try {
-            const filePath = path.join(__dirname, '../../mensajes/mensajes-data.js');
-            const content = `// Array con mensajes especiales\nconst MENSAJES = ${JSON.stringify(mensajes, null, 2)};\n\nif (typeof module !== 'undefined' && module.exports) {\n    module.exports = { mensajes: MENSAJES, MENSAJES };\n}`;
-            fs.writeFileSync(filePath, content, 'utf8');
-            console.log('✅ Mensajes guardados también al archivo');
-        } catch (fileError) {
-            console.log('⚠️ No se pudo guardar al archivo (normal en Vercel), guardados en memoria:', fileError.message);
-        }
+        // Crear backup
+        crearBackup(filePath);
+        
+        // Escribir el archivo con formato
+        const content = `const MENSAJES = ${JSON.stringify(mensajes, null, 2)};\n\nif (typeof module !== 'undefined' && module.exports) {\n    module.exports = { mensajes: MENSAJES, MENSAJES };\n}`;
+        fs.writeFileSync(filePath, content, 'utf8');
+        
+        console.log(`✅ ${mensajes.length} mensajes guardados correctamente`);
         
         res.status(200).json({
             success: true,
-            message: 'Mensajes guardados',
+            message: 'Mensajes guardados correctamente',
             total: mensajes.length,
             count: mensajes.length
         });
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error al guardar mensajes:', error);
         res.status(500).json({
             success: false,
             error: error.message
         });
     }
 };
-

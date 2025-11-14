@@ -1,11 +1,20 @@
-const storage = require('../storage.js');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
     
     try {
-        const poemas = storage.poemasGuardados || [];
+        // Leer directamente del archivo
+        const filePath = path.join(__dirname, '../../poemas/poemas-data.js');
+        
+        // Eliminar la cache del require para obtener los datos más recientes
+        delete require.cache[require.resolve(filePath)];
+        
+        const data = require(filePath);
+        const poemas = data.poemas || data.POEMAS || [];
+        
         res.status(200).json({
             success: true,
             poemas: poemas,
