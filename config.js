@@ -10,24 +10,9 @@ const getBackendURL = () => {
         return 'http://localhost:3000/api';
     }
 
-    // Si estás en Netlify (producción - URL del frontend)
-    if (hostname.includes('netlify.app') || hostname.includes('vercel.app')) {
-        // Tu backend está en Vercel, obtén la URL desde:
-        // 1. Variable de entorno (configurada en Netlify)
-        // 2. O usa la URL por defecto de Vercel
-        
-        // Si tienes variable de entorno:
-        if (typeof BACKEND_API_URL !== 'undefined') {
-            return BACKEND_API_URL;
-        }
-        
-        // URL por defecto - CAMBIAR ESTO POR TU DOMINIO DE VERCEL
-        // Después de deployar en Vercel, reemplaza esto por tu URL
-        return 'https://pagina-sarita-backend.vercel.app/api';
-    }
-
-    // Por defecto
-    return 'http://localhost:3000/api';
+    // En Vercel o cualquier hostname: usar URL actual
+    // Todo corre en el mismo servidor
+    return '/api';
 };
 
 const CONFIG = {
@@ -37,3 +22,4 @@ const CONFIG = {
 
 console.log(`🌐 Backend URL: ${CONFIG.BACKEND_URL}`);
 console.log(`🔧 Modo: ${CONFIG.DEBUG ? 'DESARROLLO' : 'PRODUCCIÓN'}`);
+

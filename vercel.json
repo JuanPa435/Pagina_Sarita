@@ -1,13 +1,20 @@
 {
   "buildCommand": "npm install",
-  "outputDirectory": ".",
-  "env": {
-    "NODE_ENV": "production"
-  },
+  "framework": "static",
+  "public": ".",
   "functions": {
-    "api/index.js": {
-      "maxDuration": 60,
-      "memory": 1024
+    "api/**/*.js": {
+      "runtime": "nodejs18.x"
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
 }
