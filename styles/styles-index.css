@@ -67,6 +67,17 @@ body {
     padding: 0.4rem 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.nav-toggle:hover {
+    border-color: #00ffff;
+    background: rgba(0, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.nav-toggle:active {
+    transform: scale(0.95);
 }
 
 .nav-toggle span {
@@ -76,6 +87,7 @@ body {
     background: #00ffff;
     margin: 5px 0;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+    transition: all 0.3s ease;
 }
 
 .nav-menu-simple {

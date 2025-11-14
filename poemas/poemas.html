@@ -378,35 +378,34 @@
             }
         }
 
-        // Event Listeners
-        // Toggle menú móvil
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.getElementById('menu-simple');
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const abierto = navMenu.classList.toggle('open');
-                navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-            });
-            
-            // Cerrar menú cuando se hace click en un link
-            navMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-            
-            // Cerrar menú cuando se hace click fuera
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.navbar-simple')) {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', async () => {
+            // Toggle menú móvil
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.getElementById('menu-simple');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const abierto = navMenu.classList.toggle('open');
+                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+                
+                // Cerrar menú cuando se hace click en un link
+                navMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+                
+                // Cerrar menú cuando se hace click fuera
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.navbar-simple')) {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+            
             // Cargar poemas del backend
             const cargado = await cargarPoemasDelBackend();
             if (!cargado) {
