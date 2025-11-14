@@ -6,6 +6,14 @@ Una página web romántica, moderna e interactiva creada con todo el amor para S
 
 ---
 
+## 🌐 **DEPLOYADA EN VERCEL**
+
+**URL en vivo:** [Próximamente - ver instrucciones abajo]
+
+¿Quieres tu propia URL? → Sigue [**VERCEL_SOLO.md**](./VERCEL_SOLO.md) (5 minutos)
+
+---
+
 ## ✨ ¿Qué encontrarás aquí?
 
 ### 📚 **100 Poemas Amorosos**
