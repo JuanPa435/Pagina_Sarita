@@ -5,10 +5,11 @@ module.exports = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     
     try {
+        const poemas = storage.poemasGuardados || [];
         res.status(200).json({
             success: true,
-            poemas: storage.poemasGuardados,
-            count: storage.poemasGuardados.length
+            poemas: poemas,
+            count: poemas.length
         });
     } catch (error) {
         console.error('Error:', error);

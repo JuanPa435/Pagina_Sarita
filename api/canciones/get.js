@@ -5,10 +5,11 @@ module.exports = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     
     try {
+        const canciones = storage.cancionesGuardadas || [];
         res.status(200).json({
             success: true,
-            canciones: storage.cancionesGuardadas,
-            count: storage.cancionesGuardadas.length
+            canciones: canciones,
+            count: canciones.length
         });
     } catch (error) {
         console.error('Error:', error);
