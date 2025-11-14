@@ -140,8 +140,14 @@
 
         // Calcular días juntos y actualizar textos relacionados
         function calcularDiasJuntos() {
+            // Obtener hoy sin hora para contar días completos
             const hoy = new Date();
-            const diferencia = hoy - FECHA_INICIO;
+            hoy.setHours(0, 0, 0, 0);
+            
+            const inicio = new Date(FECHA_INICIO);
+            inicio.setHours(0, 0, 0, 0);
+            
+            const diferencia = hoy - inicio;
             const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             const diasEl = document.getElementById('diasCounter');
             if (diasEl) diasEl.textContent = dias;
