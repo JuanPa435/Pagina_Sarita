@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería - Nuestra Historia 💙</title>
+    <meta name="theme-color" content="#05bfdb">
+    <link rel="stylesheet" href="../styles/styles-galeria.css">
+    <link rel="stylesheet" href="../styles/styles-modal-galeria.css">
+    <!-- Navbar del index -->
+    <link rel="stylesheet" href="../styles/styles-index.css">
+</head>
+<body>
+    <!-- Navbar igual al index (adaptando rutas relativas) -->
+    <nav class="navbar-simple">
+        <div class="nav-content">
+            <a href="../index.html" class="logo-simple">💙 Nuestra Historia</a>
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-simple">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu-simple" id="menu-simple">
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../poemas/poemas.html">Poemas</a></li>
+                <li><a href="../canciones/canciones.html">Canciones</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="../mensajes/mensajes.html">Mensajes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido -->
+    <section class="galeria">
+        <div class="container">
+            <h2 class="seccion-titulo">📸 Galería de Fotos</h2>
+            
+            <div class="galeria-info">
+                <p>💝 Aquí guardaremos nuestros mejores momentos juntos</p>
+            </div>
+            
+            <div id="galeria-container" class="galeria-grid">
+                <!-- Las fotos se cargarán aquí -->
+                <div class="galeria-placeholder">
+                    <div class="placeholder-icon">📷</div>
+                    <p>Próximamente...</p>
+                    <p class="placeholder-subtitle">Pronto subiremos nuestras fotos favoritas</p>
+                </div>
+            </div>
+
+            <!-- Botón para agregar fotos (deshabilitado temporalmente) -->
+            <!-- <button class="btn-agregar" id="btn-agregar-foto">Agregar Foto</button> -->
+        </div>
+    </section>
+
+    <!-- Script para el navbar -->
+    <script>
+        // Toggle menú móvil
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.getElementById('menu-simple');
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const abierto = navMenu.classList.toggle('open');
+                navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+            });
+            
+            // Cerrar menú cuando se hace click en un link
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+            
+            // Cerrar menú cuando se hace click fuera
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.navbar-simple')) {
+                    navMenu.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
