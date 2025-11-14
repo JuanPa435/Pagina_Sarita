@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensajes - Nuestra Historia 💙</title>
-    <link rel="stylesheet" href="../styles/styles-mensajes-turquesa.css">
+    <link rel="stylesheet" href="../styles/styles-mensajes.css">
     <link rel="stylesheet" href="../styles/styles-modal-mensajes.css">
     <!-- Navbar del index -->
     <link rel="stylesheet" href="../styles/styles-index.css">
@@ -84,12 +84,14 @@
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
+    <script src="../config.js"></script>
     <script src="../script.js"></script>
     <script src="mensajes-data.js"></script>
     <script>
         const MENSAJES_POR_PAGINA = 12;
         let paginaActual = 1;
         let mensajeDatosEditando = null;
+        const BACKEND_URL = CONFIG.BACKEND_URL + '/mensajes';
 
         function cargarMensajesDelStorage() {
             const mensajesGuardados = localStorage.getItem('mensajes_app');

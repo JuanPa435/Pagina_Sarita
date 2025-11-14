@@ -88,13 +88,14 @@
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
+    <script src="../config.js"></script>
     <script src="../script.js"></script>
     <script>
         const POEMAS_POR_PAGINA = 12;
         let paginaActual = 1;
         let poemaDatosEditando = null;
         let poemasEnPantalla = []; // Array para filtros
-        const BACKEND_URL = 'http://localhost:3000/api/poemas';
+        const BACKEND_URL = CONFIG.BACKEND_URL + '/poemas';
 
         // Cargar poemas desde el backend
         async function cargarPoemasDelBackend() {
