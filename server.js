@@ -28,6 +28,12 @@ app.post('/api/canciones/save', require('./api/canciones/save.js'));
 app.get('/api/mensajes/get', require('./api/mensajes/get.js'));
 app.post('/api/mensajes/save', require('./api/mensajes/save.js'));
 
+// Webhook para Railway/GitHub
+app.post('/webhook', (req, res) => {
+    console.log('📬 Webhook recibido:', req.body);
+    res.sendStatus(200);
+});
+
 // Servir archivos HTML
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
