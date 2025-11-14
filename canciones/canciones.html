@@ -175,9 +175,11 @@
                     <div class="cancion-contenido">
                         <p>${cancion.razon}</p>
                     </div>
-                    <a href="https://open.spotify.com/search/${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-escuchar">
-                        ▶ Escuchar
-                    </a>
+                    <div style="display: flex; justify-content: center; margin: 2rem 0;">
+                        <a href="https://open.spotify.com/search/${encodeURIComponent(cancion.titulo + ' ' + cancion.artista)}" target="_blank" class="btn-escuchar">
+                            Escuchar
+                        </a>
+                    </div>
                     <div class="botones-cancion-menu">
                         <button class="btn-menu-toggle" onclick="toggleMenuCancion(this)">+</button>
                         <div class="botones-cancion-desplegable">
