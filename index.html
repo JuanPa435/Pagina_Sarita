@@ -189,22 +189,29 @@
         }
 
         // Canciones
-        function cargarPreviewCanciones() {
-            const canciones = JSON.parse(localStorage.getItem('canciones_app') || '[]');
+        async function cargarPreviewCanciones() {
             const container = document.getElementById('cancionesPreview');
             
-            if (canciones.length === 0) {
+            try {
+                const response = await fetch('http://localhost:3000/api/canciones/get');
+                const data = await response.json();
+                
+                if (!data.success || !data.canciones || data.canciones.length === 0) {
+                    container.innerHTML = '<p class="no-items">Nuestras canciones favoritas estarán aquí 🎶</p>';
+                    return;
+                }
+                
+                container.innerHTML = data.canciones.slice(0, 3).map(cancion => `
+                    <div class="item-card">
+                        <h3>🎵 ${cancion.titulo}</h3>
+                        <p><strong>${cancion.artista}</strong></p>
+                        <p>${cancion.razon}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('❌ Error cargando canciones del preview:', error);
                 container.innerHTML = '<p class="no-items">Nuestras canciones favoritas estarán aquí 🎶</p>';
-                return;
             }
-            
-            container.innerHTML = canciones.slice(0, 3).map(cancion => `
-                <div class="item-card">
-                    <h3>🎵 ${cancion.titulo}</h3>
-                    <p><strong>${cancion.artista}</strong></p>
-                    <p>${cancion.razon}</p>
-                </div>
-            `).join('');
         }
 
         // Mensajes

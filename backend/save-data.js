@@ -195,3 +195,32 @@ app.listen(PORT, () => {
     console.log(`📝 Los datos se guardarán automáticamente con backups`);
 });
 
+// Obtener canciones actuales del servidor
+app.get('/api/canciones/get', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, '../canciones/canciones-data.js');
+        console.log(`📂 Buscando archivo: ${filePath}`);
+        
+        if (fs.existsSync(filePath)) {
+            const contenido = fs.readFileSync(filePath, 'utf8');
+            const match = contenido.match(/const\s+CANCIONES\s*=\s*(\[[\s\S]*\]);/);
+            if (match) {
+                try {
+                    const canciones = JSON.parse(match[1]);
+                    if (Array.isArray(canciones) && canciones.length > 0) {
+                        console.log(`✅ Retornando ${canciones.length} canciones`);
+                        return res.json({ success: true, canciones });
+                    }
+                } catch (parseErr) {
+                    console.error('❌ Error parseando JSON:', parseErr.message);
+                }
+            }
+        }
+        
+        res.json({ success: false, canciones: [] });
+    } catch (error) {
+        console.error('❌ Error al obtener canciones:', error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
