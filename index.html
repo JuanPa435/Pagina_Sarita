@@ -136,9 +136,7 @@
 
     <script>
         // Configuración de fechas
-        const FECHA_INICIO = new Date('2025-06-05');
-
-        const FECHA_INICIO = new Date('2025-05-06');
+        const FECHA_INICIO = new Date(2025, 4, 6); // mayo = 4 (0-indexed), día 6
 
         // Calcular días juntos y actualizar textos relacionados
         function calcularDiasJuntos() {
@@ -148,11 +146,17 @@
             const diasEl = document.getElementById('diasCounter');
             if (diasEl) diasEl.textContent = dias;
 
-            const format = (d) => d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+            const dia = FECHA_INICIO.getDate();
+            const mes = meses[FECHA_INICIO.getMonth()];
+            const anio = FECHA_INICIO.getFullYear();
+            
+            const fechaFormato = `${dia} de ${mes} de ${anio}`;
+            
             const sinceEl = document.getElementById('sinceDate');
-            if (sinceEl) sinceEl.textContent = `Desde el ${format(FECHA_INICIO)}`;
+            if (sinceEl) sinceEl.textContent = `Desde el ${fechaFormato}`;
             const footerSince = document.getElementById('footerSince');
-            if (footerSince) footerSince.textContent = `Nuestra historia comenzó el ${format(FECHA_INICIO)} y sigue escribiéndose cada día`;
+            if (footerSince) footerSince.textContent = `Nuestra historia comenzó el ${fechaFormato} y sigue escribiéndose cada día`;
         }
 
         // Cargar previews de todas las secciones
