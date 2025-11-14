@@ -1,7 +1,7 @@
 {
   "buildCommand": "npm install",
   "framework": "static",
-  "public": ".",
+  "public": true,
   "functions": {
     "api/**/*.js": {
       "runtime": "nodejs18.x"
