@@ -2,6 +2,10 @@
    MENSAJES TURQUESA - MEGA VISIBLE
    ========================================== */
 
+body {
+    padding-top: 85px;
+}
+
 :root {
     --turquesa-principal: #05bfdb;
     --turquesa-claro: #a5f0f7;
@@ -331,5 +335,42 @@
 
     .mensaje-box {
         padding: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    .mensajes {
+        padding: 2rem 1rem 3rem;
+    }
+    
+    .seccion-titulo {
+        font-size: 1.5rem;
+    }
+    
+    .mensaje-box {
+        padding: 1.5rem;
+    }
+    
+    .mensaje-box h3 {
+        font-size: 1.2rem;
+    }
+    
+    .mensaje-texto {
+        font-size: 0.95rem;
+    }
+    
+    .mensaje-fecha {
+        font-size: 0.85rem;
+    }
+    
+    .btn-agregar {
+        width: 100%;
+        max-width: 300px;
+        font-size: 1rem;
+        padding: 0.9rem 1.8rem;
     }
 }

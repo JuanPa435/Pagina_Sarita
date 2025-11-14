@@ -2,6 +2,10 @@
    POEMAS - ESTILO AMOROSO Y ROMÁNTICO
    ========================================== */
 
+body {
+    padding-top: 85px;
+}
+
 :root {
     --turquesa-principal: #00bfff;
     --turquesa-claro: #00d4e8;
@@ -422,6 +426,98 @@
     
     .poema-card h3 {
         font-size: 1.3rem;
+    }
+    
+    .btn-agregar {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    .poemas {
+        padding: 2rem 1rem 3rem;
+    }
+    
+    .seccion-titulo {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+    
+    .seccion-titulo::before {
+        font-size: 1.5rem;
+    }
+    
+    .poema-card {
+        padding: 1.5rem;
+    }
+    
+    .poema-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .poema-contenido {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .poema-autor {
+        font-size: 0.85rem;
+    }
+    
+    .buscador-container {
+        gap: 0.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .buscador-input {
+        font-size: 0.9rem;
+        padding: 0.7rem 1rem;
+    }
+    
+    .btn-limpiar {
+        font-size: 0.9rem;
+        padding: 0.7rem 1rem;
+    }
+    
+    .paginacion {
+        gap: 0.3rem;
+    }
+    
+    .pagina-btn,
+    .pagina-btn-icono {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-agregar {
+        font-size: 1rem;
+        padding: 0.9rem 1.8rem;
+    }
+    
+    .btn-menu-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .botones-poema-desplegable {
+        min-width: 140px;
+        padding: 0.8rem;
+        right: -10px;
+    }
+    
+    .btn-editar,
+    .btn-eliminar {
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem;
     }
 }
 

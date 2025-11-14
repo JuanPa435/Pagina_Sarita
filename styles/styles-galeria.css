@@ -2,6 +2,10 @@
    GALERÍA TURQUESA - ULTRA VISIBLE
    ========================================== */
 
+body {
+    padding-top: 85px;
+}
+
 :root {
     --turquesa-principal: #05bfdb;
     --turquesa-claro: #a5f0f7;
@@ -408,6 +412,55 @@
 
     .btn-upload,
     .btn-eliminar-seleccionadas {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    .galeria {
+        padding: 2rem 1rem 3rem;
+    }
+    
+    .seccion-titulo {
+        font-size: 1.5rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .gallery-item {
+        height: 250px;
+    }
+    
+    .modal-content {
+        max-width: 98%;
+        padding: 1rem;
+    }
+    
+    .modal-img {
+        max-height: 50vh;
+    }
+    
+    .gallery-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-upload,
+    .btn-eliminar-seleccionadas {
+        width: 100%;
+        max-width: 300px;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
         padding: 0.7rem 1.2rem;
         font-size: 0.85rem;
     }

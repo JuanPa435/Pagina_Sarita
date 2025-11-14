@@ -243,3 +243,46 @@
         width: 100%;
     }
 }
+
+@media (max-width: 480px) {
+    .modal-poema-content {
+        width: 98%;
+        padding: 1.5rem;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-header {
+        padding: 1rem 0;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .btn-cerrar-modal {
+        width: 32px;
+        height: 32px;
+        font-size: 1.3rem;
+    }
+    
+    .form-group label {
+        font-size: 0.95rem;
+    }
+    
+    .form-control,
+    .form-textarea {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+    }
+    
+    .form-textarea {
+        min-height: 150px;
+    }
+    
+    .btn-cancelar,
+    .btn-guardar {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}

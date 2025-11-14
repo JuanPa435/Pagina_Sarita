@@ -87,6 +87,40 @@
     <script src="../config.js"></script>
     <script src="../script.js"></script>
     <script src="mensajes-data.js"></script>
+    
+    <!-- Script del Navbar (se carga primero) -->
+    <script>
+        // Inicializar navbar inmediatamente
+        (function() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.getElementById('menu-simple');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const abierto = navMenu.classList.toggle('open');
+                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+                
+                // Cerrar menú cuando se hace click en un link
+                navMenu.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+                
+                // Cerrar menú cuando se hace click fuera
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.navbar-simple')) {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+        })();
+    </script>
+    
     <script>
         const MENSAJES_POR_PAGINA = 12;
         let paginaActual = 1;
@@ -302,33 +336,6 @@
                     cerrarModal();
                 }
             });
-
-            // Toggle menú móvil
-            const navToggle = document.querySelector('.nav-toggle');
-            const navMenu = document.getElementById('menu-simple');
-            if (navToggle && navMenu) {
-                navToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const abierto = navMenu.classList.toggle('open');
-                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-                });
-                
-                // Cerrar menú cuando se hace click en un link
-                navMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        navMenu.classList.remove('open');
-                        navToggle.setAttribute('aria-expanded', 'false');
-                    });
-                });
-                
-                // Cerrar menú cuando se hace click fuera
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.navbar-simple')) {
-                        navMenu.classList.remove('open');
-                        navToggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
         });
     </script>
 </body>

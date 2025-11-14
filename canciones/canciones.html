@@ -23,13 +23,12 @@
             <ul class="nav-menu-simple" id="menu-simple">
                 <li><a href="../index.html">Inicio</a></li>
                 <li><a href="../poemas/poemas.html">Poemas</a></li>
-                <li><a href="canciones.html">Canciones</a></li>
+                <li><a href="../canciones/canciones.html">Canciones</a></li>
                 <li><a href="../galeria/galeria.html">Galería</a></li>
                 <li><a href="../mensajes/mensajes.html">Mensajes</a></li>
             </ul>
         </div>
     </nav>
-
     <!-- Contenido -->
     <section class="canciones">
         <div class="container">
@@ -94,6 +93,40 @@
 
     <script src="../config.js"></script>
     <script src="../script.js"></script>
+    
+    <!-- Script del Navbar (se carga primero) -->
+    <script>
+        // Inicializar navbar inmediatamente
+        (function() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.getElementById('menu-simple');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const abierto = navMenu.classList.toggle('open');
+                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+                
+                // Cerrar menú cuando se hace click en un link
+                navMenu.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+                
+                // Cerrar menú cuando se hace click fuera
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.navbar-simple')) {
+                        navMenu.classList.remove('open');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+        })();
+    </script>
+    
     <script>
         const CANCIONES_POR_PAGINA = 12;
         const BACKEND_URL = CONFIG.BACKEND_URL + '/canciones';
@@ -390,33 +423,6 @@
                 link.click();
                 URL.revokeObjectURL(url);
             });
-
-            // Toggle menú móvil mejorado
-            const navToggle = document.querySelector('.nav-toggle');
-            const navMenu = document.getElementById('menu-simple');
-            if (navToggle && navMenu) {
-                navToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const abierto = navMenu.classList.toggle('open');
-                    navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-                });
-                
-                // Cerrar menú cuando se hace click en un link
-                navMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        navMenu.classList.remove('open');
-                        navToggle.setAttribute('aria-expanded', 'false');
-                    });
-                });
-                
-                // Cerrar menú cuando se hace click fuera
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.navbar-simple')) {
-                        navMenu.classList.remove('open');
-                        navToggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
         });
     </script>
 </body>
