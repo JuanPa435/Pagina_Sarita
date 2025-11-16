@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -21,6 +22,26 @@ app.use((req, res, next) => {
 
 // Servir archivos estáticos
 app.use(express.static('.'));
+// Servir uploads estáticos
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Configuración de multer para subir imágenes de galería
+const uploadsDir = path.join(__dirname, 'uploads', 'galeria');
+fs.mkdirSync(uploadsDir, { recursive: true });
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadsDir);
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname) || '.jpg';
+        const base = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9-_]/g, '_');
+        const ts = Date.now();
+        cb(null, `${base}_${ts}${ext}`);
+    }
+});
+
+const upload = multer({ storage });
 
 // ============ FUNCIONES AUXILIARES ============
 
@@ -250,6 +271,62 @@ app.get('/mensajes', (req, res) => {
     res.sendFile(path.join(__dirname, 'mensajes/mensajes.html'));
 });
 
+// ============ RUTAS API - GALERIA ============
+
+app.get('/api/galeria/get', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'galeria/galeria-data.js');
+        delete require.cache[require.resolve(filePath)];
+        const data = require(filePath);
+        const fotos = data.fotos || data.FOTOS || data.galeria || data.GALERIA || [];
+
+        res.json({ success: true, fotos, count: fotos.length });
+    } catch (error) {
+        console.error('Error al leer galería:', error);
+        res.status(500).json({ success: false, error: error.message, fotos: [] });
+    }
+});
+
+app.post('/api/galeria/save', (req, res) => {
+    try {
+        const { fotos } = req.body;
+        if (!Array.isArray(fotos)) {
+            return res.status(400).json({ success: false, error: 'Datos inválidos' });
+        }
+
+        const filePath = path.join(__dirname, 'galeria/galeria-data.js');
+        crearBackup(filePath);
+
+        const content = `const GALERIA = ${JSON.stringify(fotos, null, 2)};\n\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports = { fotos: GALERIA, GALERIA };\n}`;
+        fs.writeFileSync(filePath, content, 'utf8');
+
+        console.log(`✅ ${fotos.length} fotos guardadas`);
+        res.json({ success: true, message: 'Galería guardada correctamente', total: fotos.length, count: fotos.length });
+    } catch (error) {
+        console.error('Error al guardar galería:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Subida de imagen individual (campo: "foto")
+app.post('/api/galeria/upload', upload.single('foto'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: 'Archivo no recibido' });
+        }
+        const publicUrl = `/uploads/galeria/${req.file.filename}`;
+        res.json({ success: true, url: publicUrl, filename: req.file.filename });
+    } catch (error) {
+        console.error('Error en upload galería:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============ RUTA HTML - GALERIA ============
+app.get('/galeria', (req, res) => {
+    res.sendFile(path.join(__dirname, 'galeria/galeria.html'));
+});
+
 // ============ INICIAR SERVIDOR ============
 
 app.listen(PORT, '0.0.0.0', () => {
@@ -258,6 +335,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('🚀 ========================================');
     console.log(`📝 Poemas:    http://localhost:${PORT}/poemas`);
     console.log(`🎵 Canciones: http://localhost:${PORT}/canciones`);
+    console.log(`📸 Galería:  http://localhost:${PORT}/galeria`);
     console.log(`💌 Mensajes:  http://localhost:${PORT}/mensajes`);
     console.log(`🔗 Webhook:   http://localhost:${PORT}/webhook`);
     console.log('🚀 ========================================');

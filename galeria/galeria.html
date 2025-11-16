@@ -35,21 +35,12 @@
         <div class="container">
             <h2 class="seccion-titulo">📸 Galería de Fotos</h2>
             
-            <div class="galeria-info">
-                <p>💝 Aquí guardaremos nuestros mejores momentos juntos</p>
-            </div>
-            
-            <div id="galeria-container" class="galeria-grid">
-                <!-- Las fotos se cargarán aquí -->
-                <div class="galeria-placeholder">
-                    <div class="placeholder-icon">📷</div>
-                    <p>Próximamente...</p>
-                    <p class="placeholder-subtitle">Pronto subiremos nuestras fotos favoritas</p>
-                </div>
+            <div class="gallery-controls">
+                <button class="btn-upload" id="btn-subir-fotos">Subir fotos</button>
+                <input type="file" id="file-input" accept="image/*" multiple>
             </div>
 
-            <!-- Botón para agregar fotos (deshabilitado temporalmente) -->
-            <!-- <button class="btn-agregar" id="btn-agregar-foto">Agregar Foto</button> -->
+            <div id="galeria-container" class="gallery-grid"></div>
         </div>
     </section>
 
@@ -81,6 +72,231 @@
                 }
             });
         }
+    </script>
+
+    <script src="../config.js"></script>
+    <script src="../script.js"></script>
+
+    <!-- Modal de visualización -->
+    <div id="modal-visualizar" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrar-visualizar">&times;</span>
+            <img id="visualizar-img" class="modal-img" alt="Foto">
+            <div class="modal-buttons">
+                <button class="btn-descargar" id="btn-descargar">Descargar</button>
+                <button class="btn-cerrar-modal" id="btn-cerrar-visualizar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal agregar/editar foto -->
+    <div id="modal-galeria" class="modal-galeria" style="display:none;">
+        <div class="modal-galeria-content">
+            <div class="modal-header">
+                <h3 id="modal-galeria-titulo">Agregar/Editar Foto</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-editar">&times;</button>
+            </div>
+            <form id="form-foto">
+                <div class="form-group">
+                    <label for="foto-autor">¿Quién la subió?</label>
+                    <input type="text" id="foto-autor" placeholder="Nombre" />
+                </div>
+                <div class="form-group">
+                    <label for="foto-descripcion">Descripción</label>
+                    <textarea id="foto-descripcion" rows="3" placeholder="Escribe una descripción"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="foto-reemplazar">Reemplazar imagen (opcional)</label>
+                    <input type="file" id="foto-reemplazar" accept="image/*" />
+                </div>
+                <div style="display:flex; gap:1rem; justify-content:flex-end;">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar-editar">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = CONFIG.BACKEND_URL + '/galeria';
+        let FOTOS = [];
+        let indiceEditando = null;
+
+        async function cargarGaleria() {
+            try {
+                const res = await fetch(BACKEND_URL + '/get');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.fotos)) {
+                    FOTOS = data.fotos;
+                } else {
+                    FOTOS = [];
+                }
+                renderGaleria();
+            } catch (e) {
+                console.error('Error cargando galería:', e);
+                FOTOS = [];
+                renderGaleria();
+            }
+        }
+
+        function renderGaleria() {
+            const grid = document.getElementById('galeria-container');
+            grid.innerHTML = '';
+            if (!FOTOS.length) {
+                grid.innerHTML = `
+                    <div class="foto-no-encontrada">No hay fotos todavía. ¡Sube tus primeras fotos! 💙</div>
+                `;
+                return;
+            }
+            FOTOS.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'galeria-item';
+                card.innerHTML = `
+                    <div class="checkbox-wrapper" style="display:none;">
+                        <input type="checkbox" />
+                    </div>
+                    ${item.src ? `<img src="${item.src}" alt="Foto ${idx+1}">` : `<div class='foto-no-encontrada'>Foto no disponible</div>`}
+                    <div class="galeria-overlay">
+                        <button class="btn-ver" data-accion="ver" data-idx="${idx}">Ver</button>
+                        <button class="btn-ver" data-accion="editar" data-idx="${idx}">Editar</button>
+                        <button class="btn-ver" data-accion="eliminar" data-idx="${idx}">Eliminar</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function guardarGaleria() {
+            const res = await fetch(BACKEND_URL + '/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fotos: FOTOS })
+            });
+            const data = await res.json();
+            return !!data.success;
+        }
+
+        async function subirArchivo(file) {
+            const form = new FormData();
+            form.append('foto', file);
+            const res = await fetch(BACKEND_URL + '/upload', { method: 'POST', body: form });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.error || 'Error subiendo');
+            return data.url;
+        }
+
+        // Eventos UI
+        document.getElementById('btn-subir-fotos').addEventListener('click', () => {
+            document.getElementById('file-input').click();
+        });
+
+        document.getElementById('file-input').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+            try {
+                for (const f of files) {
+                    const url = await subirArchivo(f);
+                    FOTOS.push({ src: url, autor: '', descripcion: '', fecha: new Date().toISOString().slice(0,10) });
+                }
+                const ok = await guardarGaleria();
+                if (ok) renderGaleria();
+                else alert('No se pudo guardar la galería');
+            } catch (err) {
+                console.error(err);
+                alert('Error al subir alguna foto');
+            } finally {
+                e.target.value = '';
+            }
+        });
+
+        // Delegación de eventos para ver/editar/eliminar
+        document.getElementById('galeria-container').addEventListener('click', async (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const accion = btn.dataset.accion;
+            const idx = parseInt(btn.dataset.idx, 10);
+            if (Number.isNaN(idx)) return;
+
+            if (accion === 'ver') {
+                const item = FOTOS[idx];
+                document.getElementById('visualizar-img').src = item.src;
+                document.getElementById('modal-visualizar').classList.add('active');
+            }
+            if (accion === 'editar') {
+                indiceEditando = idx;
+                const item = FOTOS[idx];
+                document.getElementById('modal-galeria-titulo').textContent = 'Editar Foto';
+                document.getElementById('foto-autor').value = item.autor || '';
+                document.getElementById('foto-descripcion').value = item.descripcion || '';
+                document.getElementById('modal-galeria').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            if (accion === 'eliminar') {
+                const conf = confirm('¿Eliminar esta foto?');
+                if (!conf) return;
+                FOTOS.splice(idx, 1);
+                const ok = await guardarGaleria();
+                if (ok) renderGaleria();
+                else alert('No se pudo guardar los cambios');
+            }
+        });
+
+        // Modal visualizar
+        document.getElementById('cerrar-visualizar').addEventListener('click', () => {
+            document.getElementById('modal-visualizar').classList.remove('active');
+        });
+        document.getElementById('btn-cerrar-visualizar').addEventListener('click', () => {
+            document.getElementById('modal-visualizar').classList.remove('active');
+        });
+        document.getElementById('btn-descargar').addEventListener('click', () => {
+            const src = document.getElementById('visualizar-img').src;
+            const a = document.createElement('a');
+            a.href = src;
+            a.download = src.split('/').pop();
+            a.click();
+        });
+
+        // Modal editar
+        function cerrarModalEditar() {
+            document.getElementById('modal-galeria').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('form-foto').reset();
+            indiceEditando = null;
+        }
+        document.getElementById('btn-cerrar-editar').addEventListener('click', cerrarModalEditar);
+        document.getElementById('btn-cancelar-editar').addEventListener('click', cerrarModalEditar);
+        document.getElementById('modal-galeria').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-galeria') cerrarModalEditar();
+        });
+
+        document.getElementById('form-foto').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (indiceEditando === null) return cerrarModalEditar();
+            const autor = document.getElementById('foto-autor').value.trim();
+            const descripcion = document.getElementById('foto-descripcion').value.trim();
+            const reemplazo = document.getElementById('foto-reemplazar');
+
+            try {
+                if (reemplazo.files && reemplazo.files[0]) {
+                    const nuevaUrl = await subirArchivo(reemplazo.files[0]);
+                    FOTOS[indiceEditando].src = nuevaUrl;
+                }
+                FOTOS[indiceEditando].autor = autor;
+                FOTOS[indiceEditando].descripcion = descripcion;
+                const ok = await guardarGaleria();
+                if (ok) {
+                    cerrarModalEditar();
+                    renderGaleria();
+                } else {
+                    alert('No se pudo guardar los cambios');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error al guardar');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', cargarGaleria);
     </script>
 </body>
 </html>

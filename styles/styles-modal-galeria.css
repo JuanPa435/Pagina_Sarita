@@ -1,7 +1,6 @@
-/* ========== SECCIÓN CANCIONES ========== */
+/* Ajustes generales de sección (no tocamos el fondo para respetar styles-galeria.css) */
 .galeria {
     padding: 5rem 2rem;
-    background: linear-gradient(180deg, #1a3a4a 0%, #0f2a38 50%, #1a3a4a 100%);
     min-height: 100vh;
     position: relative;
 }

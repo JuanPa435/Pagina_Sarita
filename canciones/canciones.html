@@ -70,6 +70,19 @@
                     <input type="text" id="cancion-artista" placeholder="Ej: Taylor Swift">
                 </div>
                 <div class="form-group">
+                    <label>¿Quién lo dedica?</label>
+                    <div class="dedicador-options">
+                        <label class="radio-pill">
+                            <input type="radio" name="cancion-dedicador" value="Sarita">
+                            Sarita
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="cancion-dedicador" value="JP" checked>
+                            JP
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="cancion-url">Enlace (YouTube, Spotify, etc):</label>
                     <input type="text" id="cancion-url" placeholder="Pega el enlace de la canción">
                 </div>
@@ -173,8 +186,9 @@
             const filtro = texto.toLowerCase();
             cancionesEnPantalla = window.CANCIONES.filter(cancion => 
                 cancion.titulo.toLowerCase().includes(filtro) || 
-                cancion.artista.toLowerCase().includes(filtro) ||
-                cancion.razon.toLowerCase().includes(filtro)
+                (cancion.artista || '').toLowerCase().includes(filtro) ||
+                (cancion.razon || '').toLowerCase().includes(filtro) ||
+                (cancion.dedicadoPor || '').toLowerCase().includes(filtro)
             );
             paginaActual = 1;
             mostrarCanciones();
@@ -203,9 +217,11 @@
                 const div = document.createElement('div');
                 div.className = 'cancion-card';
                 div.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+                const dedicador = cancion.dedicadoPor || 'JP';
                 div.innerHTML = `
                     <h3>Canción #${indicePrincipal + 1}: ${cancion.titulo}</h3>
                     <p class="cancion-artista">🎤 ${cancion.artista}</p>
+                    <p class="badge-dedicador">💌 Dedicado por: <strong>${dedicador}</strong></p>
                     <div class="cancion-contenido">
                         <p>${cancion.razon}</p>
                     </div>
@@ -319,6 +335,10 @@
             document.getElementById('cancion-artista').value = cancion.artista || '';
             document.getElementById('cancion-url').value = cancion.url || '';
             document.getElementById('cancion-dedicatoria').value = cancion.razon || '';
+            const dedicadorVal = cancion.dedicadoPor || 'JP';
+            document.querySelectorAll('input[name="cancion-dedicador"]').forEach(r => {
+                r.checked = (r.value === dedicadorVal);
+            });
             mostrarModal('Editar Canción');
         }
 
@@ -346,6 +366,7 @@
             const artista = document.getElementById('cancion-artista').value.trim();
             const url = document.getElementById('cancion-url').value.trim();
             const razon = document.getElementById('cancion-dedicatoria').value.trim();
+            const dedicador = (document.querySelector('input[name="cancion-dedicador"]:checked')?.value) || 'JP';
 
             if (!titulo) {
                 alert('Por favor completa el título de la canción');
@@ -353,9 +374,9 @@
             }
 
             if (cancionDatosEditando !== null) {
-                window.CANCIONES[cancionDatosEditando] = { titulo, artista: artista || 'Desconocido', url, razon };
+                window.CANCIONES[cancionDatosEditando] = { titulo, artista: artista || 'Desconocido', url, razon, dedicadoPor: dedicador };
             } else {
-                window.CANCIONES.push({ titulo, artista: artista || 'Desconocido', url, razon });
+                window.CANCIONES.push({ titulo, artista: artista || 'Desconocido', url, razon, dedicadoPor: dedicador });
             }
 
             // Guardar en backend

@@ -181,6 +181,22 @@ body {
     letter-spacing: 0.3px;
 }
 
+/* Dedicador badge */
+.badge-dedicador {
+    display: inline-block;
+    align-self: flex-start;
+    background: rgba(255, 107, 145, 0.2);
+    border: 1.5px solid rgba(255, 107, 145, 0.5);
+    color: #ffffff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    margin: 0 0 1rem 0;
+    box-shadow: 0 4px 12px rgba(255, 107, 145, 0.2);
+}
+
 /* Contenido de la canción */
 .cancion-contenido {
     color: rgba(255, 255, 255, 0.98);
@@ -193,6 +209,29 @@ body {
     font-weight: 400;
     font-style: italic;
     letter-spacing: 0.3px;
+}
+
+/* Opciones de dedicador */
+.dedicador-options {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.radio-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 700;
+}
+
+.radio-pill input[type="radio"] {
+    accent-color: #ff6b91;
 }
 
 .cancion-contenido p {
