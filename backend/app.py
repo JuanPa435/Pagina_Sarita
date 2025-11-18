@@ -41,8 +41,9 @@ try:
 except:
     pass
 
-# POEMAS
+# POEMAS (se exponen con y sin prefijo /api para compatibilidad Vercel)
 @app.route('/poemas/get')
+@app.route('/api/poemas/get')
 def get_poemas():
     try:
         conn = get_db()
@@ -56,6 +57,7 @@ def get_poemas():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/poemas/save', methods=['POST'])
+@app.route('/api/poemas/save', methods=['POST'])
 def save_poemas():
     try:
         data = request.json
@@ -75,6 +77,7 @@ def save_poemas():
 
 # CANCIONES
 @app.route('/canciones/get')
+@app.route('/api/canciones/get')
 def get_canciones():
     try:
         conn = get_db()
@@ -89,6 +92,7 @@ def get_canciones():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/canciones/save', methods=['POST'])
+@app.route('/api/canciones/save', methods=['POST'])
 def save_canciones():
     try:
         data = request.json
@@ -108,6 +112,7 @@ def save_canciones():
 
 # MESES
 @app.route('/meses/get')
+@app.route('/api/meses/get')
 def get_meses():
     try:
         conn = get_db()
@@ -121,6 +126,7 @@ def get_meses():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/meses/save', methods=['POST'])
+@app.route('/api/meses/save', methods=['POST'])
 def save_meses():
     try:
         data = request.json
@@ -139,6 +145,7 @@ def save_meses():
 
 # RECUERDOS
 @app.route('/recuerdos/imagen/<int:foto_id>')
+@app.route('/api/recuerdos/imagen/<int:foto_id>')
 def serve_imagen(foto_id):
     try:
         conn = get_db()
@@ -154,6 +161,7 @@ def serve_imagen(foto_id):
         return jsonify({'error': str(e)}), 500
 
 @app.route('/recuerdos/get')
+@app.route('/api/recuerdos/get')
 def get_recuerdos():
     try:
         conn = get_db()
@@ -168,6 +176,7 @@ def get_recuerdos():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/recuerdos/upload', methods=['POST'])
+@app.route('/api/recuerdos/upload', methods=['POST'])
 def upload_recuerdo():
     try:
         if 'foto' not in request.files:
@@ -193,6 +202,7 @@ def upload_recuerdo():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/health')
+@app.route('/api/health')
 def health():
     return jsonify({'status': 'OK', 'time': datetime.now().isoformat()})
 
