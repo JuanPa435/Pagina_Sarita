@@ -1,51 +1,62 @@
-// Cargar datos de localStorage y mostrar previsualizaciones
-function cargarDatos() {
-    const poemasGuardados = localStorage.getItem('poemas_app');
-    const cancionesGuardadas = localStorage.getItem('canciones_app');
-    const mensajesGuardados = localStorage.getItem('mensajes_app');
-    const fotosGuardadas = localStorage.getItem('fotos_app');
-    const mesesGuardados = localStorage.getItem('meses_app');
+// Cargar datos desde el backend PostgreSQL
+async function cargarDatos() {
+    const BACKEND_URL = CONFIG.BACKEND_URL;
 
-    // Mostrar previsualizaciones - Poemas
-    if (poemasGuardados) {
-        try {
-            const poemas = JSON.parse(poemasGuardados);
-            mostrarPreviewPoemas(poemas.slice(0, 3));
-        } catch (e) {
-            console.log('Error cargando poemas');
-            cargarPoemasDefecto();
+    // Cargar poemas desde backend
+    try {
+        console.log('🔄 Cargando poemas del backend...');
+        const res = await fetch(`${BACKEND_URL}/poemas/get`);
+        const data = await res.json();
+        if (data.success && data.poemas) {
+            console.log(`✅ ${data.poemas.length} poemas cargados`);
+            mostrarPreviewPoemas(data.poemas.slice(0, 3));
+        } else {
+            console.warn('⚠️ No hay poemas disponibles');
+            mostrarPreviewPoemas([]);
         }
-    } else {
+    } catch (err) {
+        console.error('❌ Error cargando poemas:', err);
         cargarPoemasDefecto();
     }
 
-    // Mostrar previsualizaciones - Canciones
-    if (cancionesGuardadas) {
-        try {
-            const canciones = JSON.parse(cancionesGuardadas);
-            mostrarPreviewCanciones(canciones.slice(0, 3));
-        } catch (e) {
-            console.log('Error cargando canciones');
-            cargarCancionesDefecto();
+    // Cargar canciones desde backend
+    try {
+        console.log('🔄 Cargando canciones del backend...');
+        const res = await fetch(`${BACKEND_URL}/canciones/get`);
+        const data = await res.json();
+        if (data.success && data.canciones) {
+            console.log(`✅ ${data.canciones.length} canciones cargadas`);
+            mostrarPreviewCanciones(data.canciones.slice(0, 3));
+        } else {
+            console.warn('⚠️ No hay canciones disponibles');
+            mostrarPreviewCanciones([]);
         }
-    } else {
+    } catch (err) {
+        console.error('❌ Error cargando canciones:', err);
         cargarCancionesDefecto();
     }
 
-    // Mostrar previsualizaciones - Mensajes
-    if (mensajesGuardados) {
-        try {
-            const mensajes = JSON.parse(mensajesGuardados);
-            mostrarPreviewMensajes(mensajes.slice(0, 3));
-        } catch (e) {
-            console.log('Error cargando mensajes');
-            cargarMensajesDefecto();
+    // Cargar mensajes desde backend
+    try {
+        console.log('🔄 Cargando mensajes del backend...');
+        const res = await fetch(`${BACKEND_URL}/mensajes/get`);
+        const data = await res.json();
+        if (data.success && data.mensajes) {
+            console.log(`✅ ${data.mensajes.length} mensajes cargados`);
+            mostrarPreviewMensajes(data.mensajes.slice(0, 3));
+        } else {
+            console.warn('⚠️ No hay mensajes disponibles');
+            mostrarPreviewMensajes([]);
         }
-    } else {
+    } catch (err) {
+        console.error('❌ Error cargando mensajes:', err);
         cargarMensajesDefecto();
     }
 
-    // Mostrar previsualizaciones - Fotos
+    // Fotos y meses siguen usando localStorage por ahora
+    const fotosGuardadas = localStorage.getItem('fotos_app');
+    const mesesGuardados = localStorage.getItem('meses_app');
+
     if (fotosGuardadas) {
         try {
             const fotos = JSON.parse(fotosGuardadas);
@@ -55,7 +66,6 @@ function cargarDatos() {
         }
     }
 
-    // Mostrar previsualizaciones - Meses
     if (mesesGuardados) {
         try {
             const meses = JSON.parse(mesesGuardados);
@@ -111,7 +121,7 @@ function cargarMensajesDefecto() {
 }
 
 function mostrarPreviewPoemas(poemas) {
-    const container = document.getElementById('poemas-preview');
+    const container = document.getElementById('poemasPreview');
     container.innerHTML = '';
     
     if (poemas.length === 0) {
@@ -133,7 +143,7 @@ function mostrarPreviewPoemas(poemas) {
 }
 
 function mostrarPreviewCanciones(canciones) {
-    const container = document.getElementById('canciones-preview');
+    const container = document.getElementById('cancionesPreview');
     container.innerHTML = '';
     
     if (canciones.length === 0) {
@@ -155,7 +165,7 @@ function mostrarPreviewCanciones(canciones) {
 }
 
 function mostrarPreviewMensajes(mensajes) {
-    const container = document.getElementById('mensajes-preview');
+    const container = document.getElementById('mensajesPreview');
     container.innerHTML = '';
     
     if (mensajes.length === 0) {
@@ -177,7 +187,7 @@ function mostrarPreviewMensajes(mensajes) {
 }
 
 function mostrarPreviewFotos(fotos) {
-    const container = document.getElementById('galeria-preview');
+    const container = document.getElementById('galeriaPreview');
     container.innerHTML = '';
     
     if (fotos.length === 0) {
@@ -194,7 +204,7 @@ function mostrarPreviewFotos(fotos) {
 }
 
 function mostrarPreviewMeses(meses) {
-    const container = document.getElementById('meses-preview');
+    const container = document.getElementById('mesesPreview');
     container.innerHTML = '';
     
     if (meses.length === 0) {

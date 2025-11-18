@@ -1,0 +1,46 @@
+/* Estilos Meses (basado en mensajes) */
+:root {
+  --turquesa-principal: #05bfdb;
+  --turquesa-neon: #00ffff;
+  --rosa-intenso: #ff6f91;
+  --lavanda: #b08df9;
+  --blanco: #ffffff;
+}
+
+body { padding-top:85px; }
+
+.meses { padding:3.5rem 2rem 5rem; min-height:100vh; background:linear-gradient(180deg,#00b8d4,#7c3aed); color:#fff; }
+.container { max-width:1200px; margin:0 auto; }
+.seccion-titulo { text-align:center; font-size:2.6rem; margin-bottom:1.2rem; }
+.intro { text-align:center; max-width:780px; margin:0 auto 2.5rem; font-size:1.1rem; line-height:1.6; }
+#meses-container { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:2rem; }
+.mes-box { background:rgba(255,255,255,0.12); backdrop-filter:blur(6px); border:2px solid rgba(255,255,255,0.3); border-radius:20px; padding:1.8rem 1.6rem; position:relative; display:flex; flex-direction:column; gap:0.9rem; }
+.mes-box h3 { margin:0; font-size:1.35rem; color:#fff; }
+.mes-descripcion { margin:0; font-size:0.95rem; line-height:1.6; color:#f0f9ff; }
+.mes-acciones { display:flex; gap:0.8rem; margin-top:auto; }
+.mes-acciones button { flex:1; padding:0.7rem 1rem; border:none; border-radius:10px; cursor:pointer; font-weight:600; }
+.btn-editar { background:linear-gradient(90deg,#05bfdb,#b08df9); color:#062428; }
+.btn-eliminar { background:#ff6f91; color:#fff; }
+.btn-editar:hover { filter:brightness(1.1); }
+.btn-eliminar:hover { filter:brightness(1.1); }
+.btn-agregar { padding:1rem 2rem; background:linear-gradient(90deg,#05bfdb,#ff6f91); border:none; color:#062428; font-weight:700; border-radius:50px; cursor:pointer; }
+.btn-agregar:hover { filter:brightness(1.15); }
+.paginacion { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin:3rem 0; }
+.pagina-btn { padding:0.9rem 1.4rem; background:#05bfdb; color:#062428; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
+.pagina-btn.activa { background:#00ffff; }
+.pagina-btn.deshabilitada { opacity:.4; cursor:not-allowed; }
+.modal-mes { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:100; }
+.modal-mes-content { background:#0f2a38; color:#fff; padding:2rem 2rem 2.4rem; border-radius:18px; width:100%; max-width:640px; box-shadow:0 10px 38px rgba(0,0,0,.4); }
+.modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; }
+.modal-header h3 { margin:0; }
+.btn-cerrar-modal { background:#ff6f91; border:none; color:#fff; font-size:1.2rem; width:38px; height:38px; border-radius:50%; cursor:pointer; }
+.form-group { margin-bottom:1.2rem; display:flex; flex-direction:column; gap:0.4rem; }
+.form-group input, .form-group textarea { padding:0.8rem 1rem; border:1px solid #2e5165; background:#14394d; color:#fff; border-radius:10px; font-family:inherit; }
+.form-group textarea { resize:vertical; }
+.btn-cancelar, .btn-guardar { padding:0.8rem 1.6rem; border:none; border-radius:10px; cursor:pointer; font-weight:700; }
+.btn-cancelar { background:#2e5165; color:#fff; }
+.btn-guardar { background:#05bfdb; color:#062428; }
+.btn-guardar:hover, .btn-cancelar:hover { filter:brightness(1.1); }
+.footer { text-align:center; padding:2.5rem 1rem; font-size:0.85rem; color:#fff; }
+@media (max-width:768px){ #meses-container { grid-template-columns:1fr; } .seccion-titulo{ font-size:2rem; } }
+@media (max-width:480px){ .mes-box { padding:1.3rem 1.1rem; } .mes-box h3 { font-size:1.15rem; } }

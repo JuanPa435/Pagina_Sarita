@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="../styles/styles-modal-poemas.css">
     <!-- Navbar del index -->
     <link rel="stylesheet" href="../styles/styles-index.css">
+    <!-- Config del backend -->
+    <script src="../config.js"></script>
 </head>
 <body>
     <!-- Navbar igual al index (adaptando rutas relativas) -->
@@ -25,7 +27,7 @@
                 <li><a href="poemas.html">Poemas</a></li>
                 <li><a href="../canciones/canciones.html">Canciones</a></li>
                 <li><a href="../galeria/galeria.html">Galería</a></li>
-                <li><a href="../mensajes/mensajes.html">Mensajes</a></li>
+                <li><a href="../meses/meses.html">Meses</a></li>
             </ul>
         </div>
     </nav>
@@ -88,7 +90,6 @@
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
-    <script src="../config.js"></script>
     <script src="../script.js"></script>
     
     <!-- Script del Navbar (se carga primero) -->
@@ -129,22 +130,35 @@
         let paginaActual = 1;
         let poemaDatosEditando = null;
         let poemasEnPantalla = []; // Array para filtros
+        window.POEMAS = []; // Inicializar window.POEMAS
+        
+        // Verificar que CONFIG esté disponible
+        if (typeof CONFIG === 'undefined') {
+            console.error('❌ CONFIG no está definido. Asegúrate de que config.js se carga antes.');
+            alert('Error: CONFIG no definido. Por favor recarga la página.');
+        }
         const BACKEND_URL = CONFIG.BACKEND_URL + '/poemas';
+        console.log('🔧 BACKEND_URL configurado:', BACKEND_URL);
 
         // Cargar poemas desde el backend
         async function cargarPoemasDelBackend() {
             try {
-                console.log('🔄 Cargando poemas del backend...');
+                console.log('🔄 Cargando poemas del backend desde:', `${BACKEND_URL}/get`);
                 const res = await fetch(`${BACKEND_URL}/get`);
+                console.log('📡 Respuesta recibida. Status:', res.status);
                 const data = await res.json();
+                console.log('📦 Datos parseados:', data);
                 if (data.success && data.poemas) {
                     window.POEMAS = data.poemas;
                     poemasEnPantalla = [...window.POEMAS]; // Inicializar array de pantalla
                     console.log(`✅ ${data.poemas.length} poemas cargados del backend`);
                     return true;
+                } else {
+                    console.warn('⚠️ Respuesta sin éxito o sin poemas:', data);
                 }
             } catch (err) {
-                console.warn('⚠️ Error cargando del backend:', err);
+                console.error('❌ Error cargando del backend:', err);
+                console.error('Stack trace:', err.stack);
             }
             return false;
         }
@@ -193,12 +207,22 @@
         }
 
         function mostrarPoemas() {
+            console.log('📋 mostrarPoemas() llamado');
+            console.log('   window.POEMAS length:', window.POEMAS ? window.POEMAS.length : 'undefined');
+            console.log('   poemasEnPantalla length:', poemasEnPantalla.length);
+            
             const container = document.getElementById('poemas-container');
+            if (!container) {
+                console.error('❌ No se encontró el contenedor poemas-container');
+                return;
+            }
             container.innerHTML = '';
 
             const inicio = (paginaActual - 1) * POEMAS_POR_PAGINA;
             const fin = inicio + POEMAS_POR_PAGINA;
             const poemasEnPagina = poemasEnPantalla.slice(inicio, fin);
+            
+            console.log(`   Mostrando poemas del ${inicio} al ${fin}, total en página: ${poemasEnPagina.length}`);
 
             if (poemasEnPagina.length === 0) {
                 if (poemasEnPantalla.length === 0) {
