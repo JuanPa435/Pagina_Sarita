@@ -12,8 +12,12 @@
       "dest": "conexion/vercel_handler.py"
     },
     {
+      "src": "/paginas/(.*)",
+      "dest": "/paginas/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "paginas/$1"
+      "dest": "/$1"
     }
   ]
 }
