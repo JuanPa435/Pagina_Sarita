@@ -1,0 +1,9 @@
+{
+  "name": "pagina-sarita",
+  "version": "2.0.0",
+  "description": "Página web romántica con frontend estático",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site - no build needed'"
+  }
+}
