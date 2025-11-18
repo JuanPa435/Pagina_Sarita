@@ -1,14 +1,19 @@
 {
+  "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "conexion/vercel_handler.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "dest": "conexion/vercel_handler.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "paginas/$1"
     }
   ]
 }
