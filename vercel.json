@@ -1,27 +1,21 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "conexion/vercel_handler.py",
-      "use": "@vercel/python"
-    }
-  ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "conexion/vercel_handler.py"
     },
     {
-      "src": "/",
-      "dest": "/index.html"
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/$1"
     },
     {
       "src": "/paginas/(.*)",
       "dest": "/paginas/$1"
     },
     {
-      "src": "/(.*\\.(css|js|html|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
-      "dest": "/$1"
+      "src": "/",
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
