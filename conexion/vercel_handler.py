@@ -1,8 +1,8 @@
-from flask import Flask
-from backend.app import app
+from backend.app import app as flask_app
 from flask_cors import CORS
 
-CORS(app, resources={r"/*": {"origins": "*"}})
+# Aplicar CORS global
+CORS(flask_app, resources={r"/*": {"origins": "*"}})
 
-def handler(event, context):
-    return app(event, context)
+# Vercel @vercel/python detecta la variable WSGI 'app'
+app = flask_app

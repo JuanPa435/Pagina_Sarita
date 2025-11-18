@@ -87,7 +87,7 @@ async function cargarDatos() {
 // Cargar poemas desde el archivo de datos
 function cargarPoemasDefecto() {
     const poemasScript = document.createElement('script');
-    poemasScript.src = 'poemas/poemas-data.js';
+    poemasScript.src = 'paginas/poemas/poemas-data.js';
     poemasScript.onload = () => {
         if (typeof POEMAS !== 'undefined') {
             mostrarPreviewPoemas(POEMAS.slice(0, 3));
@@ -99,7 +99,7 @@ function cargarPoemasDefecto() {
 // Cargar canciones desde el archivo de datos
 function cargarCancionesDefecto() {
     const cancionesScript = document.createElement('script');
-    cancionesScript.src = 'canciones/canciones-data.js';
+    cancionesScript.src = 'paginas/canciones/canciones-data.js';
     cancionesScript.onload = () => {
         if (typeof CANCIONES !== 'undefined') {
             mostrarPreviewCanciones(CANCIONES.slice(0, 3));
