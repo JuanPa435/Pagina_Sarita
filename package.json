@@ -1,0 +1,9 @@
+{
+  "name": "pagina-sarita",
+  "version": "1.0.0",
+  "description": "Página web romántica con backend Flask",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site - no build needed'"
+  }
+}
