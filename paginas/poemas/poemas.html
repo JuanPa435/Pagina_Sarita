@@ -7,8 +7,6 @@
     <meta name="theme-color" content="#05bfdb">
     <link rel="stylesheet" href="/paginas/styles/styles-poemas.css">
     <link rel="stylesheet" href="/paginas/styles/styles-modal-poemas.css">
-    <!-- Navbar del index -->
-    <link rel="stylesheet" href="/paginas/styles/styles-index.css">
     <!-- Config del backend -->
     <script src="/config.js"></script>
 </head>
@@ -26,7 +24,7 @@
                 <li><a href="/index.html">Inicio</a></li>
                 <li><a href="/paginas/poemas/poemas.html">Poemas</a></li>
                 <li><a href="/paginas/canciones/canciones.html">Canciones</a></li>
-                <li><a href="/paginas/galeria/galeria.html">Recuerdos</a></li>
+                <li><a href="/paginas/recuerdos/recuerdos.html">Recuerdos</a></li>
                 <li><a href="/paginas/meses/meses.html">Meses</a></li>
             </ul>
         </div>
@@ -37,10 +35,27 @@
         <div class="container">
             <h2 class="seccion-titulo">📝 Poemas <span id="poemas-count" style="font-size:0.8em; opacity:.8"></span></h2>
             
-            <!-- Buscador -->
-            <div class="buscador-container">
-                <input type="text" id="buscador-poemas" class="buscador-input" placeholder="🔍 Buscar por título, contenido o autor..." />
-                <button id="btn-limpiar-busqueda" class="btn-limpiar">✕ Limpiar</button>
+            <!-- Overlay para móviles -->
+            <div class="search-overlay" id="search-overlay-poemas"></div>
+            
+            <!-- Controles de vista -->
+            <div class="poemas-toolbar">
+                <button class="btn-agregar" id="btn-agregar-poema">
+                    <span class="btn-icon">✍️</span>
+                    <span>Agregar Poema</span>
+                </button>
+                <div class="toolbar-right">
+                    <!-- Buscador expandible -->
+                    <div class="search-container" id="search-container-poemas">
+                        <button class="btn-search-toggle" id="btn-search-toggle-poemas" aria-label="Buscar">
+                            <span class="search-icon">🔍</span>
+                        </button>
+                        <div class="search-expandable" id="search-expandable-poemas">
+                            <input type="text" id="buscador-poemas" class="buscador-input" placeholder="Buscar por título, contenido o autor..." />
+                            <button id="btn-limpiar-busqueda" class="btn-limpiar" title="Limpiar búsqueda">✕</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div id="poemas-container">
@@ -51,8 +66,6 @@
             <div class="paginacion" id="paginacion">
                 <!-- Los botones de paginación se generarán aquí -->
             </div>
-
-            <button class="btn-agregar" id="btn-agregar-poema">Agregar Poema</button>
         </div>
     </section>
 
@@ -85,9 +98,9 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer-nuevo">
         <p>Hecho con 💙 para la persona que amo</p>
-        <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
+        <p class="footer-date">Nuestra historia comenzó el 6 de mayo de 2025 y sigue escribiéndose cada día</p>
     </footer>
 
     <!-- Eliminado script.js inexistente; agregado diagnóstico -->
@@ -401,9 +414,55 @@
             // Botón agregar
             document.getElementById('btn-agregar-poema').addEventListener('click', abrirFormularioAgregar);
 
-            // Buscador
+            // Buscador expandible
+            const btnSearchToggle = document.getElementById('btn-search-toggle-poemas');
+            const searchExpandable = document.getElementById('search-expandable-poemas');
+            const searchOverlay = document.getElementById('search-overlay-poemas');
             const buscadorInput = document.getElementById('buscador-poemas');
             const btnLimpiar = document.getElementById('btn-limpiar-busqueda');
+            
+            let searchExpanded = false;
+            
+            function closeSearch() {
+                searchExpanded = false;
+                searchExpandable.classList.remove('active');
+                searchOverlay.classList.remove('active');
+                buscadorInput.value = '';
+                filtrarPoemas('');
+                document.body.style.overflow = '';
+            }
+            
+            btnSearchToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                searchExpanded = !searchExpanded;
+                if (searchExpanded) {
+                    searchExpandable.classList.add('active');
+                    if (window.innerWidth <= 480) {
+                        searchOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                    setTimeout(() => buscadorInput.focus(), 300);
+                } else {
+                    closeSearch();
+                }
+            });
+            
+            // Cerrar al hacer clic en overlay
+            searchOverlay.addEventListener('click', closeSearch);
+            
+            // Cerrar buscador al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                if (searchExpanded && !e.target.closest('.search-container')) {
+                    closeSearch();
+                }
+            });
+            
+            // Cerrar con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchExpanded) {
+                    closeSearch();
+                }
+            });
             
             buscadorInput.addEventListener('input', (e) => {
                 filtrarPoemas(e.target.value);

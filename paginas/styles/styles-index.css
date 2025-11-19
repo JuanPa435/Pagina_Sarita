@@ -1,10 +1,12 @@
 html {
     scroll-behavior: smooth;
     height: 100%;
+    min-height: 100vh;
 }
 
 body {
     font-family: 'Georgia', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
     /* Fondo turquesa principal con morado y rosado como acentos */
     background: 
         radial-gradient(circle at 20% 80%, rgba(255, 107, 145, 0.12) 0%, transparent 50%),
@@ -17,6 +19,47 @@ body {
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+}
+
+/* ========== FOOTER COMÚN ========== */
+.footer, .footer-nuevo {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin-top: 3rem;
+    color: #ffffff;
+    border-top: none;
+    background: linear-gradient(135deg, 
+        rgba(0, 184, 212, 0.85) 0%, 
+        rgba(124, 58, 237, 0.75) 50%, 
+        rgba(168, 85, 247, 0.85) 100%);
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+}
+.footer p, .footer-nuevo p { 
+    margin: .3rem 0; 
+    font-size: 1rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.footer .footer-date, .footer-nuevo .footer-date { 
+    opacity: .95; 
+    font-weight: 600; 
+    letter-spacing: .3px;
+    font-size: 0.95rem;
+}
+.footer a, .footer-nuevo a { 
+    color: #00ffff; 
+    text-decoration: none; 
+    font-weight: 700; 
+}
+.footer a:hover, .footer-nuevo a:hover { 
+    text-decoration: underline; 
+    filter: brightness(1.2); 
+}
+
+@media (max-width: 600px) {
+    .footer, .footer-nuevo { padding: 1.5rem 1rem; margin-top: 2rem; }
+    .footer p, .footer-nuevo p { font-size: 0.9rem; }
 }
 
 /* ========== NAVBAR SIMPLE Y BONITA ========== */
@@ -701,28 +744,6 @@ body {
     border-radius: 8px;
 }
 
-.footer-nuevo {
-    background: linear-gradient(180deg, rgba(5, 25, 35, 0.98) 0%, rgba(5, 191, 219, 0.05) 50%, rgba(10, 77, 104, 0.95) 100%);
-    border-top: 3px solid rgba(255, 107, 145, 0.5);
-    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
-    padding: 1.5rem 2rem;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-}
-
-.footer-nuevo p {
-    margin: 0.4rem 0;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    font-weight: 500;
-}
-
-.footer-date {
-    font-size: 0.85rem;
-    opacity: 0.75;
-}
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {

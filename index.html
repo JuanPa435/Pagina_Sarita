@@ -21,7 +21,7 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="paginas/poemas/poemas.html">Poemas</a></li>
                 <li><a href="paginas/canciones/canciones.html">Canciones</a></li>
-                <li><a href="paginas/galeria/galeria.html">Recuerdos</a></li>
+                <li><a href="paginas/recuerdos/recuerdos.html">Recuerdos</a></li>
                 <li><a href="paginas/meses/meses.html">Meses</a></li>
             </ul>
         </div>
@@ -96,7 +96,7 @@
                 <p class="no-items">Aquí estarán nuestros recuerdos más especiales 📷</p>
             </div>
             <div class="section-footer">
-                <a href="galeria/galeria.html" class="btn-primary">Ver Todos los Recuerdos</a>
+                <a href="paginas/recuerdos/recuerdos.html" class="btn-primary">Ver Todos los Recuerdos</a>
             </div>
         </div>
     </section>
@@ -120,7 +120,7 @@
     <!-- Footer -->
     <footer class="footer-nuevo">
         <p>Hecho con 💙 para la persona que amo</p>
-        <p class="footer-date" id="footerSince">Nuestra historia comenzó el 05/06/2025 y sigue escribiéndose cada día</p>
+        <p class="footer-date">Nuestra historia comenzó el 6 de mayo de 2025 y sigue escribiéndose cada día</p>
     </footer>
 
         <script src="config.js"></script>
@@ -174,8 +174,6 @@
             
             const sinceEl = document.getElementById('sinceDate');
             if (sinceEl) sinceEl.textContent = `Desde el ${fechaFormato}`;
-            const footerSince = document.getElementById('footerSince');
-            if (footerSince) footerSince.textContent = `Nuestra historia comenzó el ${fechaFormato} y sigue escribiéndose cada día`;
         }
 
         // Cargar previews de todas las secciones

@@ -68,8 +68,37 @@ def init_db():
             imagen_data LONGBLOB NOT NULL,
             imagen_mime TEXT,
             fecha DATE,
+            dedicatoria TEXT,
+            autor TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )''')
+        
+        # Migración: Agregar columnas si no existen
+        try:
+            cur.execute("""
+                SELECT COUNT(*) 
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'galeria' 
+                AND COLUMN_NAME = 'dedicatoria'
+            """)
+            if cur.fetchone()[0] == 0:
+                cur.execute("ALTER TABLE galeria ADD COLUMN dedicatoria TEXT")
+                print("✅ Columna 'dedicatoria' agregada")
+        except Exception as e:
+            print(f"⚠️ Error al agregar 'dedicatoria': {e}")
+        
+        try:
+            cur.execute("""
+                SELECT COUNT(*) 
+                FROM INFORMATION_SCHEMA.COLUMNS 
+                WHERE TABLE_NAME = 'galeria' 
+                AND COLUMN_NAME = 'autor'
+            """)
+            if cur.fetchone()[0] == 0:
+                cur.execute("ALTER TABLE galeria ADD COLUMN autor TEXT")
+                print("✅ Columna 'autor' agregada")
+        except Exception as e:
+            print(f"⚠️ Error al agregar 'autor': {e}")
         
         conn.commit()
         cur.close()
@@ -368,7 +397,7 @@ def get_recuerdos():
     try:
         conn = get_db()
         cur = conn.cursor()
-        cur.execute('SELECT id, descripcion, fecha, created_at FROM galeria ORDER BY id DESC')
+        cur.execute('SELECT id, descripcion, fecha, dedicatoria, autor, created_at FROM galeria ORDER BY id DESC')
         rows = cur.fetchall()
         recuerdos = dict_cursor(cur, rows)
         cur.close()
@@ -380,23 +409,27 @@ def get_recuerdos():
                 'id': r['id'],
                 'url': f"/api/recuerdos/imagen/{r['id']}",
                 'mensaje': r.get('descripcion', ''),
-                'fecha': r['fecha'].isoformat() if r.get('fecha') else None
+                'fecha': r['fecha'].isoformat() if r.get('fecha') else None,
+                'dedicatoria': r.get('dedicatoria', ''),
+                'autor': r.get('autor', '')
             } for r in recuerdos],
             'count': len(recuerdos)
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/recuerdos/upload', methods=['POST'])
-@app.route('/recuerdos/upload', methods=['POST'])
-def upload_recuerdo():
-    """Upload new image with metadata"""
+@app.route('/api/recuerdos/add', methods=['POST'])
+@app.route('/recuerdos/add', methods=['POST'])
+def add_recuerdo():
+    """Add new recuerdo with all fields"""
     try:
         if 'imagen' not in request.files:
             return jsonify({'success': False, 'error': 'No se envió imagen'}), 400
         
         imagen = request.files['imagen']
-        descripcion = request.form.get('mensaje', '')
+        mensaje = request.form.get('mensaje', '')
+        dedicatoria = request.form.get('dedicatoria', '')
+        autor = request.form.get('autor', '')
         fecha_str = request.form.get('fecha', '')
         
         from datetime import datetime as dt
@@ -408,8 +441,48 @@ def upload_recuerdo():
         conn = get_db()
         cur = conn.cursor()
         cur.execute(
-            'INSERT INTO galeria (descripcion, imagen_data, imagen_mime, fecha) VALUES (%s, %s, %s, %s)',
-            (descripcion, imagen_data, imagen_mime, fecha)
+            'INSERT INTO galeria (descripcion, imagen_data, imagen_mime, fecha, dedicatoria, autor) VALUES (%s, %s, %s, %s, %s, %s)',
+            (mensaje, imagen_data, imagen_mime, fecha, dedicatoria, autor)
+        )
+        conn.commit()
+        foto_id = cur.lastrowid
+        cur.close()
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Recuerdo guardado exitosamente',
+            'id': foto_id,
+            'url': f'/api/recuerdos/imagen/{foto_id}'
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/recuerdos/upload', methods=['POST'])
+@app.route('/recuerdos/upload', methods=['POST'])
+def upload_recuerdo():
+    """Upload new image with metadata"""
+    try:
+        if 'foto' not in request.files:
+            return jsonify({'success': False, 'error': 'No se envió imagen'}), 400
+        
+        imagen = request.files['foto']
+        descripcion = request.form.get('mensaje', '')
+        fecha_str = request.form.get('fecha', '')
+        dedicatoria = request.form.get('dedicatoria', '')
+        autor = request.form.get('autor', '')
+        
+        from datetime import datetime as dt
+        fecha = dt.strptime(fecha_str, '%Y-%m-%d').date() if fecha_str else None
+        
+        imagen_data = imagen.read()
+        imagen_mime = imagen.content_type or 'image/jpeg'
+        
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO galeria (descripcion, imagen_data, imagen_mime, fecha, dedicatoria, autor) VALUES (%s, %s, %s, %s, %s, %s)',
+            (descripcion, imagen_data, imagen_mime, fecha, dedicatoria, autor)
         )
         conn.commit()
         foto_id = cur.lastrowid
@@ -422,6 +495,75 @@ def upload_recuerdo():
             'id': foto_id,
             'url': f'/api/recuerdos/imagen/{foto_id}'
         })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/recuerdos/delete/<int:foto_id>', methods=['DELETE'])
+@app.route('/recuerdos/delete/<int:foto_id>', methods=['DELETE'])
+def delete_recuerdo(foto_id):
+    """Delete a recuerdo by ID"""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('DELETE FROM galeria WHERE id = %s', (foto_id,))
+        conn.commit()
+        affected = cur.rowcount
+        cur.close()
+        conn.close()
+        
+        if affected > 0:
+            return jsonify({'success': True, 'message': 'Recuerdo eliminado'})
+        else:
+            return jsonify({'success': False, 'error': 'Recuerdo no encontrado'}), 404
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/recuerdos/update/<int:foto_id>', methods=['PUT'])
+@app.route('/recuerdos/update/<int:foto_id>', methods=['PUT'])
+def update_recuerdo(foto_id):
+    """Update a recuerdo"""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        
+        # Obtener datos actuales
+        cur.execute('SELECT * FROM galeria WHERE id = %s', (foto_id,))
+        existing = cur.fetchone()
+        if not existing:
+            cur.close()
+            conn.close()
+            return jsonify({'success': False, 'error': 'Recuerdo no encontrado'}), 404
+        
+        # Actualizar datos
+        descripcion = request.form.get('mensaje', existing[1] if len(existing) > 1 else '')
+        fecha_str = request.form.get('fecha', '')
+        dedicatoria = request.form.get('dedicatoria', existing[5] if len(existing) > 5 else '')
+        autor = request.form.get('autor', existing[6] if len(existing) > 6 else '')
+        
+        from datetime import datetime as dt
+        fecha = dt.strptime(fecha_str, '%Y-%m-%d').date() if fecha_str else (existing[4] if len(existing) > 4 else None)
+        
+        # Si hay nueva imagen
+        if 'imagen' in request.files and request.files['imagen'].filename:
+            imagen = request.files['imagen']
+            imagen_data = imagen.read()
+            imagen_mime = imagen.content_type or 'image/jpeg'
+            cur.execute(
+                'UPDATE galeria SET descripcion=%s, imagen_data=%s, imagen_mime=%s, fecha=%s, dedicatoria=%s, autor=%s WHERE id=%s',
+                (descripcion, imagen_data, imagen_mime, fecha, dedicatoria, autor, foto_id)
+            )
+        else:
+            # Solo actualizar texto
+            cur.execute(
+                'UPDATE galeria SET descripcion=%s, fecha=%s, dedicatoria=%s, autor=%s WHERE id=%s',
+                (descripcion, fecha, dedicatoria, autor, foto_id)
+            )
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+        return jsonify({'success': True, 'message': 'Recuerdo actualizado'})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meses - Nuestra Historia 💙</title>
   <link rel="stylesheet" href="/paginas/styles/styles-meses.css" />
-  <link rel="stylesheet" href="/paginas/styles/styles-index.css" />
   <script src="/config.js"></script>
 </head>
 <body>
@@ -19,7 +18,7 @@
         <li><a href="/index.html">Inicio</a></li>
         <li><a href="/paginas/poemas/poemas.html">Poemas</a></li>
         <li><a href="/paginas/canciones/canciones.html">Canciones</a></li>
-        <li><a href="/paginas/galeria/galeria.html">Recuerdos</a></li>
+        <li><a href="/paginas/recuerdos/recuerdos.html">Recuerdos</a></li>
         <li><a href="/paginas/meses/meses.html" class="active">Meses</a></li>
       </ul>
     </div>
@@ -27,7 +26,7 @@
 
   <section class="meses">
     <div class="container">
-      <h2 class="seccion-titulo">🎉 Nuestros Meses Juntos</h2>
+      <h2 class="seccion-titulo">🎉 Nuestros Meses Juntos <span id="meses-count" style="font-size:0.8em; opacity:.8"></span></h2>
       <p class="intro">Cada mes contigo merece ser recordado y celebrado. Aquí guardamos la huella de cada etapa de nuestra historia. 💝</p>
 
       <div id="meses-container"></div>
@@ -64,11 +63,12 @@
     </div>
   </div>
 
-  <footer class="footer">
-    <p>Hecho con 💙 para la persona que amo</p>
-    <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
-  </footer>
-
+      <!-- Footer -->
+      <footer class="footer-nuevo">
+        <p>Hecho con 💙 para la persona que amo</p>
+        <p class="footer-date">Nuestra historia comenzó el 6 de mayo de 2025 y sigue escribiéndose cada día</p>
+      </footer>
+    
   <script>
     // Navbar simple
     (function() {
@@ -101,6 +101,8 @@
         const data = await res.json();
         if (data.success) {
           window.MESES = data.meses || [];
+          const cnt = document.getElementById('meses-count');
+          if (cnt) cnt.textContent = `(${window.MESES.length})`;
           mostrarMeses();
         }
       } catch (e) {
@@ -125,6 +127,8 @@
 
     function mostrarMeses() {
       const cont = document.getElementById('meses-container');
+      const cnt = document.getElementById('meses-count');
+      if (cnt) cnt.textContent = `(${MESES.length})`;
       cont.innerHTML = '';
       if (MESES.length === 0) {
         cont.innerHTML = '<p class="no-items">Aún no hay meses guardados. Agrega el primero 🎊</p>';
