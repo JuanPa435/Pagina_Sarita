@@ -8,25 +8,46 @@ import pymysql
 import os
 from datetime import datetime
 
+try:
+    # Carga variables desde .env si existe (desarrollo)
+    from dotenv import load_dotenv  # type: ignore
+    load_dotenv()
+except Exception:
+    pass
+
 # ==================== CONFIGURACIÓN ====================
 
-# Base de datos ORIGEN (Railway actual)
-SOURCE_DB = {
-    'host': 'mysql.railway.internal',  # o tu host actual
-    'port': 3306,
-    'user': 'root',
-    'password': 'TU_PASSWORD_ACTUAL',
-    'database': 'railway'
-}
+def read_db_from_env(prefix: str):
+    host = os.environ.get(f'{prefix}_HOST')
+    port = int(os.environ.get(f'{prefix}_PORT', '3306'))
+    user = os.environ.get(f'{prefix}_USER')
+    password = os.environ.get(f'{prefix}_PASSWORD')
+    database = os.environ.get(f'{prefix}_NAME')
 
-# Base de datos DESTINO (nueva)
-TARGET_DB = {
-    'host': 'nuevo-host.com',
-    'port': 3306,
-    'user': 'nuevo_usuario',
-    'password': 'NUEVO_PASSWORD',
-    'database': 'nueva_db'
-}
+    missing = [k for k, v in {
+        f'{prefix}_HOST': host,
+        f'{prefix}_USER': user,
+        f'{prefix}_PASSWORD': password,
+        f'{prefix}_NAME': database,
+    }.items() if not v]
+
+    if missing:
+        raise RuntimeError(
+            f"Faltan variables de entorno para {prefix}: {', '.join(missing)}. "
+            "Configura un archivo .env (ver .env.example) o exporta variables."
+        )
+
+    return {
+        'host': host,
+        'port': port,
+        'user': user,
+        'password': password,
+        'database': database,
+    }
+
+# Base de datos ORIGEN y DESTINO via entorno
+SOURCE_DB = read_db_from_env('SOURCE_DB')
+TARGET_DB = read_db_from_env('TARGET_DB')
 
 # ==================== FUNCIONES ====================
 

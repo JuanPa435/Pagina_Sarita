@@ -10,3 +10,6 @@ backups/.last_backup.json
 # PIDs de procesos
 .backend.pid
 .frontend.pid
+
+# Entornos locales
+.env

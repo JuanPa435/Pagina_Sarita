@@ -9,21 +9,51 @@ import os
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Optional
+
+try:
+    # Carga variables desde .env si existe (desarrollo)
+    from dotenv import load_dotenv  # type: ignore
+    load_dotenv()
+except Exception:
+    pass
 
 # ==================== CONFIGURACIÓN ====================
 
-# Base de datos
-DB_CONFIG = {
-    'host': 'shinkansen.proxy.rlwy.net',
-    'port': 27654,
-    'user': 'root',
-    'password': 'sddJsJrAROwSQpEMiLnrBqfPiAUfAATg',
-    'database': 'railway'
-}
+# Base de datos (leer de variables de entorno)
+def get_db_config_from_env():
+    host = os.environ.get('DB_HOST')
+    port = int(os.environ.get('DB_PORT', '3306'))
+    user = os.environ.get('DB_USER')
+    password = os.environ.get('DB_PASSWORD')
+    database = os.environ.get('DB_NAME')
+
+    missing = [k for k, v in {
+        'DB_HOST': host,
+        'DB_USER': user,
+        'DB_PASSWORD': password,
+        'DB_NAME': database,
+    }.items() if not v]
+
+    if missing:
+        raise RuntimeError(
+            f"Faltan variables de entorno para backup: {', '.join(missing)}. "
+            "Configura un archivo .env (ver .env.example) o exporta variables."
+        )
+
+    return {
+        'host': host,
+        'port': port,
+        'user': user,
+        'password': password,
+        'database': database,
+    }
+
+DB_CONFIG = get_db_config_from_env()
 
 # Configuración de backups
 BACKUP_DIR = 'backups'  # Carpeta donde se guardarán los backups
-BACKUP_INTERVAL_DAYS = 15  # Cada cuántos días hacer backup
+BACKUP_INTERVAL_DAYS = 1  # Cada cuántos días hacer backup
 MAX_BACKUPS = 10  # Máximo de backups a mantener (los más antiguos se eliminan)
 
 # Archivo para registrar último backup
