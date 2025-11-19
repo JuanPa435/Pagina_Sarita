@@ -4,7 +4,11 @@
     {
       "src": "conexion/vercel_handler.py",
       "use": "@vercel/python"
-    }
+    },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "config.js", "use": "@vercel/static" },
+    { "src": "index.js", "use": "@vercel/static" },
+    { "src": "paginas/**", "use": "@vercel/static" }
   ],
   "routes": [
     {
