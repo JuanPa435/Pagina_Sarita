@@ -27,7 +27,7 @@ const getBackendURL = () => {
                   (port !== '' && port !== '80' && port !== '443');
     
     if (isDev) {
-        return 'http://127.0.0.1:5000/api';
+        return 'http://127.0.0.1:5050/api';
     } else {
         return '/api';
     }
