@@ -27,7 +27,8 @@ const getBackendURL = () => {
                   (port !== '' && port !== '80' && port !== '443');
     
     if (isDev) {
-        return 'http://127.0.0.1:5000/api';
+        // Usa el puerto del backend local (sincronizado con backend/app.py -> PORT)
+        return 'http://127.0.0.1:5050/api';
     } else {
         return '/api';
     }

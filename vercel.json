@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "conexion/vercel_handler.py",
+      "use": "@vercel/python"
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
@@ -21,5 +27,8 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url"
+  }
 }

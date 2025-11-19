@@ -105,7 +105,6 @@
     </footer>
 
     <script src="/config.js"></script>
-    <script src="/script.js"></script>
     
     <!-- Script del Navbar (se carga primero) -->
     <script>
@@ -142,28 +141,54 @@
     
     <script>
         const CANCIONES_POR_PAGINA = 12;
-        const BACKEND_URL = CONFIG.BACKEND_URL + '/canciones';
+        const params = new URLSearchParams(location.search);
+        const USE_RAW = params.get('raw') === '1';
+        const BACKEND_URL = CONFIG.BACKEND_URL + '/canciones' + (USE_RAW ? '/raw' : '');
+        console.log('🔧 RAW mode canciones:', USE_RAW);
         let paginaActual = 1;
         let cancionDatosEditando = null;
         let cancionesEnPantalla = [];
 
-        // Cargar canciones del backend
-        async function cargarCancionesDelBackend() {
-            try {
-                const response = await fetch(BACKEND_URL + '/get');
-                const data = await response.json();
-                
-                if (data.success && data.canciones) {
-                    window.CANCIONES = data.canciones;
-                    cancionesEnPantalla = [...data.canciones];
-                    console.log(`🎵 ${data.canciones.length} canciones cargadas del backend`);
-                    return true;
+                // Fallback canciones
+                const FALLBACK_CANCIONES = [
+                    { titulo: 'Perfect', artista: 'Ed Sheeran', url: 'https://youtu.be/2Vv-BfVoq4g', razon: 'La letra describe exactamente lo que siento', dedicadoPor: 'JP' },
+                    { titulo: 'Yellow', artista: 'Coldplay', url: 'https://youtu.be/yKNxeF4KMsY', razon: 'Porque todo se volvió luz contigo', dedicadoPor: 'JP' },
+                    { titulo: 'All of Me', artista: 'John Legend', url: 'https://youtu.be/450p7goxZqg', razon: 'Entrega completa de amor', dedicadoPor: 'JP' }
+                ];
+
+                // Cargar canciones del backend con precache y fallback
+                async function cargarCancionesDelBackend() {
+                        if(!window.CANCIONES || !Array.isArray(window.CANCIONES)) window.CANCIONES = [];
+                        if(window.CANCIONES.length === 0){
+                            const prec = sessionStorage.getItem('PRE_CANCIONES');
+                            if(prec){
+                                try { const arr = JSON.parse(prec); if(Array.isArray(arr) && arr.length){
+                                    window.CANCIONES = arr; cancionesEnPantalla = [...arr]; console.log('🌱 Semilla PRE_CANCIONES usada:', arr.length); mostrarCanciones();
+                                }} catch(e){ console.warn('PRE_CANCIONES parse error', e); }
+                            }
+                        }
+                        try {
+                              const endpoint = USE_RAW ? BACKEND_URL : (BACKEND_URL + '/get');
+                              console.log('🔄 Fetch backend canciones:', endpoint);
+                              const response = await fetch(endpoint, { headers: USE_RAW ? { 'X-No-Fallback': '1' } : {} });
+                            console.log('📡 Status canciones:', response.status);
+                            const data = await response.json();
+                            console.log('📦 JSON canciones:', data);
+                            if(data.success && Array.isArray(data.canciones)){
+                                window.CANCIONES = data.canciones.length? data.canciones : FALLBACK_CANCIONES;
+                                cancionesEnPantalla = [...window.CANCIONES];
+                                console.log('✅ Total canciones cargadas (final):', window.CANCIONES.length);
+                                return true;
+                            } else {
+                                console.warn('⚠️ Respuesta sin éxito, usando fallback');
+                                if(window.CANCIONES.length === 0){ window.CANCIONES = FALLBACK_CANCIONES; cancionesEnPantalla = [...window.CANCIONES]; }
+                            }
+                        } catch(error){
+                            console.error('❌ Error fetch canciones:', error);
+                            if(window.CANCIONES.length === 0){ window.CANCIONES = FALLBACK_CANCIONES; cancionesEnPantalla = [...window.CANCIONES]; console.log('📥 Fallback canciones aplicado'); }
+                        }
+                        return false;
                 }
-            } catch (error) {
-                console.error('❌ Error cargando canciones del backend:', error);
-            }
-            return false;
-        }
 
         // Guardar canciones en el backend
         async function guardarCancionesEnBackend() {
@@ -391,16 +416,16 @@
         }
 
         // Event listeners
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Cargar canciones del backend
-            const cargado = await cargarCancionesDelBackend();
-            if (!cargado) {
-                console.warn('⚠️ No se pudo cargar del backend, usando array vacío');
-                window.CANCIONES = [];
-                cancionesEnPantalla = [];
-            }
-            
-            mostrarCanciones();
+                document.addEventListener('DOMContentLoaded', async () => {
+                        await cargarCancionesDelBackend();
+                        if(!window.CANCIONES.length){
+                            console.warn('⚠️ Después de fetch sigue vacío, aplicando fallback canciones');
+                            window.CANCIONES = FALLBACK_CANCIONES; cancionesEnPantalla = [...window.CANCIONES];
+                        }
+                        mostrarCanciones();
+                        if(document.getElementById('canciones-container').children.length === 0){
+                            console.error('❌ Contenedor canciones vacío tras mostrarCanciones');
+                        }
 
             // Buscador
             const buscadorInput = document.getElementById('buscador-canciones');

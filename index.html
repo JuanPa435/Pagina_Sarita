@@ -66,7 +66,8 @@
                 <p class="no-items">Aún no hay poemas... pero aquí escribiré nuestras historias 🌹</p>
             </div>
             <div class="section-footer">
-                <a href="poemas/poemas.html" class="btn-primary">Ver Todos los Poemas</a>
+                <!-- Ajuste de ruta: agregar prefijo paginas/ para que funcione en Vercel -->
+                <a href="paginas/poemas/poemas.html" class="btn-primary">Ver Todos los Poemas</a>
             </div>
         </div>
     </section>
@@ -80,7 +81,8 @@
                 <p class="no-items">Nuestras canciones favoritas estarán aquí 🎶</p>
             </div>
             <div class="section-footer">
-                <a href="canciones/canciones.html" class="btn-primary">Ver Todas las Canciones</a>
+                <!-- Ajuste de ruta: agregar prefijo paginas/ para que funcione en Vercel -->
+                <a href="paginas/canciones/canciones.html" class="btn-primary">Ver Todas las Canciones</a>
             </div>
         </div>
     </section>
@@ -121,7 +123,30 @@
         <p class="footer-date" id="footerSince">Nuestra historia comenzó el 05/06/2025 y sigue escribiéndose cada día</p>
     </footer>
 
-    <script src="config.js"></script>
+        <script src="config.js"></script>
+        <script>
+            // Pre-cache de poemas y canciones en sessionStorage para acelerar páginas internas
+            (async function precacheContenido(){
+                try {
+                    const base = (typeof CONFIG!== 'undefined') ? CONFIG.BACKEND_URL.replace(/\/$/,'') : '/api';
+                    const [poRes, caRes] = await Promise.all([
+                        fetch(base + '/poemas/get').then(r=>r.ok?r.json():Promise.reject(r.status)),
+                        fetch(base + '/canciones/get').then(r=>r.ok?r.json():Promise.reject(r.status))
+                    ]);
+                    if(poRes && poRes.success && poRes.poemas){
+                        sessionStorage.setItem('PRE_POEMAS', JSON.stringify(poRes.poemas.slice(0,200))); // limitar tamaño
+                        console.log('[PRECACHE] Guardados poemas:', poRes.poemas.length);
+                    }
+                    if(caRes && caRes.success && caRes.canciones){
+                        sessionStorage.setItem('PRE_CANCIONES', JSON.stringify(caRes.canciones.slice(0,200)));
+                        console.log('[PRECACHE] Guardadas canciones:', caRes.canciones.length);
+                    }
+                } catch(e){
+                    console.warn('[PRECACHE] Falló precarga', e);
+                }
+            })();
+        </script>
+        <script src="paginas/diagnostico.js"></script>
     <script>
         // Configuración de fechas
         const FECHA_INICIO = new Date(2025, 4, 6); // mayo = 4 (0-indexed), día 6

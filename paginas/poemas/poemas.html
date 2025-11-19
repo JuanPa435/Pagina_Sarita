@@ -35,7 +35,7 @@
     <!-- Contenido -->
     <section class="poemas">
         <div class="container">
-            <h2 class="seccion-titulo">📝 Poemas</h2>
+            <h2 class="seccion-titulo">📝 Poemas <span id="poemas-count" style="font-size:0.8em; opacity:.8"></span></h2>
             
             <!-- Buscador -->
             <div class="buscador-container">
@@ -90,7 +90,8 @@
         <p class="footer-date">Actualizado el: <span id="fecha"></span></p>
     </footer>
 
-    <script src="/script.js"></script>
+    <!-- Eliminado script.js inexistente; agregado diagnóstico -->
+    <script src="/paginas/diagnostico.js"></script>
     
     <!-- Script del Navbar (se carga primero) -->
     <script>
@@ -130,35 +131,25 @@
         let paginaActual = 1;
         let poemaDatosEditando = null;
         let poemasEnPantalla = []; // Array para filtros
-        window.POEMAS = []; // Inicializar window.POEMAS
-        
-        // Verificar que CONFIG esté disponible
-        if (typeof CONFIG === 'undefined') {
-            console.error('❌ CONFIG no está definido. Asegúrate de que config.js se carga antes.');
-            alert('Error: CONFIG no definido. Por favor recarga la página.');
-        }
-        const BACKEND_URL = CONFIG.BACKEND_URL + '/poemas';
-        console.log('🔧 BACKEND_URL configurado:', BACKEND_URL);
+        let POEMAS = []; // Array principal de poemas
 
         // Cargar poemas desde el backend
         async function cargarPoemasDelBackend() {
             try {
-                console.log('🔄 Cargando poemas del backend desde:', `${BACKEND_URL}/get`);
-                const res = await fetch(`${BACKEND_URL}/get`);
-                console.log('📡 Respuesta recibida. Status:', res.status);
+                const res = await fetch(`${CONFIG.BACKEND_URL}/poemas/get`, { cache: 'no-store' });
                 const data = await res.json();
-                console.log('📦 Datos parseados:', data);
-                if (data.success && data.poemas) {
-                    window.POEMAS = data.poemas;
-                    poemasEnPantalla = [...window.POEMAS]; // Inicializar array de pantalla
-                    console.log(`✅ ${data.poemas.length} poemas cargados del backend`);
+                console.log('📦 Respuesta poemas:', data);
+                
+                if (data.success && Array.isArray(data.poemas)) {
+                    POEMAS = data.poemas;
+                    poemasEnPantalla = [...POEMAS];
+                    const cnt = document.getElementById('poemas-count');
+                    if (cnt) cnt.textContent = `(${POEMAS.length})`;
+                    console.log(`✅ ${POEMAS.length} poemas cargados`);
                     return true;
-                } else {
-                    console.warn('⚠️ Respuesta sin éxito o sin poemas:', data);
                 }
             } catch (err) {
-                console.error('❌ Error cargando del backend:', err);
-                console.error('Stack trace:', err.stack);
+                console.error('❌ Error al cargar poemas:', err);
             }
             return false;
         }
@@ -166,22 +157,21 @@
         // Guardar poemas en el backend
         async function guardarPoemasEnBackend() {
             try {
-                console.log(`📤 Guardando ${window.POEMAS.length} poemas en el backend...`);
-                const res = await fetch(`${BACKEND_URL}/save`, {
+                const res = await fetch(`${CONFIG.BACKEND_URL}/poemas/save`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ poemas: window.POEMAS })
+                    body: JSON.stringify({ poemas: POEMAS })
                 });
                 const data = await res.json();
                 if (data.success) {
-                    console.log(`✅ Guardado exitoso: ${data.total} poemas en servidor`);
+                    console.log(`✅ Guardado exitoso`);
                     return true;
                 } else {
-                    console.error(`❌ Error al guardar: ${data.error}`);
+                    console.error(`❌ Error al guardar:`, data.error);
                     return false;
                 }
             } catch (err) {
-                console.error('❌ Error guardando en backend:', err);
+                console.error('❌ Error guardando:', err);
                 return false;
             }
         }
@@ -189,47 +179,38 @@
         // Función de búsqueda
         function filtrarPoemas(texto) {
             texto = texto.toLowerCase().trim();
-            console.log(`🔍 Buscando: "${texto}"`);
             
             if (texto === '') {
-                poemasEnPantalla = [...window.POEMAS];
+                poemasEnPantalla = [...POEMAS];
             } else {
-                poemasEnPantalla = window.POEMAS.filter(poema => 
+                poemasEnPantalla = POEMAS.filter(poema => 
                     poema.titulo.toLowerCase().includes(texto) ||
                     poema.contenido.toLowerCase().includes(texto) ||
                     poema.autor.toLowerCase().includes(texto)
                 );
             }
             
-            paginaActual = 1; // Volver a la primera página
+            paginaActual = 1;
             mostrarPoemas();
-            console.log(`📊 Resultados encontrados: ${poemasEnPantalla.length}`);
         }
 
         function mostrarPoemas() {
-            console.log('📋 mostrarPoemas() llamado');
-            console.log('   window.POEMAS length:', window.POEMAS ? window.POEMAS.length : 'undefined');
-            console.log('   poemasEnPantalla length:', poemasEnPantalla.length);
-            
             const container = document.getElementById('poemas-container');
-            if (!container) {
-                console.error('❌ No se encontró el contenedor poemas-container');
-                return;
-            }
+            if (!container) return;
+            
             container.innerHTML = '';
+            const cnt = document.getElementById('poemas-count');
+            if (cnt) cnt.textContent = `(${poemasEnPantalla.length})`;
 
             const inicio = (paginaActual - 1) * POEMAS_POR_PAGINA;
             const fin = inicio + POEMAS_POR_PAGINA;
             const poemasEnPagina = poemasEnPantalla.slice(inicio, fin);
-            
-            console.log(`   Mostrando poemas del ${inicio} al ${fin}, total en página: ${poemasEnPagina.length}`);
 
             if (poemasEnPagina.length === 0) {
-                if (poemasEnPantalla.length === 0) {
-                    container.innerHTML = '<div class="no-resultados">😔 No se encontraron poemas con tu búsqueda...</div>';
-                } else {
-                    container.innerHTML = '<div class="no-items">Aún no hay poemas... pero aquí escribiré nuestras historias 🌹</div>';
-                }
+                const msg = poemasEnPantalla.length === 0 
+                    ? '😔 No se encontraron poemas con tu búsqueda...' 
+                    : 'Aún no hay poemas... pero aquí escribiré nuestras historias 🌹';
+                container.innerHTML = `<div class="no-items">${msg}</div>`;
                 actualizarPaginacion();
                 return;
             }
@@ -329,49 +310,39 @@
 
         // Editar poema
         function editarPoema(indice) {
-            console.log(`✏️ Editando poema en índice: ${indice}`);
             if (!POEMAS[indice]) {
-                console.error(`❌ Poema no encontrado en índice ${indice}`);
                 alert('Error: Poema no encontrado');
                 return;
             }
             poemaDatosEditando = indice;
             const poema = POEMAS[indice];
-            console.log(`📝 Datos del poema a editar:`, poema);
             document.getElementById('poema-titulo').value = poema.titulo;
             document.getElementById('poema-contenido').value = poema.contenido;
             document.getElementById('poema-autor').value = poema.autor || '';
             mostrarModal('Editar Poema');
         }
 
-        // Eliminar poema con confirmación
+        // Eliminar poema
         async function eliminarPoema(indice) {
-            console.log(`🗑️ Intentando eliminar poema en índice: ${indice}`);
             if (!POEMAS[indice]) {
-                console.error(`❌ Poema no encontrado en índice ${indice}`);
                 alert('Error: Poema no encontrado');
                 return;
             }
             const titulo = POEMAS[indice].titulo;
-            if (confirm(`¿Estás seguro de que quieres eliminar el poema "${titulo}"?`)) {
-                console.log(`📚 Poemas antes de eliminar: ${POEMAS.length}`);
-                POEMAS.splice(indice, 1);
-                console.log(`📚 Poemas después de eliminar: ${POEMAS.length}`);
-                
-                const guardado = await guardarPoemasEnBackend();
-                if (guardado) {
-                    console.log(`✅ Poema eliminado y guardado en backend`);
-                    // Recargar página para mostrar cambios
-                    window.location.reload();
-                } else {
-                        paginaActual = 1;
-                    }
-                    mostrarPoemas();
-                } else {
-                    console.error(`❌ Error al guardar en backend después de eliminar`);
-                    alert('Error al eliminar. Intenta de nuevo.');
-                }
+            if (!confirm(`¿Eliminar el poema "${titulo}"?`)) return;
+            
+            POEMAS.splice(indice, 1);
+            const guardado = await guardarPoemasEnBackend();
+            
+            if (guardado) {
+                const totalPaginas = Math.ceil(POEMAS.length / POEMAS_POR_PAGINA) || 1;
+                if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+                poemasEnPantalla = [...POEMAS];
+                mostrarPoemas();
+            } else {
+                alert('Error al eliminar. Intenta de nuevo.');
             }
+        }
 
         // Toggle menu de acciones en poema
         function toggleMenuPoema(btn) {
@@ -403,46 +374,28 @@
                 return;
             }
 
-            console.log(`🖊️ ${poemaDatosEditando !== null ? 'Editando' : 'Agregando'} poema: "${titulo}"`);
-            console.log(`📚 Poemas actuales antes: ${window.POEMAS.length}`);
-
             const nuevoPoema = { titulo, contenido, autor: autor || 'Escrito con amor ❤️' };
             
             if (poemaDatosEditando !== null) {
-                const indiceEditando = poemaDatosEditando;
-                console.log(`✏️ Reemplazando poema en índice ${indiceEditando}`);
-                console.log(`  Anterior:`, window.POEMAS[indiceEditando]);
-                window.POEMAS[indiceEditando] = nuevoPoema;
-                console.log(`  Nuevo:`, window.POEMAS[indiceEditando]);
+                POEMAS[poemaDatosEditando] = nuevoPoema;
             } else {
-                window.POEMAS.push(nuevoPoema);
-                console.log(`✅ Poema agregado. Total ahora: ${window.POEMAS.length}`);
+                POEMAS.push(nuevoPoema);
             }
-
-            console.log(`📤 Enviando ${window.POEMAS.length} poemas al backend...`);
             
             // Guardar en backend
             const guardado = await guardarPoemasEnBackend();
             if (guardado) {
-                console.log('✨ Poema guardado exitosamente en el backend');
-                poemaDatosEditando = null; // Limpiar estado de edición
+                poemaDatosEditando = null;
                 cerrarModal();
-                // Recargar página para mostrar cambios
-                window.location.reload();
+                poemasEnPantalla = [...POEMAS];
+                mostrarPoemas();
             } else {
-                console.error('❌ Error al guardar en backend');
                 alert('Error al guardar. Intenta de nuevo.');
             }
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Cargar poemas del backend
-            const cargado = await cargarPoemasDelBackend();
-            if (!cargado) {
-                console.warn('⚠️ No se pudo cargar del backend, usando array vacío');
-                window.POEMAS = [];
-            }
-            
+            await cargarPoemasDelBackend();
             mostrarPoemas();
 
             // Botón agregar
