@@ -7,6 +7,18 @@
     "build": "echo 'Static site - no build needed'",
     "dev": "bash scripts/dev.sh",
     "prod": "bash scripts/prod.sh",
-    "start": "npm run prod"
+    "start": "npm run prod",
+    "backend:start": "bash scripts/backend.sh start",
+    "backend:stop": "bash scripts/backend.sh stop",
+    "backend:restart": "bash scripts/backend.sh restart",
+    "backend:status": "bash scripts/backend.sh status",
+    "backend:logs": "bash scripts/backend.sh logs",
+    "backend:health": "bash scripts/backend.sh health",
+    "frontend:start": "bash scripts/frontend.sh start",
+    "frontend:stop": "bash scripts/frontend.sh stop",
+    "frontend:restart": "bash scripts/frontend.sh restart",
+    "frontend:status": "bash scripts/frontend.sh status",
+    "frontend:logs": "bash scripts/frontend.sh logs",
+    "frontend:health": "bash scripts/frontend.sh health"
   }
 }
