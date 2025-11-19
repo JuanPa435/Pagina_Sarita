@@ -1,2 +1,12 @@
 *.log
 __pycache__/
+
+# Backups de base de datos
+backups/*.sql
+backups/*.txt
+backups/.last_backup.json
+!backups/README.md
+
+# PIDs de procesos
+.backend.pid
+.frontend.pid
