@@ -1,0 +1,19 @@
+============================================================
+INFORMACIÓN DEL BACKUP
+============================================================
+
+Fecha: 2025-11-20 02:38:58
+Base de datos: railway
+Archivo SQL: backup_20251120_023858.sql
+Tamaño: 6329.37 KB
+Tablas: 4
+Registros totales: 72
+
+Detalle por tabla:
+------------------------------------------------------------
+  • canciones: 28 registros
+  • galeria: 3 registros
+  • meses: 0 registros
+  • poemas: 41 registros
+
+============================================================
