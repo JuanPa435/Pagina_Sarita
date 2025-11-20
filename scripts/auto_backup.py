@@ -53,8 +53,8 @@ DB_CONFIG = get_db_config_from_env()
 
 # Configuración de backups
 BACKUP_DIR = 'backups'  # Carpeta donde se guardarán los backups
-BACKUP_INTERVAL_DAYS = 1  # Cada cuántos días hacer backup
-MAX_BACKUPS = 10  # Máximo de backups a mantener (los más antiguos se eliminan)
+BACKUP_INTERVAL_DAYS = 1  # Frecuencia: diario
+MAX_BACKUPS = 5  # Máximo de backups a mantener (los más antiguos se eliminan)
 
 # Archivo para registrar último backup
 LAST_BACKUP_FILE = 'backups/.last_backup.json'

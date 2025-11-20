@@ -4,9 +4,9 @@ Esta carpeta contiene los backups automáticos de la base de datos.
 
 ## 📋 Información
 
-- **Intervalo**: Se crea un backup cada 15 días automáticamente
+- **Intervalo**: Se crea un backup diariamente (03:00 UTC)
 - **Formato**: Archivos SQL con timestamp
-- **Máximo**: Se mantienen los últimos 10 backups
+- **Máximo**: Se mantienen los últimos 5 backups
 - **Archivos por backup**:
   - `backup_YYYYMMDD_HHMMSS.sql` - Archivo SQL con los datos
   - `backup_YYYYMMDD_HHMMSS_info.txt` - Información del backup
@@ -42,12 +42,12 @@ mysql -h HOST -u USER -p DATABASE < backups/backup_YYYYMMDD_HHMMSS.sql
 ## 🚀 Uso del script
 
 ```bash
-# Ejecutar el script de backup automático
+# Ejecutar el script de backup automático (local)
 python scripts/auto_backup.py
 ```
 
 **Opciones disponibles:**
-1. Verificar y crear backup si es necesario
+1. Verificar y crear backup si es necesario (diario)
 2. Crear backup ahora (forzar)
 3. Ver último backup
 4. Listar todos los backups
