@@ -19,16 +19,6 @@ def dict_cursor(cursor, data):
     columns = [col[0] for col in cursor.description]
     return [dict(zip(columns, row)) for row in data]
 
-# Fallback data
-FALLBACK_POEMAS = [
-    {"titulo": "Tu sonrisa", "contenido": "Tu sonrisa ilumina mis días\ncomo el sol que atraviesa la niebla", "autor": "JP"},
-    {"titulo": "Amor eterno", "contenido": "En cada latido de mi corazón\nresuena tu nombre con pasión", "autor": "JP"}
-]
-
-FALLBACK_CANCIONES = [
-    {"titulo": "Perfect", "artista": "Ed Sheeran", "url": "https://youtu.be/2Vv-BfVoq4g", "razon": "Describe lo que siento", "dedicadoPor": "JP"},
-    {"titulo": "Yellow", "artista": "Coldplay", "url": "https://youtu.be/yKNxeF4KMsY", "razon": "Todo se volvió luz contigo", "dedicadoPor": "JP"}
-]
 
 # Inicializar tablas
 def init_db():
