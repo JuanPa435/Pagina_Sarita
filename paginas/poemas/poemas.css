@@ -606,6 +606,12 @@ body {
     margin-bottom: 2.2rem;
 }
 
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
 .paginacion {
     width: 100%;
     display: flex;
@@ -774,24 +780,6 @@ body {
     }
 }
 
-/* Toolbar con botón agregar y buscador */
-.poemas-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.toolbar-right {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    flex: 1;
-    justify-content: flex-end;
-}
-
 /* Overlay para móviles */
 .search-overlay {
     display: none;
@@ -940,38 +928,8 @@ body {
     }
 }
 
-/* Móviles grandes */
-@media (max-width: 640px) {
-    .poemas-toolbar {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .toolbar-right {
-        width: 100%;
-        justify-content: center;
-        margin-top: 1rem;
-    }
-    
-    .search-container {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
 /* Móviles pequeños */
 @media (max-width: 480px) {
-    .poemas-toolbar {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .toolbar-right {
-        justify-content: center;
-        margin-top: 0;
-    }
-    
     .btn-agregar {
         width: 100%;
         max-width: 280px;
