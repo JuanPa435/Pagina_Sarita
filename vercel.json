@@ -12,23 +12,23 @@
       "dest": "/api/index.py"
     },
     {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|html))",
-      "dest": "/$1"
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/index.html"
     },
     {
       "src": "/paginas/(.*)",
       "dest": "/paginas/$1"
     },
     {
-      "src": "/conexion/(.*)",
-      "dest": "/conexion/$1"
+      "src": "/conexion/config.js",
+      "dest": "/conexion/config.js"
     },
     {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|html|json))",
       "dest": "/$1"
     }
   ]
