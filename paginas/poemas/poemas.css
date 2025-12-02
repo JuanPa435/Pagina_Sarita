@@ -364,6 +364,9 @@ body {
     padding: 1em 1.2em;
     box-shadow: 0 2px 12px #3601a722;
     width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 .fecha {
     display: block;
@@ -620,9 +623,18 @@ body {
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 1rem 0.8rem !important;
+        align-items: center !important;
+        max-width: 100% !important;
+    }
     #poemas-container {
         grid-template-columns: 1fr;
         gap: 1.8rem;
+        justify-items: stretch;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
     }
     
     .poemas {
@@ -639,13 +651,11 @@ body {
         margin-bottom: 0.3rem;
     }
     
-    #poemas-container {
-        grid-template-columns: 1fr;
-        gap: 3.5rem;
-    }
-    
     .poema-card {
-        padding: 2rem;
+        padding: 1.5rem 1rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     
     .poema-card h3 {
@@ -665,8 +675,12 @@ body {
         padding-top: 70px;
     }
     
+    .container {
+        padding: 0.5rem 0.5rem !important;
+    }
+    
     .poemas {
-        padding: 2rem 1rem 3rem;
+        padding: 2rem 0.5rem 3rem;
     }
     
     .seccion-titulo {
@@ -679,8 +693,18 @@ body {
         font-size: 1.5rem;
     }
     
+    #poemas-container {
+        max-width: 100%;
+        padding: 0;
+    }
+    
     .poema-card {
-        padding: 1.5rem;
+        padding: 1.2rem 0.8rem;
+    }
+    
+    .poema-contenido {
+        font-size: 0.85rem;
+        padding: 0.8rem 0.9rem;
     }
     
     .poema-card h3 {
