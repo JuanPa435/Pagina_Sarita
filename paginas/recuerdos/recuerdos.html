@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuerdos - Nuestra Historia 💙</title>
-    <meta name="theme-color" content="#05bfdb">
-    <link rel="stylesheet" href="/paginas/styles/styles-recuerdos.css">
+    <title>Nuestra Historia 💙</title>
+    <meta name="theme-color" content="#0f2a38">
+    <link rel="stylesheet" href="recuerdos.css">
+    <link rel="stylesheet" href="/paginas/celulares.css">
 </head>
+
 <body>
-    <!-- Navbar manual -->
+    <div class="particles-bg" id="particles-bg"></div>
+    <!-- Navegación Simple -->
     <nav class="navbar-simple">
         <div class="nav-content">
             <a href="/index.html" class="logo-simple">💙 Nuestra Historia</a>
-            <ul class="nav-menu-simple">
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+            <ul class="nav-menu-simple" id="menu-simple">
                 <li><a href="/index.html">Inicio</a></li>
                 <li><a href="/paginas/poemas/poemas.html">Poemas</a></li>
                 <li><a href="/paginas/canciones/canciones.html">Canciones</a></li>
@@ -22,440 +26,97 @@
         </div>
     </nav>
 
-
     <!-- Contenido -->
     <section class="recuerdos-galeria">
         <div class="container">
-            <h2 class="seccion-titulo">💫 Recuerdos <span id="recuerdos-count" style="font-size:0.8em; opacity:.8"></span></h2>
-            <p class="intro">Tus momentos guardados. Voltea una tarjeta para leer la dedicatoria ✨</p>
-
+            <h2 class="seccion-titulo">Recuerdos <span id="recuerdos-count" style="font-size:0.8em; opacity:.8"></span></h2>
+            
+            <!-- Overlay para móviles -->
+            <div class="search-overlay" id="search-overlay-recuerdos"></div>
+            
             <!-- Controles de vista -->
             <div class="recuerdos-toolbar">
-                <button id="btn-agregar-recuerdo" class="btn-agregar">
-                    <span class="btn-icon">📸</span>
+                <button class="btn-agregar" id="btn-agregar-recuerdo">
+                    <span class="btn-icon">🎵</span>
                     <span>Agregar Recuerdo</span>
                 </button>
                 <div class="toolbar-right">
-                    <label for="orden-recuerdos">Orden:</label>
-                    <select id="orden-recuerdos">
-                        <option value="desc">Más recientes primero</option>
-                        <option value="asc">Más antiguos primero</option>
-                    </select>
+                    <!-- Buscador expandible -->
+                    <div class="search-container" id="search-container-recuerdos">
+                        <button class="btn-search-toggle" id="btn-search-toggle-recuerdos" aria-label="Buscar">
+                            <span class="search-icon">🔍</span>
+                        </button>
+                        <div class="search-expandable" id="search-expandable-recuerdos">
+                            <input type="text" id="buscador-recuerdos" class="buscador-input" placeholder="Buscar por título, artista..." />
+                            <button id="btn-limpiar-busqueda" class="btn-limpiar" title="Limpiar búsqueda">✕</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            
+            <div id="recuerdos-grid">
+                <!-- Los recuerdos se cargarán aquí -->
+            </div>
 
-            <!-- Grid de recuerdos -->
-            <div id="recuerdos-grid" class="gallery-grid"></div>
+            <!-- Paginación -->
+            <div class="paginacion" id="paginacion">
+                <!-- Los botones de paginación se generarán aquí -->
+            </div>
         </div>
     </section>
 
-    <!-- Modal para agregar recuerdo -->
-    <div id="modal-agregar" class="modal-recuerdo">
-        <div class="modal-content-recuerdo">
+    <!-- Modal para agregar/editar recuerdo -->
+    <div id="modal-recuerdo" class="modal-cancion" style="display: none;">
+        <div class="modal-cancion-content">
             <div class="modal-header">
-                <h3>📸 Agregar Nuevo Recuerdo</h3>
-                <button class="modal-close" id="btn-cerrar-modal">&times;</button>
+                <h3 id="modal-titulo">Agregar Recuerdo</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
             </div>
-            <form id="form-recuerdo" class="recuerdo-form">
-                <div class="form-field">
-                    <label for="rec-foto">
-                        <span class="label-icon">🖼️</span>
-                        Seleccionar Imagen
-                    </label>
-                    <input type="file" id="rec-foto" accept="image/*" required>
-                    <div id="preview-container" class="preview-container"></div>
+            <form id="form-recuerdo" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="recuerdo-imagen">Imagen: *</label>
+                    <input type="file" id="recuerdo-imagen" accept="image/*" required>
                 </div>
-                <div class="form-field">
-                    <label for="rec-fecha">
-                        <span class="label-icon">📅</span>
-                        Fecha del Recuerdo
-                    </label>
-                    <input type="date" id="rec-fecha" required>
+                <div class="form-group">
+                    <label for="recuerdo-mensaje">Mensaje/Descripción:</label>
+                    <input type="text" id="recuerdo-mensaje" placeholder="Describe este recuerdo">
                 </div>
-                <div class="form-field">
-                    <label for="rec-mensaje">
-                        <span class="label-icon">💭</span>
-                        Mensaje
-                    </label>
-                    <textarea id="rec-mensaje" rows="3" placeholder="Describe este momento especial..." required></textarea>
+                <div class="form-group">
+                    <label for="recuerdo-fecha">Fecha:</label>
+                    <input type="date" id="recuerdo-fecha">
                 </div>
-                <div class="form-field">
-                    <label for="rec-dedicatoria">
-                        <span class="label-icon">💝</span>
-                        Dedicatoria
-                    </label>
-                    <textarea id="rec-dedicatoria" rows="2" placeholder="Para la persona que amo..." required></textarea>
+                <div class="form-group">
+                    <label>¿Quién lo sube?</label>
+                    <div class="dedicador-options">
+                        <label class="radio-pill">
+                            <input type="radio" name="recuerdo-autor" value="Sarita">
+                            Sarita
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="recuerdo-autor" value="JP" checked>
+                            JP
+                        </label>
+                    </div>
                 </div>
-                <div class="form-field">
-                    <label for="rec-autor">
-                        <span class="label-icon">✍️</span>
-                        De parte de
-                    </label>
-                    <input type="text" id="rec-autor" placeholder="Tu nombre..." required>
+                <div class="form-group">
+                    <label for="recuerdo-dedicatoria">Dedicatoria:</label>
+                    <textarea id="recuerdo-dedicatoria" placeholder="¿Por qué compartes este recuerdo?" rows="4"></textarea>
                 </div>
-                <div class="form-actions">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                     <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
-                    <button type="submit" class="btn-guardar">
-                        <span>💾</span>
-                        Guardar Recuerdo
-                    </button>
+                    <button type="submit" class="btn-guardar">Guardar Recuerdo</button>
                 </div>
             </form>
         </div>
     </div>
-
-        <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer-nuevo">
         <p>Hecho con 💙 para la persona que amo</p>
         <p class="footer-date">Nuestra historia comenzó el 6 de mayo de 2025 y sigue escribiéndose cada día</p>
     </footer>
 
-    <!-- Script para el navbar -->
-    <script>
-        // Toggle menú móvil
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.getElementById('menu-simple');
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const abierto = navMenu.classList.toggle('open');
-                navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-            });
-            navMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.navbar-simple')) {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-    </script>
-
-    <script src="/config.js"></script>
-    <script>
-        const API = CONFIG.BACKEND_URL + '/recuerdos';
-        const grid = document.getElementById('recuerdos-grid');
-        const selectOrden = document.getElementById('orden-recuerdos');
-        window.RECUERDOS = [];
-        let editandoId = null; // Variable para saber si estamos editando
-
-        async function cargarRecuerdos() {
-            grid.innerHTML = '';
-            try {
-                const res = await fetch(API + '/get');
-                const data = await res.json();
-                const lista = data.success ? (data.recuerdos || []) : [];
-                window.RECUERDOS = lista;
-                actualizarContador(lista.length);
-                if (!lista.length) {
-                    grid.innerHTML = `<div class="foto-no-encontrada">Aún no hay recuerdos. ¡Sube el primero! ✨</div>`;
-                    return;
-                }
-                mostrarRecuerdos();
-            } catch (e) {
-                console.error('Error cargando recuerdos', e);
-                actualizarContador(0);
-                grid.innerHTML = `<div class="foto-no-encontrada">No se pudieron cargar los recuerdos</div>`;
-            }
-        }
-
-        function actualizarContador(n){
-            const cnt = document.getElementById('recuerdos-count');
-            if (cnt) cnt.textContent = `(${n})`;
-        }
-
-        function ordenarRecuerdos(arr){
-            const modo = (selectOrden?.value || 'desc');
-            return [...arr].sort((a,b)=>{
-                const da = new Date(a.fecha||a.created_at||0).getTime();
-                const db = new Date(b.fecha||b.created_at||0).getTime();
-                return modo === 'asc' ? (da - db) : (db - da);
-            });
-        }
-
-        function mostrarRecuerdos(){
-            grid.innerHTML = '';
-            const ordenados = ordenarRecuerdos(window.RECUERDOS || []);
-            ordenados.forEach(r => grid.appendChild(crearCard(r)));
-        }
-
-        function crearCard(rec) {
-            const card = document.createElement('div');
-            card.className = 'recuerdo-card';
-            const imgUrl = CONFIG.BACKEND_URL.replace(/\/api$/, '') + rec.url;
-            const titulo = formatearFecha(rec.fecha);
-            card.innerHTML = `
-                <div class="recuerdo-actions">
-                    <button class="btn-edit" onclick="editarRecuerdo(${rec.id}, event)" title="Editar">✏️</button>
-                    <button class="btn-delete" onclick="eliminarRecuerdo(${rec.id}, event)" title="Eliminar">🗑️</button>
-                </div>
-                <div class="recuerdo-inner">
-                    <div class="recuerdo-front">
-                        <div class="recuerdo-image-container">
-                            <img src="${imgUrl}" alt="Recuerdo" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/300x300?text=Recuerdo'" />
-                        </div>
-                        <div class="recuerdo-front-mensaje">
-                            <p>${escaparHTML(rec.mensaje || 'Sin mensaje')}</p>
-                        </div>
-                    </div>
-                    <div class="recuerdo-back">
-                        <div class="recuerdo-back-content">
-                            <p class="recuerdo-fecha-back">📅 ${formatearFecha(rec.fecha)}</p>
-                            <div class="dedicatoria-icon">💝</div>
-                            <p class="recuerdo-dedicatoria">${escaparHTML(rec.dedicatoria || 'Sin dedicatoria')}</p>
-                            <p class="recuerdo-autor">- ${escaparHTML(rec.autor || 'Anónimo')}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Click para voltear solo si no es en los botones
-            const inner = card.querySelector('.recuerdo-inner');
-            inner.addEventListener('click', (e) => {
-                if (!e.target.closest('.recuerdo-actions')) {
-                    card.classList.toggle('is-flipped');
-                }
-            });
-            
-            return card;
-        }
-
-        async function eliminarRecuerdo(id, event) {
-            event.stopPropagation();
-            if (!confirm('¿Estás seguro de eliminar este recuerdo?')) return;
-            
-            try {
-                const res = await fetch(`${API}/delete/${id}`, { method: 'DELETE' });
-                const data = await res.json();
-                if (data.success) {
-                    await cargarRecuerdos();
-                } else {
-                    alert('Error al eliminar: ' + (data.error || 'desconocido'));
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Error al eliminar el recuerdo');
-            }
-        }
-
-        async function editarRecuerdo(id, event) {
-            event.stopPropagation();
-            const rec = window.RECUERDOS.find(r => r.id === id);
-            if (!rec) return alert('Recuerdo no encontrado');
-            
-            // Marcar que estamos editando
-            editandoId = id;
-            
-            // Llenar el formulario con los datos actuales
-            // Asegurar que la fecha se muestre correctamente sin perder un día
-            if (rec.fecha) {
-                const fechaStr = rec.fecha.includes('T') ? rec.fecha : rec.fecha + 'T00:00:00';
-                const d = new Date(fechaStr);
-                const year = d.getUTCFullYear();
-                const month = String(d.getUTCMonth() + 1).padStart(2, '0');
-                const day = String(d.getUTCDate()).padStart(2, '0');
-                document.getElementById('rec-fecha').value = `${year}-${month}-${day}`;
-            } else {
-                document.getElementById('rec-fecha').value = '';
-            }
-            document.getElementById('rec-mensaje').value = rec.mensaje || '';
-            document.getElementById('rec-dedicatoria').value = rec.dedicatoria || '';
-            document.getElementById('rec-autor').value = rec.autor || '';
-            
-            // Hacer que el input de foto no sea requerido en modo edición
-            document.getElementById('rec-foto').removeAttribute('required');
-            
-            // Cambiar el título del modal
-            document.querySelector('.modal-header h3').textContent = '✏️ Editar Recuerdo';
-            
-            // Abrir el modal
-            document.getElementById('modal-agregar').classList.add('active');
-        }
-
-        function escaparHTML(str) {
-            return (str || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-        }
-
-        function formatearFecha(fecha) {
-            if (!fecha) return '';
-            // Agregar 'T00:00:00' para evitar problemas de zona horaria
-            const fechaStr = fecha.includes('T') ? fecha : fecha + 'T00:00:00';
-            const d = new Date(fechaStr);
-            return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
-        }
-
-        function cerrarModal() {
-            const modal = document.getElementById('modal-agregar');
-            const formRecuerdo = document.getElementById('form-recuerdo');
-            const previewContainer = document.getElementById('preview-container');
-            modal.classList.remove('active');
-            formRecuerdo.reset();
-            previewContainer.innerHTML = '';
-            // Restaurar título del modal y modo agregar
-            document.querySelector('.modal-header h3').textContent = '📸 Agregar Nuevo Recuerdo';
-            editandoId = null;
-            // Restaurar required en foto
-            document.getElementById('rec-foto').setAttribute('required', '');
-        }
-
-        document.getElementById('form-recuerdo').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const fileInput = document.getElementById('rec-foto');
-            const fechaInput = document.getElementById('rec-fecha');
-            const msgInput = document.getElementById('rec-mensaje');
-            const dedicatoriaInput = document.getElementById('rec-dedicatoria');
-            const autorInput = document.getElementById('rec-autor');
-            
-            // Si estamos editando
-            if (editandoId !== null) {
-                const fd = new FormData();
-                if (fileInput.files[0]) {
-                    fd.append('imagen', fileInput.files[0]);
-                }
-                fd.append('fecha', fechaInput.value);
-                fd.append('mensaje', msgInput.value.trim());
-                fd.append('dedicatoria', dedicatoriaInput.value.trim());
-                fd.append('autor', autorInput.value.trim());
-                
-                try {
-                    const res = await fetch(`${API}/update/${editandoId}`, { method: 'PUT', body: fd });
-                    const data = await res.json();
-                    if (data.success) {
-                        alert('¡Recuerdo actualizado! 💙');
-                        cerrarModal();
-                        await cargarRecuerdos();
-                    } else {
-                        alert('Error: ' + (data.error || 'No se pudo actualizar'));
-                    }
-                } catch (err) {
-                    console.error(err);
-                    alert('Error al actualizar el recuerdo');
-                }
-                return;
-            }
-            
-            // Modo agregar (original)
-            if (!fileInput.files[0]) return alert('Selecciona una foto');
-            const fd = new FormData();
-            fd.append('foto', fileInput.files[0]);
-            fd.append('fecha', fechaInput.value);
-            fd.append('mensaje', msgInput.value.trim());
-            fd.append('dedicatoria', dedicatoriaInput.value.trim());
-            fd.append('autor', autorInput.value.trim());
-            try {
-                const res = await fetch(API + '/upload', { method: 'POST', body: fd });
-                const data = await res.json();
-                if (!data.success) return alert('No se pudo guardar el recuerdo');
-                fileInput.value = '';
-                msgInput.value = '';
-                fechaInput.value = '';
-                dedicatoriaInput.value = '';
-                autorInput.value = '';
-                await cargarRecuerdos();
-            } catch(err) {
-                console.error(err);
-                alert('Error subiendo el recuerdo');
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Footer igual al index
-            (function(){
-                const FECHA_INICIO = new Date(2025, 4, 6);
-                const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-                const dia = FECHA_INICIO.getDate();
-                const mes = meses[FECHA_INICIO.getMonth()];
-                const anio = FECHA_INICIO.getFullYear();
-                const fechaFormato = `${dia} de ${mes} de ${anio}`;
-                const footerSince = document.getElementById('footerSince');
-                if (footerSince) footerSince.textContent = `Nuestra historia comenzó el ${fechaFormato} y sigue escribiéndose cada día`;
-            })();
-
-            // Cargar y preparar eventos
-            cargarRecuerdos();
-            if (selectOrden) selectOrden.addEventListener('change', mostrarRecuerdos);
-
-            // MODAL - Agregar Recuerdo
-            const modal = document.getElementById('modal-agregar');
-            const btnAgregar = document.getElementById('btn-agregar-recuerdo');
-            const btnCerrar = document.getElementById('btn-cerrar-modal');
-            const btnCancelar = document.getElementById('btn-cancelar');
-            const formRecuerdo = document.getElementById('form-recuerdo');
-            const inputFoto = document.getElementById('rec-foto');
-            const previewContainer = document.getElementById('preview-container');
-
-            // Abrir modal en modo agregar
-            if (btnAgregar) {
-                btnAgregar.addEventListener('click', () => {
-                    editandoId = null; // Asegurar que estamos en modo agregar
-                    document.getElementById('rec-foto').setAttribute('required', '');
-                    document.querySelector('.modal-header h3').textContent = '📸 Agregar Nuevo Recuerdo';
-                    modal.classList.add('active');
-                });
-            }
-
-            // Cerrar modal
-            // La función cerrarModal ya está definida arriba globalmente
-
-            if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
-            if (btnCancelar) btnCancelar.addEventListener('click', cerrarModal);
-
-            // Cerrar al hacer clic fuera del modal
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) cerrarModal();
-            });
-
-            // Preview de imagen
-            inputFoto.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        previewContainer.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // El manejador de submit ya está definido arriba, no agregarlo de nuevo
-        });
-    </script>
-</body>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuerdos</title>
-    <link rel="stylesheet" href="../styles/navbar.css">
-    <link rel="stylesheet" href="../styles/styles-index.css">
-</head>
-<body>
-    <nav>
-        <a href="/index.html" class="navbar-title">💙 Nuestra Historia</a>
-        <ul>
-            <li><a href="/index.html">Inicio</a></li>
-            <li><a href="/paginas/poemas/poemas.html">Poemas</a></li>
-            <li><a href="/paginas/canciones/canciones.html">Canciones</a></li>
-            <li><a href="/paginas/recuerdos/recuerdos.html">Recuerdos</a></li>
-            <li><a href="/paginas/meses/meses.html">Meses</a></li>
-        </ul>
-    </nav>
-    <main>
-        <div class="cuadro-historia historia">
-            <h1>Recuerdos</h1>
-            <div class="subtitulo">Momentos capturados para siempre</div>
-            <!-- Contenido de recuerdos -->
-        </div>
-    </main>
-    <footer>
-        &copy; 2025 Nuestra Historia. Creado con <span class="footer-heart">💙</span> por JuanPa435.
-    </footer>
+        <script src="/conexion/config.js"></script>
+        <script src="recuerdos.js"></script>
 </body>
 </html>
