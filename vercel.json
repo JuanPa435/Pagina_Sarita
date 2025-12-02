@@ -2,21 +2,17 @@
   "version": 2,
   "builds": [
     {
-      "src": "conexion/vercel_handler.py",
+      "src": "backend/index.py",
       "use": "@vercel/python"
-    },
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "config.js", "use": "@vercel/static" },
-    { "src": "index.js", "use": "@vercel/static" },
-    { "src": "paginas/**", "use": "@vercel/static" }
+    }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "conexion/vercel_handler.py"
+      "dest": "/api/index.py"
     },
     {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|html))",
       "dest": "/$1"
     },
     {
@@ -25,10 +21,6 @@
     },
     {
       "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
       "dest": "/index.html"
     }
   ]

@@ -1,0 +1,13 @@
+node_modules
+.git
+__pycache__
+*.pyc
+.DS_Store
+.env.local
+.venv
+venv
+backups
+scripts/auto_backup.py
+scripts/migrate_db.py
+.frontend.pid
+.vscode
