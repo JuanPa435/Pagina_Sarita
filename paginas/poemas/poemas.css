@@ -43,7 +43,7 @@
     background: none;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: flex-start;
 }
 .footer-nuevo {
@@ -308,11 +308,11 @@ body {
 /* Grid de poemas - 3 columnas */
 #poemas-container {
     display: grid;
-    grid-template-columns: repeat(3, minmax(360px, 1fr));
-    column-gap: 5.5rem;
-    row-gap: 0.5rem;
-    justify-self: center;
-    align-self: center;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 5rem;
+    row-gap: 3.5rem;
+    justify-items: center;
+    align-items: start;
     width: 100%;
 }
 
@@ -327,10 +327,9 @@ body {
     animation: fadeInUp 1.1s cubic-bezier(.4,0,.2,1);
     width: 100%;
     display: flex;
-    max-width: 100%;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     background: rgba(255, 255, 255, 0.615);
     justify-content: center;
 }
@@ -547,7 +546,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.7rem;
-    margin: 0 auto 2.5rem;
+    margin: 0 0 0 0;
     padding: 1.1rem 2.4rem;
     background: linear-gradient(90deg, #b4f8f1 0%, #edbafa 100%);
     color: #5f495e;
@@ -593,14 +592,14 @@ body {
     padding: 0 1.5rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: flex-start;
 }
 .poemas-toolbar {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 1.2rem;
     margin-bottom: 2.2rem;
@@ -633,7 +632,6 @@ body {
 @media (max-width: 768px) {
     .container {
         padding: 1rem 1rem !important;
-        align-items: center !important;
         max-width: 100% !important;
     }
     #poemas-container {
