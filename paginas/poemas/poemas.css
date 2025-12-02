@@ -626,14 +626,14 @@ body {
 
 @media (max-width: 768px) {
     .container {
-        padding: 1rem 0.8rem !important;
+        padding: 1rem 1rem !important;
         align-items: center !important;
         max-width: 100% !important;
     }
     #poemas-container {
         grid-template-columns: 1fr;
-        gap: 1.8rem;
-        justify-items: stretch;
+        gap: 1.5rem;
+        justify-items: center;
         width: 100%;
         max-width: 100%;
         padding: 0;
@@ -654,9 +654,10 @@ body {
     }
     
     .poema-card {
-        padding: 1.5rem 1rem;
-        width: 100%;
-        max-width: 100%;
+        padding: 1rem 0.8rem;
+        border-radius: 16px;
+        width: 92%;
+        max-width: 92%;
         box-sizing: border-box;
     }
     
@@ -678,7 +679,7 @@ body {
     }
     
     .container {
-        padding: 0.5rem 0.5rem !important;
+        padding: 0.5rem 0.8rem !important;
     }
     
     .poemas {
@@ -701,7 +702,9 @@ body {
     }
     
     .poema-card {
-        padding: 1.2rem 0.8rem;
+        padding: 0.9rem 0.7rem;
+        width: 90%;
+        max-width: 90%;
     }
     
     .poema-contenido {
