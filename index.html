@@ -5,18 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Historia 💙</title>
     <meta name="theme-color" content="#0f2a38">
-    <link rel="stylesheet" href="paginas/styles/styles-index.css">
+    <link rel="stylesheet" href="paginas/index/index.css">
+    <link rel="stylesheet" href="paginas/celulares.css">
 </head>
 <body>
+    <div class="particles-bg" id="particles-bg"></div>
     <!-- Navegación Simple -->
     <nav class="navbar-simple">
         <div class="nav-content">
             <a href="index.html" class="logo-simple">💙 Nuestra Historia</a>
-            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-simple">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
             <ul class="nav-menu-simple" id="menu-simple">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="paginas/poemas/poemas.html">Poemas</a></li>
@@ -38,23 +36,22 @@
                 <span class="heart">🤍</span>
                 <span class="heart">❤️</span>
             </div>
-            
-            <h1 class="main-title">Nuestra Historia</h1>
-            <p class="subtitle">Cada día contigo es un regalo 💝</p>
-            
-            <div class="days-counter">
-                <div class="counter-box">
-                    <span class="days-number" id="diasCounter">191</span>
-                    <span class="days-label">Días Juntos</span>
-                </div>
-                <div class="couple-info">
-                    <p class="since-date" id="sinceDate">Desde el 05/06/2025</p>
-                    <p class="message">Te amo más cada día ✨</p>
-                </div>
-            </div>
 
-            
-        </div>
+            <div class="historia">
+                <h1>Nuestra Historia</h1>
+                <p>Desde el primer momento supe que serías especial para mí. Cada día juntos es una nueva aventura llena de amor y felicidad. Gracias por ser mi compañera, mi amiga y mi gran amor.</p>
+                <div class="fecha-contador">
+                    <div class="contador-box">
+                        <span id="contador-dias"></span>
+                        <small>DÍAS JUNTOS</small>
+                    </div>
+                    <div class="fecha-box">
+                        <strong>Desde el 6 de mayo de 2025</strong>
+                        <em>Te amo más cada día ✨</em>
+                    </div>
+                </div>
+            </div>      
+
     </section>
 
     <!-- Sección Poemas -->
@@ -101,246 +98,13 @@
         </div>
     </section>
 
-    <!-- Sección Mensajes eliminada: reemplazada por Meses -->
-
-    <!-- Sección Meses -->
-    <section class="section-wrapper" id="meses">
-        <div class="section-inner">
-            <h2 class="section-title">🎉 Celebraciones Mensuales</h2>
-            <p class="section-desc">Cada mes es un nuevo aniversario que celebrar contigo</p>
-            <div class="meses-preview" id="mesesPreview">
-                <p class="no-items">Nuestras celebraciones mensuales irán aquí 🎊</p>
-            </div>
-            <div class="section-footer">
-                <a href="meses/meses.html" class="btn-primary">Ver Todos los Meses</a>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="footer-nuevo">
         <p>Hecho con 💙 para la persona que amo</p>
         <p class="footer-date">Nuestra historia comenzó el 6 de mayo de 2025 y sigue escribiéndose cada día</p>
     </footer>
 
-        <script src="config.js"></script>
-        <script>
-            // Pre-cache de poemas y canciones en sessionStorage para acelerar páginas internas
-            (async function precacheContenido(){
-                try {
-                    const base = (typeof CONFIG!== 'undefined') ? CONFIG.BACKEND_URL.replace(/\/$/,'') : '/api';
-                    const [poRes, caRes] = await Promise.all([
-                        fetch(base + '/poemas/get').then(r=>r.ok?r.json():Promise.reject(r.status)),
-                        fetch(base + '/canciones/get').then(r=>r.ok?r.json():Promise.reject(r.status))
-                    ]);
-                    if(poRes && poRes.success && poRes.poemas){
-                        sessionStorage.setItem('PRE_POEMAS', JSON.stringify(poRes.poemas.slice(0,200))); // limitar tamaño
-                        console.log('[PRECACHE] Guardados poemas:', poRes.poemas.length);
-                    }
-                    if(caRes && caRes.success && caRes.canciones){
-                        sessionStorage.setItem('PRE_CANCIONES', JSON.stringify(caRes.canciones.slice(0,200)));
-                        console.log('[PRECACHE] Guardadas canciones:', caRes.canciones.length);
-                    }
-                } catch(e){
-                    console.warn('[PRECACHE] Falló precarga', e);
-                }
-            })();
-        </script>
-        <script src="paginas/diagnostico.js"></script>
-    <script>
-        // Configuración de fechas
-        const FECHA_INICIO = new Date(2025, 4, 6); // mayo = 4 (0-indexed), día 6
-
-        // Calcular días juntos y actualizar textos relacionados
-        function calcularDiasJuntos() {
-            // Obtener hoy sin hora para contar días completos
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            
-            const inicio = new Date(FECHA_INICIO);
-            inicio.setHours(0, 0, 0, 0);
-            
-            const diferencia = hoy - inicio;
-            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-            const diasEl = document.getElementById('diasCounter');
-            if (diasEl) diasEl.textContent = dias;
-
-            const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-            const dia = FECHA_INICIO.getDate();
-            const mes = meses[FECHA_INICIO.getMonth()];
-            const anio = FECHA_INICIO.getFullYear();
-            
-            const fechaFormato = `${dia} de ${mes} de ${anio}`;
-            
-            const sinceEl = document.getElementById('sinceDate');
-            if (sinceEl) sinceEl.textContent = `Desde el ${fechaFormato}`;
-        }
-
-        // Cargar previews de todas las secciones
-        async function cargarPreviews() {
-            await cargarPreviewPoemas();
-            await cargarPreviewCanciones();
-            cargarPreviewGaleria();
-            cargarPreviewMeses();
-        }
-
-        // Poemas
-        async function cargarPreviewPoemas() {
-            const container = document.getElementById('poemasPreview');
-            
-            try {
-                const response = await fetch(`${CONFIG.BACKEND_URL}/poemas/get`);
-                const data = await response.json();
-                
-                if (!data.success || !data.poemas || data.poemas.length === 0) {
-                    container.innerHTML = '<p class="no-items">Aún no hay poemas... pero aquí escribiré nuestras historias 🌹</p>';
-                    return;
-                }
-                
-                container.innerHTML = data.poemas.slice(0, 3).map(poema => `
-                    <div class="item-card">
-                        <h3>${poema.titulo}</h3>
-                        <p>${poema.contenido.substring(0, 100)}...</p>
-                        <div class="meta">Por: ${poema.autor}</div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('❌ Error cargando poemas del preview:', error);
-                container.innerHTML = '<p class="no-items">Aún no hay poemas... pero aquí escribiré nuestras historias 🌹</p>';
-            }
-        }
-
-        // Canciones
-        async function cargarPreviewCanciones() {
-            const container = document.getElementById('cancionesPreview');
-            
-            try {
-                const response = await fetch(`${CONFIG.BACKEND_URL}/canciones/get`);
-                const data = await response.json();
-                
-                if (!data.success || !data.canciones || data.canciones.length === 0) {
-                    container.innerHTML = '<p class="no-items">Nuestras canciones favoritas estarán aquí 🎶</p>';
-                    return;
-                }
-                
-                container.innerHTML = data.canciones.slice(0, 3).map(cancion => `
-                    <div class="item-card">
-                        <h3>🎵 ${cancion.titulo}</h3>
-                        <p><strong>${cancion.artista}</strong></p>
-                        <p>${cancion.razon}</p>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('❌ Error cargando canciones del preview:', error);
-                container.innerHTML = '<p class="no-items">Nuestras canciones favoritas estarán aquí 🎶</p>';
-            }
-        }
-
-        /* Mensajes preview eliminado */
-
-        // Recuerdos (antes Galería)
-        async function cargarPreviewGaleria() {
-            const container = document.getElementById('galeriaPreview');
-            try {
-                const res = await fetch(`${CONFIG.BACKEND_URL}/recuerdos/get`);
-                const data = await res.json();
-                const lista = data.success ? (data.recuerdos || []) : [];
-                if (!lista.length) {
-                    container.innerHTML = '<p class="no-items">Aquí estarán nuestros recuerdos más especiales 📷</p>';
-                    return;
-                }
-                const mediaBase = CONFIG.BACKEND_URL.replace(/\/api$/, '');
-                container.innerHTML = lista.slice(0, 3).map(r => `
-                    <div class="gallery-item" title="${(r.mensaje || '').replace(/\"/g,'&quot;')}">
-                        <img src="${mediaBase + r.url}" alt="Recuerdo">
-                    </div>
-                `).join('');
-            } catch (_) {
-                container.innerHTML = '<p class="no-items">Aquí estarán nuestros recuerdos más especiales 📷</p>';
-            }
-        }
-
-        // Meses
-        function cargarPreviewMeses() {
-            const meses = JSON.parse(localStorage.getItem('meses_app') || '[]');
-            const container = document.getElementById('mesesPreview');
-            
-            if (meses.length === 0) {
-                container.innerHTML = '<p class="no-items">Nuestras celebraciones mensuales irán aquí 🎊</p>';
-                return;
-            }
-            
-            container.innerHTML = meses.slice(0, 3).map(mes => `
-                <div class="mes-card">
-                    <div class="mes-number">${mes.numero}</div>
-                    <p><strong>Mes ${mes.numero}</strong></p>
-                    <p>${mes.fecha}</p>
-                    <p style="margin-top: 0.8rem; font-size: 0.95rem; color: var(--coral);">${mes.mensaje}</p>
-                </div>
-            `).join('');
-        }
-
-        // Smooth scroll para los links del navbar
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href !== '#') {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-        });
-
-        // Toggle menú móvil
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.getElementById('menu-simple');
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const abierto = navMenu.classList.toggle('open');
-                navToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-            });
-            
-            // Cerrar menú cuando se hace click en un link
-            navMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
-            
-            // Cerrar menú cuando se hace click fuera
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.navbar-simple')) {
-                    navMenu.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-
-        // Animaciones al hacer scroll
-        const observar = () => {
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.12 });
-            document.querySelectorAll('.item-card, .mes-card, .gallery-item, .section-title').forEach(el => obs.observe(el));
-        };
-
-        // Inicializar
-        calcularDiasJuntos();
-        cargarPreviews();
-        observar();
-
-        // Recargar previews cada segundo (por si hay cambios desde otra pestaña)
-        setInterval(cargarPreviews, 2000);
-    </script>
+        <script src="conexion/config.js"></script>          
+        <script src="paginas/index/index.js"></script>
 </body>
 </html>

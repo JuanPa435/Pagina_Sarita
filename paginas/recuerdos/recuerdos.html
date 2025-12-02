@@ -8,24 +8,20 @@
     <link rel="stylesheet" href="/paginas/styles/styles-recuerdos.css">
 </head>
 <body>
-    <!-- Navbar igual al index (adaptando rutas relativas) -->
+    <!-- Navbar manual -->
     <nav class="navbar-simple">
         <div class="nav-content">
             <a href="/index.html" class="logo-simple">💙 Nuestra Historia</a>
-            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-simple">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-menu-simple" id="menu-simple">
+            <ul class="nav-menu-simple">
                 <li><a href="/index.html">Inicio</a></li>
                 <li><a href="/paginas/poemas/poemas.html">Poemas</a></li>
                 <li><a href="/paginas/canciones/canciones.html">Canciones</a></li>
-                <li><a href="/paginas/recuerdos/recuerdos.html" class="active">Recuerdos</a></li>
+                <li><a href="/paginas/recuerdos/recuerdos.html">Recuerdos</a></li>
                 <li><a href="/paginas/meses/meses.html">Meses</a></li>
             </ul>
         </div>
     </nav>
+
 
     <!-- Contenido -->
     <section class="recuerdos-galeria">
@@ -430,5 +426,36 @@
             // El manejador de submit ya está definido arriba, no agregarlo de nuevo
         });
     </script>
+</body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuerdos</title>
+    <link rel="stylesheet" href="../styles/navbar.css">
+    <link rel="stylesheet" href="../styles/styles-index.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html" class="navbar-title">💙 Nuestra Historia</a>
+        <ul>
+            <li><a href="/index.html">Inicio</a></li>
+            <li><a href="/paginas/poemas/poemas.html">Poemas</a></li>
+            <li><a href="/paginas/canciones/canciones.html">Canciones</a></li>
+            <li><a href="/paginas/recuerdos/recuerdos.html">Recuerdos</a></li>
+            <li><a href="/paginas/meses/meses.html">Meses</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div class="cuadro-historia historia">
+            <h1>Recuerdos</h1>
+            <div class="subtitulo">Momentos capturados para siempre</div>
+            <!-- Contenido de recuerdos -->
+        </div>
+    </main>
+    <footer>
+        &copy; 2025 Nuestra Historia. Creado con <span class="footer-heart">💙</span> por JuanPa435.
+    </footer>
 </body>
 </html>

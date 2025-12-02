@@ -1,12 +1,12 @@
 import os
 import mysql.connector
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde .env
+load_dotenv()
 
 # Fuente única de verdad para la conexión a MySQL
-# Usa env var DATABASE_URL si existe; si no, usa la proporcionada
-DATABASE_URL = os.environ.get(
-    'DATABASE_URL',
-    'mysql://root:sddJsJrAROwSQpEMiLnrBqfPiAUfAATg@shinkansen.proxy.rlwy.net:27654/railway'
-)
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def parse_mysql_url(url: str):
     """Parsea mysql://user:pass@host:port/db en sus componentes"""
