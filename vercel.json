@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "backend/index.py",
-      "use": "@vercel/python"
+  "functions": {
+    "backend/index.py": {
+      "runtime": "python3.9"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
@@ -20,8 +19,16 @@
       "dest": "/paginas/$1"
     },
     {
+      "src": "/conexion/(.*)",
+      "dest": "/conexion/$1"
+    },
+    {
       "src": "/",
       "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
