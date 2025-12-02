@@ -309,8 +309,8 @@ body {
 #poemas-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    column-gap: 5rem;
-    row-gap: 3.5rem;
+    column-gap: 6rem;
+    row-gap: 4rem;
     justify-items: center;
     align-items: start;
     width: 100%;
@@ -321,7 +321,7 @@ body {
 .poema-card {
     border-radius: 40px;
     padding: 2rem 2em 2rem 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     border: 2.5px solid #07116f55;
     transition: box-shadow 0.28s cubic-bezier(.4,0,.2,1), transform 0.18s cubic-bezier(.4,0,.2,1), border 0.18s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1);
     animation: fadeInUp 1.1s cubic-bezier(.4,0,.2,1);
@@ -622,10 +622,11 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
     #poemas-container {
         grid-template-columns: repeat(2, 1fr);
-        gap: 2.5rem;
+        column-gap: 3rem;
+        row-gap: 2.5rem;
     }
 }
 
@@ -636,7 +637,8 @@ body {
     }
     #poemas-container {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        column-gap: 0;
+        row-gap: 1.5rem;
         justify-items: center;
         width: 100%;
         max-width: 100%;
@@ -670,10 +672,11 @@ body {
     }
     
     .btn-agregar {
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-        display: block;
+        width: auto;
+        max-width: none;
+        margin: 0;
+        display: inline-flex;
+        justify-content: center;
     }
 }
 

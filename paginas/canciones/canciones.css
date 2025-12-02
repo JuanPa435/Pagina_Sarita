@@ -285,8 +285,8 @@ body.modal-abierto .footer-nuevo { display:none !important; }
 #canciones-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    column-gap: 5rem;
-    row-gap: 3.5rem;
+    column-gap: 6rem;
+    row-gap: 4rem;
     justify-items: center;
     align-items: start;
     width: 100%;
@@ -301,7 +301,7 @@ section.canciones .container { flex:1 0 auto; }
 .cancion-card {
     border-radius: 40px;
     padding: 2rem 2em 2rem 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     border: 2.5px solid #07116f55;
     transition: box-shadow 0.28s cubic-bezier(.4,0,.2,1), transform 0.18s cubic-bezier(.4,0,.2,1), border 0.18s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1);
     animation: fadeInUp 1.1s cubic-bezier(.4,0,.2,1);
@@ -586,8 +586,8 @@ section.canciones .container { flex:1 0 auto; }
 @media (max-width: 1200px) {
     #canciones-container {
         grid-template-columns: repeat(2, minmax(300px, 1fr));
-        column-gap: 2.5rem;
-        row-gap: 1.5rem;
+        column-gap: 3rem;
+        row-gap: 2.5rem;
     }
 }
 
@@ -654,7 +654,7 @@ section.canciones .container { flex:1 0 auto; }
     #canciones-container {
         grid-template-columns: 1fr;
         column-gap: 0;
-        row-gap: 1rem;
+        row-gap: 1.5rem;
         justify-items: center;
         width: 100%;
         max-width: 100%;
@@ -671,7 +671,7 @@ section.canciones .container { flex:1 0 auto; }
     .cancion-artista { font-size: 0.95rem; }
     .cancion-dedicatoria { font-size: 0.95rem; padding: 0.6rem 0.9rem; }
     .btn-escuchar { font-size: 1rem; padding: 0.6rem 1.2rem; }
-    .btn-agregar { width: 100%; max-width: 320px; margin: 0 auto; display: block; }
+    .btn-agregar { width: auto; max-width: none; margin: 0; display: inline-flex; justify-content: center; }
     .btn-menu-toggle { width: 40px; height: 40px; font-size: 1.1rem; }
     .seccion-titulo { font-size: 2.2rem; margin: 1rem 0 1rem; text-shadow: none; }
     .logo-simple { font-size: 1.2rem; text-shadow: none; padding: 0 10px; margin-right: 8px; }
@@ -854,37 +854,39 @@ section.canciones .container { flex:1 0 auto; }
 @media (max-width: 640px) {
     .poemas-toolbar {
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
     }
     
     .toolbar-right {
-        width: 100%;
-        justify-content: center;
-        margin-top: 1rem;
+        width: auto;
+        justify-content: flex-end;
+        margin-top: 0;
     }
     
     .search-container {
-        width: 100%;
-        justify-content: center;
+        width: auto;
+        justify-content: flex-end;
     }
 }
 
 /* Móviles pequeños */
 @media (max-width: 480px) {
     .poemas-toolbar {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         gap: 1rem;
+        justify-content: space-between;
     }
     
     .toolbar-right {
-        justify-content: center;
+        justify-content: flex-end;
         margin-top: 0;
+        width: auto;
     }
     
     .btn-agregar {
-        width: 100%;
-        max-width: 280px;
+        width: auto;
+        max-width: none;
         justify-content: center;
     }
     

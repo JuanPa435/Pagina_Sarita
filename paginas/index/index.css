@@ -88,6 +88,31 @@
     background: rgba(176,141,249,0.13);
     box-shadow: 0 2px 12px #b08df922;
     transition: color 0.3s, text-shadow 0.3s, transform 0.2s, background 0.3s, box-shadow 0.3s;
+    animation: logoPop 1.2s cubic-bezier(.4,0,.2,1);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-simple::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, #fff2 0%, #b08df922 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+}
+
+.logo-simple:hover {
+    color: #fff;
+    text-shadow: 0 2px 24px #b08df9, 0 2px 24px #7fe7dc;
+    transform: scale(1.11) rotate(-2deg);
+    background: rgba(176,141,249,0.22);
+    box-shadow: 0 8px 32px #b08df988, 0 2px 8px #7fe7dc88;
+}
+
+.logo-simple:hover::after {
+    opacity: 0.22;
 }
 
 .nav-menu-simple {
