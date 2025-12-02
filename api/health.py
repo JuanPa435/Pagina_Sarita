@@ -7,9 +7,11 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
-        message = json.dumps({
+        
+        response = {
             'status': 'ok',
-            'message': 'Test endpoint working!',
-            'service': 'Pagina Sarita Backend'
-        })
-        self.wfile.write(message.encode())
+            'message': 'Backend is running!',
+            'service': 'Pagina Sarita'
+        }
+        
+        self.wfile.write(json.dumps(response).encode())
