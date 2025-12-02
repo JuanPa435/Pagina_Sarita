@@ -409,11 +409,13 @@ const POEMAS_POR_PAGINA = 12;
                 filtrarPoemas(e.target.value);
             });
             
-            btnLimpiar.addEventListener('click', () => {
-                buscadorInput.value = '';
-                filtrarPoemas('');
-                buscadorInput.focus();
-            });
+            // Botón limpiar (X)
+            if (btnLimpiar) {
+                btnLimpiar.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeSearch();
+                });
+            }
 
             // Navbar toggle block moved to top
         });

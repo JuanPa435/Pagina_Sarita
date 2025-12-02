@@ -284,21 +284,66 @@ document.addEventListener('DOMContentLoaded', async () => {
                     filtrarCanciones(e.target.value);
                 });
             }
+            // Buscador desplegable
+            const btnSearchToggle = document.getElementById('btn-search-toggle-canciones');
+            const searchExpandable = document.getElementById('search-expandable-canciones');
+            const searchOverlay = document.getElementById('search-overlay-canciones');
             const btnLimpiarBusqueda = document.getElementById('btn-limpiar-busqueda');
-            if (btnLimpiarBusqueda && buscadorInput) {
-                btnLimpiarBusqueda.addEventListener('click', () => {
-                    buscadorInput.value = '';
-                    filtrarCanciones('');
+            
+            let searchExpanded = false;
+            
+            function closeSearch() {
+                searchExpanded = false;
+                if (searchExpandable) searchExpandable.classList.remove('active');
+                if (searchOverlay) searchOverlay.classList.remove('active');
+                if (buscadorInput) buscadorInput.value = '';
+                filtrarCanciones('');
+                document.body.style.overflow = '';
+            }
+            
+            if (btnSearchToggle && searchExpandable) {
+                btnSearchToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    searchExpanded = !searchExpanded;
+                    if (searchExpanded) {
+                        searchExpandable.classList.add('active');
+                        if (window.innerWidth <= 480 && searchOverlay) {
+                            searchOverlay.classList.add('active');
+                            document.body.style.overflow = 'hidden';
+                        }
+                        setTimeout(() => buscadorInput.focus(), 300);
+                    } else {
+                        closeSearch();
+                    }
                 });
             }
-        // Buscador desplegable
-        const btnSearchToggle = document.getElementById('btn-search-toggle-canciones');
-        const searchExpandable = document.getElementById('search-expandable-canciones');
-        if (btnSearchToggle && searchExpandable) {
-            btnSearchToggle.addEventListener('click', () => {
-                searchExpandable.classList.toggle('active');
+            
+            // Cerrar al hacer clic en overlay
+            if (searchOverlay) {
+                searchOverlay.addEventListener('click', closeSearch);
+            }
+            
+            // Cerrar buscador al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                if (searchExpanded && !e.target.closest('.search-container')) {
+                    closeSearch();
+                }
             });
-        }
+            
+            // Cerrar con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchExpanded) {
+                    closeSearch();
+                }
+            });
+            
+            // Botón limpiar (X)
+            if (btnLimpiarBusqueda) {
+                btnLimpiarBusqueda.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeSearch();
+                });
+            }
     await cargarCancionesDelBackend();
     mostrarCanciones();
     document.getElementById('btn-agregar-cancion').addEventListener('click', abrirFormularioAgregar);

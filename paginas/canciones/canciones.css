@@ -287,8 +287,9 @@ body.modal-abierto .footer-nuevo { display:none !important; }
     grid-template-columns: repeat(3, minmax(360px, 1fr));
     column-gap: 5.5rem;
     row-gap: 0.5rem;
-    justify-self: left;
+    justify-self: center;
     align-self: center;
+    width: 100%;
 }
 
 /* Asegurar espacio para footer: sección principal mínimo viewport menos footer aproximado */
@@ -309,6 +310,7 @@ section.canciones .container { flex:1 0 auto; }
     max-width: 100%;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     background: rgba(255, 255, 255, 0.615);
     justify-content: center;
 }
