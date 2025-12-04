@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#0f2a38">
     <link rel="stylesheet" href="recuerdos.css">
     <link rel="stylesheet" href="/paginas/celulares.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 </head>
 
 <body>
@@ -29,7 +30,7 @@
     <!-- Contenido -->
     <section class="recuerdos-galeria">
         <div class="container">
-            <h2 class="seccion-titulo">Recuerdos <span id="recuerdos-count" style="font-size:0.8em; opacity:.8"></span></h2>
+            <h2 class="seccion-titulo">🖼️ Recuerdos <span id="recuerdos-count" style="font-size:0.8em; opacity:.8"></span></h2>
             
             <!-- Overlay para móviles -->
             <div class="search-overlay" id="search-overlay-recuerdos"></div>
@@ -37,7 +38,7 @@
             <!-- Controles de vista -->
             <div class="recuerdos-toolbar">
                 <button class="btn-agregar" id="btn-agregar-recuerdo">
-                    <span class="btn-icon">🎵</span>
+                    <span class="btn-icon">🖼️</span>
                     <span>Agregar Recuerdo</span>
                 </button>
                 <div class="toolbar-right">
@@ -68,48 +69,88 @@
 
     <!-- Modal para agregar/editar recuerdo -->
     <div id="modal-recuerdo" class="modal-cancion" style="display: none;">
-        <div class="modal-cancion-content">
+        <div class="modal-cancion-content modal-recuerdo-wide">
             <div class="modal-header">
                 <h3 id="modal-titulo">Agregar Recuerdo</h3>
                 <button class="btn-cerrar-modal" id="btn-cerrar-modal">&times;</button>
             </div>
             <form id="form-recuerdo" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="recuerdo-imagen">Imagen: *</label>
-                    <input type="file" id="recuerdo-imagen" accept="image/*" required>
-                </div>
-                <div class="form-group">
-                    <label for="recuerdo-mensaje">Mensaje/Descripción:</label>
-                    <input type="text" id="recuerdo-mensaje" placeholder="Describe este recuerdo">
-                </div>
-                <div class="form-group">
-                    <label for="recuerdo-fecha">Fecha:</label>
-                    <input type="date" id="recuerdo-fecha">
-                </div>
-                <div class="form-group">
-                    <label>¿Quién lo sube?</label>
-                    <div class="dedicador-options">
-                        <label class="radio-pill">
-                            <input type="radio" name="recuerdo-autor" value="Sarita">
-                            Sarita
-                        </label>
-                        <label class="radio-pill">
-                            <input type="radio" name="recuerdo-autor" value="JP" checked>
-                            JP
-                        </label>
+                <div class="modal-recuerdo-layout">
+                    <!-- Columna izquierda: Imagen -->
+                    <div class="modal-recuerdo-left">
+                        <div class="form-group">
+                            <label for="recuerdo-imagen">Imagen: *</label>
+                            <input type="file" id="recuerdo-imagen" accept="image/*" required>
+                            <button type="button" id="btn-editar-imagen" class="btn-editar-img" style="display:none; margin-top:0.5rem;">✂️ Ajustar Imagen</button>
+                            <div id="preview-imagen-container" style="display:none; margin-top:1rem;">
+                                <img id="preview-imagen" style="max-width:100%; border-radius:8px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Columna derecha: Formulario -->
+                    <div class="modal-recuerdo-right">
+                        <div class="form-group">
+                            <label for="recuerdo-mensaje">Mensaje/Descripción:</label>
+                            <textarea id="recuerdo-mensaje" placeholder="Describe este recuerdo" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="recuerdo-fecha">Fecha:</label>
+                            <input type="date" id="recuerdo-fecha">
+                        </div>
+                        <div class="form-group">
+                            <label>¿Quién lo sube?</label>
+                            <div class="dedicador-options">
+                                <label class="radio-pill">
+                                    <input type="radio" name="recuerdo-autor" value="Sarita">
+                                    Sarita
+                                </label>
+                                <label class="radio-pill">
+                                    <input type="radio" name="recuerdo-autor" value="JP" checked>
+                                    JP
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="recuerdo-dedicatoria">Dedicatoria:</label>
+                            <textarea id="recuerdo-dedicatoria" placeholder="¿Por qué compartes este recuerdo?" rows="5"></textarea>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="recuerdo-dedicatoria">Dedicatoria:</label>
-                    <textarea id="recuerdo-dedicatoria" placeholder="¿Por qué compartes este recuerdo?" rows="4"></textarea>
-                </div>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1);">
                     <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
                     <button type="submit" class="btn-guardar">Guardar Recuerdo</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Modal de edición de imagen -->
+    <div id="modal-crop-imagen" class="modal-cancion" style="display: none;">
+        <div class="modal-cancion-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>Ajustar Imagen</h3>
+                <button class="btn-cerrar-modal" id="btn-cerrar-crop">&times;</button>
+            </div>
+            <div style="padding: 1rem;">
+                <div style="max-height: 400px; overflow: hidden; background: #000;">
+                    <img id="imagen-crop" style="max-width: 100%;">
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                    <button type="button" class="btn-crop-control" id="btn-zoom-in">🔍+ Zoom In</button>
+                    <button type="button" class="btn-crop-control" id="btn-zoom-out">🔍- Zoom Out</button>
+                    <button type="button" class="btn-crop-control" id="btn-rotate-left">↶ Rotar Izq</button>
+                    <button type="button" class="btn-crop-control" id="btn-rotate-right">↷ Rotar Der</button>
+                    <button type="button" class="btn-crop-control" id="btn-reset-crop">🔄 Reiniciar</button>
+                </div>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar-crop">Cancelar</button>
+                    <button type="button" class="btn-guardar" id="btn-aplicar-crop">✓ Aplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer-nuevo">
         <p>Hecho con 💙 para la persona que amo</p>
@@ -117,6 +158,7 @@
     </footer>
 
         <script src="/conexion/config.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
         <script src="recuerdos.js"></script>
 </body>
 </html>
