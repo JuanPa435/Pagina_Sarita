@@ -891,6 +891,7 @@ section.recuerdos-galeria .container { flex:1 0 auto; }
     
     .detalle-mensaje p {
         font-size: 1rem;
+        font-style: italic;
     }
     
     .detalle-autor p {
@@ -937,6 +938,7 @@ section.recuerdos-galeria .container { flex:1 0 auto; }
     
     .detalle-mensaje p {
         font-size: 0.95rem;
+        font-style: italic;
     }
     
     .detalle-autor p {
@@ -1006,6 +1008,7 @@ section.recuerdos-galeria .container { flex:1 0 auto; }
     .detalle-mensaje p {
         font-size: 0.9rem;
         line-height: 1.4;
+        font-style: italic;
     }
     
     .detalle-autor p {
