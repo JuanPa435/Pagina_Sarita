@@ -160,14 +160,18 @@ const POEMAS_POR_PAGINA = 12;
 
         // Modal Functions
         function mostrarModal(titulo = 'Agregar Poema') {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.documentElement.style.setProperty('--scrollbar-width', scrollbarWidth + 'px');
+            
             document.getElementById('modal-titulo').textContent = titulo;
             document.getElementById('modal-poema').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-abierto');
         }
 
         function cerrarModal() {
             document.getElementById('modal-poema').style.display = 'none';
-            document.body.style.overflow = 'auto';
+            document.body.classList.remove('modal-abierto');
+            document.documentElement.style.setProperty('--scrollbar-width', '0px');
             document.getElementById('form-poema').reset();
             poemaDatosEditando = null;
         }

@@ -206,6 +206,10 @@ body {
     animation:bgMove 12s linear infinite alternate;
     min-height:100vh; display:flex; flex-direction:column;
 }
+body.modal-abierto {
+    overflow: hidden !important;
+    padding-right: var(--scrollbar-width, 15px);
+}
 section.canciones { flex:1 0 auto; }
 .footer-nuevo { margin-top:auto; }
 body.modal-abierto .footer-nuevo { display:none !important; }

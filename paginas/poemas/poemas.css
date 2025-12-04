@@ -261,13 +261,20 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    width: 100vw;
-    max-width: 100vw;
+    width: 100%;
+    max-width: 100%;
     overflow-x: hidden;
     font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
     color: #1a2330;
     background: linear-gradient(120deg, #7fe7dc 0%, #b2f7ef 40%, #b08df9 80%, #fff 100%);
     animation: bgMove 12s linear infinite alternate;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+body.modal-abierto {
+    overflow: hidden !important;
+    padding-right: var(--scrollbar-width, 15px);
 }
     /* Desktop: container and footer use full width, no forced 100vw */
 

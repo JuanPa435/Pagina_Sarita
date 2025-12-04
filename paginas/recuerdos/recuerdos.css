@@ -207,6 +207,10 @@ body {
     animation:bgMove 12s linear infinite alternate;
     min-height:100vh; display:flex; flex-direction:column;
 }
+body.modal-abierto {
+    overflow: hidden !important;
+    padding-right: var(--scrollbar-width, 15px);
+}
 section.canciones { flex:1 0 auto; }
 .footer-nuevo { margin-top:auto; }
 body.modal-abierto .footer-nuevo { display:none !important; }
@@ -1443,14 +1447,15 @@ section.recuerdos-galeria .container { flex:1 0 auto; }
 /* Modal de canciones */
 .modal-cancion {
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    inset: 0;
     background: rgba(176,141,249,0.13);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     backdrop-filter: blur(2px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 

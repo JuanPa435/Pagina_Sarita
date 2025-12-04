@@ -110,7 +110,20 @@ function renderRecuerdosPreview(recuerdos) {
         const el = document.createElement('div');
         el.className = 'gallery-item';
         const imgUrl = CONFIG.BACKEND_URL.replace(/\/api$/, '') + recuerdo.url;
-        el.innerHTML = `<img src="${imgUrl}" alt="Recuerdo" />`;
+        // Formatear fecha
+        const fechaObj = new Date(recuerdo.fecha);
+        const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+        const fechaFormato = `${fechaObj.getDate()} ${meses[fechaObj.getMonth()]} ${fechaObj.getFullYear()}`;
+        el.innerHTML = `
+            <div class="recuerdo-card-flip">
+                <div class="recuerdo-flip-inner">
+                    <div class="recuerdo-flip-front">
+                        <img src="${imgUrl}" alt="Recuerdo" />
+                    </div>
+                </div>
+            </div>
+            <div class="recuerdo-preview-fecha">${fechaFormato}</div>
+        `;
         cont.appendChild(el);
     });
 }

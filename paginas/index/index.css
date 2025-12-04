@@ -532,19 +532,66 @@
 
 .items-preview, .gallery-preview, .meses-preview {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2.2rem;
     width: 100%;
-    max-width: 100vw;
-    justify-items: start;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: -2.5rem;
+    max-width: 950px;
+    justify-items: center;
+    padding: 0 1rem;
+    margin: 2rem auto 0;
+}
 
+.gallery-item {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
 
-/* --- NUEVO ESTILO PARA PREVIEWS DEL INDEX --- */
+/* ===== FLIP CARD STYLES FOR PREVIEW ===== */
+.recuerdo-card-flip {
+    width: 100%;
+    height: 280px;
+    perspective: 1000px;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-.item-card, .gallery-item, .mes-card {
+.recuerdo-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.recuerdo-flip-front {
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.recuerdo-flip-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recuerdo-preview-fecha {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+/* ===== LEGACY STYLES FOR COMPATIBILITY ===== */
+.item-card, .mes-card {
     background: rgba(255,255,255,0.92);
     border-radius: 32px;
     box-shadow: 0 8px 32px #b08df966, 0 2px 12px #7fe7dc44, 0 0 0 4px #b08df922;
@@ -561,7 +608,7 @@
     backdrop-filter: blur(3px);
     font-size: 0.8em;
 }
-}
+
 .item-card:hover, .gallery-item:hover, .mes-card:hover {
     box-shadow: 0 16px 48px #b08df988, 0 4px 24px #7fe7dc88, 0 0 0 8px #b08df922;
     border: 2.5px solid #7fe7dc;
